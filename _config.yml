@@ -215,7 +215,8 @@ font:
 social:
   #LinkLabel: Link
   GitHub: https://github.com/631068264
-
+  # Email: l631068264@gmail.com
+  StackOverflow: https://stackoverflow.com/users/5360312/wyx
 # Social Links Icons
 # Icon Mapping:
 #   Map a menu item to a specific FontAwesome icon name.
@@ -226,9 +227,8 @@ social_icons:
   # Icon Mappings.
   # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
   GitHub: github
-  Twitter: twitter
-  Weibo: weibo
-
+  Email: envelope
+  StackOverflow: stack-overflow
 
 # Sidebar Avatar
 # in directory: /assets/images/avatar.gif
@@ -578,7 +578,7 @@ exturl: false
 #! ---------------------------------------------------------------
 
 # Motion
-use_motion: true
+use_motion: false
 
 # Fancybox
 fancybox: true
