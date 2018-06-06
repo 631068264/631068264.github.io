@@ -1,22 +1,44 @@
-{% if site.alipay or site.wechatpay %}
+{% if site.reward.enable and post.rewards %}
   <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>{{ site.reward_comment }}</div>
+    <div>{{ site.reward.reward_comment }}</div>
     <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
+      <span>投喂</span>
     </button>
     <div id="QR" style="display: none;">
-      {% if site.wechatpay %}
+      {% if site.reward.btc_address %}
+      <div id="btc" style="display: inline-block">
+        {% if site.reward.btc_qr %}
+        <img id="btc_qr" src="{{ site.reward.btc_qr }}" alt="{{ site.author }} BTC"/>
+        {% endif %}
+        <p>BTC打赏</p>
+        <p>{{site.reward.btc_address}}</p>
+      </div>
+      {% endif %}
+        &nbsp;
+      {% if site.reward.eth_address %}
+      <div id="eth" style="display: inline-block">
+        {% if site.reward.eth_qr %}
+        <img id="eth_qr" src="{{ site.reward.eth_qr }}" alt="{{ site.author }} ETH"/>
+        {% endif %}
+        <p>ETH打赏</p>
+        <p>{{site.reward.eth_address}}</p>
+      </div>
+      {% endif %}
+
+      {% if site.reward.wechatpay %}
         <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="{{ site.wechatpay }}" alt="{{ site.author }} WeChat Pay"/>
+          <img id="wechat_qr" src="{{ site.reward.wechatpay }}" alt="{{ site.author }} WeChat Pay"/>
           <p>微信打赏</p>
         </div>
       {% endif %}
-      {% if site.alipay %}
+        &nbsp;
+      {% if site.reward.alipay %}
         <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="{{ site.alipay }}" alt="{{ site.author }} Alipay"/>
+          <img id="alipay_qr" src="{{ site.reward.alipay }}" alt="{{ site.author }} Alipay"/>
           <p>支付宝打赏</p>
         </div>
       {% endif %}
+
     </div>
   </div>
 {% endif %}

@@ -51,7 +51,7 @@
 @import "post-gallery";
 
 @import "post-reward";
-@if  jekyll-config('alipay') or jekyll-config('wechatpay') {
+@if jekyll-config('reward.enable') {
   @include post-reward;
 }
 

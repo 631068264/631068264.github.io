@@ -57,6 +57,7 @@ defaults:
     values:
       layout: "post"
       comments: true
+      rewards: true
 
 # Atom feed
 feed:
@@ -358,6 +359,20 @@ highlight_theme: night
 # ---------------------------------------------------------------
 # Third Party Services Settings
 # ---------------------------------------------------------------
+
+# Reward Support
+
+reward:
+  # hide reward in post set rewards: false
+  enable: true
+  reward_comment: 坚持原创技术分享，您的支持将鼓励我继续创作！
+  btc_qr: /images/btc.png
+  btc_address: "1EGxXaTM1fjnJKHaZ2vuSMrTnHsF3sRSmC"
+  eth_qr: /images/eth.png
+  eth_address: "0xE5CC1346F5031A01E5A823c9aAdAEa68bFe5Da19"
+  wechatpay: /images/wechatpay.png
+  alipay: /images/alipay.png
+
 
 # MathJax Support
 mathjax:
