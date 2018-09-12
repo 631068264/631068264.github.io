@@ -394,7 +394,7 @@ han: false
 
 # Disqus
 disqus:
-  enable: true
+  enable: false
   shortname: wyx
   count: true
   # hide comments (visitors need to click to load the comments)
@@ -423,12 +423,12 @@ changyan:
 
 # Support for gitalk comments system.
 gitalk:
-  enable: false
-  clientID: # 54730ddf7b9420460c03
-  clientSecret: # c05684701b25ff1c19ea0c01ce4d80c125e0707d
-  repo: # colingpt.github.io
-  owner: # colingpt
-  admin: # colingpt
+  enable: true
+  clientID: dd688ffd2be8512fc659
+  clientSecret: 483255bda7b80acb108df487ac91a0be78710b0d
+  repo: 631068264.github.io
+  owner: 631068264
+  admin: 631068264
 
 # Baidu Share
 # Available value:
