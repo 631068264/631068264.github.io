@@ -1,7 +1,7 @@
 ---
 layout:     post
 rewards: false
-title:      np &  pd & decimal 精度
+title:      np & pd & decimal 精度
 categories:
     - py-finance
 ---
