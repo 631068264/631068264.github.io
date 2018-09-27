@@ -1,1 +1,9 @@
 // Custom styles.
+span.heimu {
+  background-color: #252525;
+  color: #252525;
+  &:hover, &:active {
+    transition: color .13s linear;
+    color: #fff;
+  }
+}
