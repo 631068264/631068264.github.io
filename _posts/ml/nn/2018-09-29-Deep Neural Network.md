@@ -4,6 +4,8 @@ rewards: false
 title:      Deep Neural Network 深层神经网络
 categories:
     - ml
+tags:
+    - dnn
 ---
 # 结构
 L-layer NN，则包含了L-1个隐藏层，最后的L层是输出层

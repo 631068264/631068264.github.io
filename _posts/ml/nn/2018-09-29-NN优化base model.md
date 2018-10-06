@@ -4,6 +4,8 @@ rewards: false
 title:      NN优化base model
 categories:
     - ml
+tags:
+    - nn优化
 ---
 
 # Train/Dev/Test sets

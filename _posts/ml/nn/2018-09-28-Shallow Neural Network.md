@@ -4,6 +4,8 @@ rewards: false
 title:      Shallow Neural Network 浅层神经网络
 categories:
     - ml
+tags:
+    - nn基础
 ---
 # 结构
 
