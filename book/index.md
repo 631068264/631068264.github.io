@@ -1,10 +1,7 @@
 ---
-layout:     post
-rewards: false
+layout: page
 title:      源
-categories:
-    - src
-description: 资料库 当做收藏夹
+description: 资料库 收藏夹 力量之源
 ---
 
 浏览器收藏夹已经令我头皮发麻
@@ -12,12 +9,10 @@ description: 资料库 当做收藏夹
 # blog
 
 ## ML
-[参考](/category/#/ml) + 个人收集资料互补
+[ML](/category/#/ml) + 个人收集资料互补
 - [黄海广 机器学习爱好者](http://www.ai-start.com/)
 - [红色石头 CSDN](https://blog.csdn.net/red_stone1)
-
-
-
+- [各种pdf](yunpan)
 
 
 # repo
