@@ -12,8 +12,7 @@ description: 资料库 收藏夹 力量之源
 [ML](/category/#/ml) + 个人收集资料互补
 - [黄海广 机器学习爱好者](http://www.ai-start.com/)
 - [红色石头 CSDN](https://blog.csdn.net/red_stone1)
-- [各种pdf](yunpan)
-
+- [各种pdf](https://pan.baidu.com/s/1NEvjs_IlaHxfVFyb6ijL1A) wrkx
 
 # repo
 
