@@ -74,7 +74,7 @@ ReLU激活函数在z大于零时梯度始终为1；在z小于零时梯度始终�
 为了弥补这个缺点，出现了Leaky ReLU激活函数，**能够保证z小于零是梯度不为0**。
 
 
-# summary
+## summary
 - 实践中隐藏层使用ReLU作为激活函数，比其他学习速度快。
 - sigmoid和tanh函数的导数在正负饱和区的梯度都会接近于0，这会造成梯度弥散，
     而Relu和Leaky ReLu函数大于0部分都为常熟，不会产生梯度弥散现象。
@@ -86,7 +86,7 @@ ReLU激活函数在z大于零时梯度始终为1；在z小于零时梯度始终�
 - **ReLu**激活函数：最常用的默认函数，，如果不确定用哪个激活函数，就使用ReLu
 
 
-# 图像对比
+## 图像对比
 ![](https://ws3.sinaimg.cn/large/006tNc79gy1fvpf636um5j31bs142wg5.jpg)
 
 <span class='gp-3'>
@@ -95,7 +95,7 @@ ReLU激活函数在z大于零时梯度始终为1；在z小于零时梯度始终�
     <img src='https://ws2.sinaimg.cn/large/006tNc79gy1fvpfdsst3vj311g0pejs9.jpg' />
 <span>
 
-# 激活函数导数
+## 激活函数导数
 ![](https://ws1.sinaimg.cn/large/006tNc79ly1fvplqz1ne1j31d212mdh0.jpg)
 
 # 权重初始化

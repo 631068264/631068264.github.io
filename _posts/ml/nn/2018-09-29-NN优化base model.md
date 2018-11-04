@@ -71,6 +71,29 @@ $$
 当$\lambda$足够大，权重矩阵接近于0的值，相当于**减轻**了这些隐藏单元对网络的**影响**，简化网络。
 设激活函数为tanh: 当W减少=>z减少=>激活函数趋于线性=>网络趋于线性
 
+l1_regularizer l1_l2_regularizer l2_regularizer
+
+```python
+scale = 0.001
+my_dense_layer = partial(
+    tf.layers.dense, activation=tf.nn.relu,
+    kernel_regularizer=tf.contrib.layers.l1_regularizer(scale))
+
+with tf.name_scope("dnn"):
+    hidden1 = my_dense_layer(X, n_hidden1, name="hidden1")
+    hidden2 = my_dense_layer(hidden1, n_hidden2, name="hidden2")
+    logits = my_dense_layer(hidden2, n_outputs, activation=None,
+                            name="outputs")
+```
+必须将正则化损失加到基本损失
+```python
+with tf.name_scope("loss"):                                     # not shown in the book
+    xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(  # not shown
+        labels=y, logits=logits)                                # not shown
+    base_loss = tf.reduce_mean(xentropy, name="avg_xentropy")   # not shown
+    reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+    loss = tf.add_n([base_loss] + reg_losses, name="loss")
+```
 ## dropout
 每层的神经元，按照一定的概率将其暂时从网络中丢弃 => 每一层都有部分神经元不工作,简化网络。
 主要用于计算机视觉。计算视觉中的输入量非常大，输入太多像素，以至于没有足够的数据。因为我们通常没有足够的数据，所以一直存在过拟合。
@@ -95,6 +118,22 @@ c = a * b
 
 # inverted dropout(反向随机失活)
 c /= keep_prob
+```
+
+```python
+training = tf.placeholder_with_default(False, shape=(), name='training')
+
+dropout_rate = 0.5  # == 1 - keep_prob
+X_drop = tf.layers.dropout(X, dropout_rate, training=training)
+
+with tf.name_scope("dnn"):
+    hidden1 = tf.layers.dense(X_drop, n_hidden1, activation=tf.nn.relu,
+                              name="hidden1")
+    hidden1_drop = tf.layers.dropout(hidden1, dropout_rate, training=training)
+    hidden2 = tf.layers.dense(hidden1_drop, n_hidden2, activation=tf.nn.relu,
+                              name="hidden2")
+    hidden2_drop = tf.layers.dropout(hidden2, dropout_rate, training=training)
+    logits = tf.layers.dense(hidden2_drop, n_outputs, name="outputs")
 ```
 ### 反向随机失活
 units失去(1-keep_prob)，Wa也会减少(1-keep_prob)，为了不影响z的期望值，所以Wa/keep_prob修正或弥补我们所需的那(1-keep_prob)
@@ -163,6 +202,31 @@ w[l] = np.random.randn(n[l],n[l-1])*np.sqrt(1/n[l-1])
 tanh，一般选择上面的初始化方法
 ReLU，权重w的初始化一般令其方差为$\frac2n$
 
+Xavier and He Initialization
+![](https://ws1.sinaimg.cn/large/006tNbRwgy1fwuoqqt6xej31fa0xgtg3.jpg)
+![](https://ws3.sinaimg.cn/large/006tNbRwgy1fwuormlrwxj31eq0iqwj1.jpg)
+![](https://ws2.sinaimg.cn/large/006tNbRwgy1fwuoruzu32j31ey03wq3a.jpg)
+```python
+W1 = tf.get_variable('W1',[25,12288],initializer=tf.contrib.layers.xavier_initializer(seed=1))
+b1 = tf.get_variable('b1',[25,1],initializer=tf.zeros_initializer())
+W2 = tf.get_variable('W2',[12,25],initializer=tf.contrib.layers.xavier_initializer(seed=1))
+b2 = tf.get_variable('b2',[12,1],initializer=tf.zeros_initializer())
+W3 = tf.get_variable('W3',[6,12],initializer=tf.contrib.layers.xavier_initializer(seed=1))
+b3 = tf.get_variable('b3',[6,1],initializer=tf.zeros_initializer())
+```
+
+[默认](https://stackoverflow.com/questions/43284047/what-is-the-default-kernel-initializer-in-tf-layers-conv2d-and-tf-layers-dense)是 glorot_uniform_initializer
+[某程度上](https://stackoverflow.com/questions/47986662/why-xavier-initializer-and-glorot-uniform-initializer-are-duplicated-to)和xavier_initializer差不多
+
+```python
+he_init = tf.contrib.layers.variance_scaling_initializer()
+hidden1 = tf.layers.dense(X, n_hidden1, activation=tf.nn.relu,
+                          kernel_initializer=he_init, name="hidden1")
+```
+
+## 激活函数
+[详细](/ml/2018/09/28/Shallow-Neural-Network/#激活函数-activation-functions)
+
 ## Gradient checking
 Back Propagation神经网络有一项重要的测试是梯度检查（gradient checking）。
 其目的是检查验证反向传播过程中梯度下降算法是否正确。
@@ -175,7 +239,7 @@ Back Propagation神经网络有一项重要的测试是梯度检查（gradient c
 </span>
 
 梯度检查首先要做的是分别将$W^{[1]},b^{[1]},\cdots,W^{[L]},b^{[L]}$这些矩阵构造成一维向量，
-然后将这些一维向量组合起来构成一个更大的一维向量θθ\theta。这样cost function $J(W^{[1]},b^{[1]},\cdots,W^{[L]},b^{[L]})$就可以表示成$J(\theta)$。
+然后将这些一维向量组合起来构成一个更大的一维向量$\theta$。这样cost function $J(W^{[1]},b^{[1]},\cdots,W^{[L]},b^{[L]})$就可以表示成$J(\theta)$。
 
 然后将反向传播过程通过梯度下降算法得到的$dW^{[1]},db^{[1]},\cdots,dW^{[L]},db^{[L]}$按照一样的顺序构造成一个一维向量$d\theta$。$d\theta$的维度与$\theta$一致。
 
@@ -197,3 +261,8 @@ $$\frac{||d\theta_{approx}-d\theta||_2}{||d\theta_{approx}||_2+||d\theta||_2}$$
 - 注意不要忽略正则化项，计算近似梯度的时候要包括进去。
 - 梯度检查时关闭dropout，检查完毕后再打开dropout。
 - 随机初始化时运行梯度检查，经过一些训练后再进行梯度检查（不常用）
+
+
+# Batch Normalization
+尽管使用 He初始化和 ELU（或任何 ReLU 变体）可以显著减少训练开始阶段的梯度消失/爆炸问题，但不保证在训练期间问题不会回来。
+[详细](/ml/2018/09/30/NN优化参数正则框架/#batch-normalization)
