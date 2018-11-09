@@ -202,7 +202,7 @@ w[l] = np.random.randn(n[l],n[l-1])*np.sqrt(1/n[l-1])
 tanh，一般选择上面的初始化方法
 ReLU，权重w的初始化一般令其方差为$\frac2n$
 
-Xavier and He Initialization
+### Xavier and He Initialization
 ![](https://ws1.sinaimg.cn/large/006tNbRwgy1fwuoqqt6xej31fa0xgtg3.jpg)
 ![](https://ws3.sinaimg.cn/large/006tNbRwgy1fwuormlrwxj31eq0iqwj1.jpg)
 ![](https://ws2.sinaimg.cn/large/006tNbRwgy1fwuoruzu32j31ey03wq3a.jpg)
