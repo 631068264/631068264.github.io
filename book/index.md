@@ -17,7 +17,8 @@ description: 资料库 收藏夹 力量之源
 # repo
 
 
-
+# Quant
+- [量化投资相关的网站](http://www.chenchen.co.uk/2015/12/03/Recommend_sites.html)
 
 
 # tools
