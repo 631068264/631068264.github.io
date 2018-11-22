@@ -10,3 +10,5 @@ Thumbs.db
 .rvmrc
 .idea/*
 .jekyll-metadata
+vendor/
+.bundle/
