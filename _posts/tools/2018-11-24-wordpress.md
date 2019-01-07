@@ -42,3 +42,30 @@ $cfg['Servers'][$i]['password']      = 'root';
 
 # 设置中文
 ![](https://ws2.sinaimg.cn/large/006tNbRwgy1fxq1dalt76j31om0daq3f.jpg)
+
+# 设置API
+- [WP API doc](https://developer.wordpress.org/rest-api/reference/)
+- [JWT Authentication](https://wordpress.org/plugins/jwt-authentication-for-wp-rest-api/)
+
+配置 .htaccess
+```shell
+find / -name .htaccess
+
+# 添加在配置最前面 不然会报错
+RewriteEngine on
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+
+....
+
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+```
+
+配置 wp-config.php 密钥 https://api.wordpress.org/secret-key/1.1/salt/
+```shell
+/** 设置WordPress变量和包含文件。 */
+define('JWT_AUTH_SECRET_KEY', '');
+define('JWT_AUTH_CORS_ENABLE', true);
+...
+
+```
