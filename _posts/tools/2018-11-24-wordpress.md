@@ -55,11 +55,23 @@ find / -name .htaccess
 RewriteEngine on
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
-
-....
-
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 ```
+**不要配置在里面**不然会因为某些原因重写.htaccess被覆盖
+```
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /wordpress/
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /wordpress/index.php [L]
+</IfModule>
+
+# END WordPress
+```
+
 
 配置 wp-config.php 密钥 https://api.wordpress.org/secret-key/1.1/salt/
 ```shell
@@ -69,3 +81,10 @@ define('JWT_AUTH_CORS_ENABLE', true);
 ...
 
 ```
+
+
+# ACF API
+
+[demo](https://github.com/airesvsg/acf-to-rest-api-example)
+
+自定义字段需要`fields[xx]`post请求。编辑字段需要先官方API发表文章获取id,再通过ACF api 来修改acf字段
