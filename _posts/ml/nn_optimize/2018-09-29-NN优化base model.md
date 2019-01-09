@@ -225,7 +225,7 @@ hidden1 = tf.layers.dense(X, n_hidden1, activation=tf.nn.relu,
 ```
 
 ## 激活函数
-[详细](/ml/2018/09/28/Shallow-Neural-Network/#激活函数-activation-functions)
+[详细](/blog/2018/09/28/Shallow-Neural-Network/#激活函数-activation-functions)
 
 ## Gradient checking
 Back Propagation神经网络有一项重要的测试是梯度检查（gradient checking）。
@@ -265,4 +265,4 @@ $$\frac{||d\theta_{approx}-d\theta||_2}{||d\theta_{approx}||_2+||d\theta||_2}$$
 
 # Batch Normalization
 尽管使用 He初始化和 ELU（或任何 ReLU 变体）可以显著减少训练开始阶段的梯度消失/爆炸问题，但不保证在训练期间问题不会回来。
-[详细](/ml/2018/09/30/NN优化参数正则框架/#batch-normalization)
+[详细](/blog/2018/09/30/NN优化参数正则框架/#batch-normalization)
