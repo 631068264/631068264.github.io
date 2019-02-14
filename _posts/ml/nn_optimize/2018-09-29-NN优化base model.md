@@ -265,4 +265,4 @@ $$\frac{||d\theta_{approx}-d\theta||_2}{||d\theta_{approx}||_2+||d\theta||_2}$$
 
 # Batch Normalization
 尽管使用 He初始化和 ELU（或任何 ReLU 变体）可以显著减少训练开始阶段的梯度消失/爆炸问题，但不保证在训练期间问题不会回来。
-[详细](/blog/2018/09/30/NN优化参数正则框架/#batch-normalization)
+[详细](/blog/2018/09/30/NN优化参数正则框架#batch-normalization)
