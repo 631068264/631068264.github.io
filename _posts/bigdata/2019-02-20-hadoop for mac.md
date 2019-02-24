@@ -131,6 +131,21 @@ stop-dfs.sh
 ```
 [http://localhost:9870](http://localhost:9870)
 
+`Permission denied: user=dr.who, access=READ_EXECUTE, inode="/tmp"`
+
+`core-site.xml`
+```
+<property>
+    <name>hadoop.http.staticuser.user</name>
+    <value><user></value>
+</property>
+```
+或者
+
+`hdfs-default.xml`
+
+`dfs.permissions.enabled=true #是否在HDFS中开启权限检查,默认为true`
+
 
 yarn
 ```
@@ -144,15 +159,52 @@ stop-yarn.sh
 brew install gcc autoconf automake libtool cmake snappy gzip bzip2 protobuf@2.5 zlib openssl maven
 ```
 
-> 必须是`protobuf@2.5` 安装后按照说明配置好PATH `protoc version is 'libprotoc 3.6.1', expected version is '2.5.0'`
+> 必须是`protobuf@2.5` 安装后按照**说明配置好PATH** `protoc version is 'libprotoc 3.6.1', expected version is '2.5.0'`
 
 `hadoop checknative -a`
 
 `mvn package -Pdist,native -DskipTests -Dtar -e`
 
+### error
+
 [Native Libraries Guide](https://hadoop.apache.org/docs/r3.1.1/hadoop-project-dist/hadoop-common/NativeLibraries.html#Download)
 
-- [Native build fails on macos due to getgrouplist not found](https://stackoverflow.com/questions/54801924/build-hadoop-3-1-1-in-osx-to-get-native-libraries)
+[Native build fails on macos due to getgrouplist not found](https://stackoverflow.com/questions/54801924/build-hadoop-3-1-1-in-osx-to-get-native-libraries)
+
+OPENSSL_ROOT_DIR
+```
+export OPENSSL_ROOT_DIR="/usr/local/opt/openssl"
+export LDFLAGS="-L${OPENSSL_ROOT_DIR}/lib"
+export CPPFLAGS="-I${OPENSSL_ROOT_DIR}/include"
+export PKG_CONFIG_PATH="${OPENSSL_ROOT_DIR}/lib/pkgconfig"
+export OPENSSL_INCLUDE_DIR="${OPENSSL_ROOT_DIR}/include"
+```
+
+#### check native
+经过好久终于可以了，配置好上面的话会更快。时间主要花在下载maven上面，老是ssl error
+![](https://ws4.sinaimg.cn/large/006tKfTcgy1g0hst1jktnj30vj0u0diq.jpg)
+
+复制native libraries到
+```
+cp -R hadoop/hadoop-dist/target/hadoop-3.1.1/lib /usr/local/Cellar/hadoop/3.1.1/libexec
+```
+check build
+```
+➜  libexec hadoop checknative -a
+2019-02-24 21:19:16,068 WARN bzip2.Bzip2Factory: Failed to load/initialize native-bzip2 library system-native, will use pure-Java version
+2019-02-24 21:19:16,072 INFO zlib.ZlibFactory: Successfully loaded & initialized native-zlib library
+2019-02-24 21:19:16,078 WARN erasurecode.ErasureCodeNative: ISA-L support is not available in your platform... using builtin-java codec where applicable
+Native library checking:
+hadoop:  true /usr/local/Cellar/hadoop/3.1.1/libexec/lib/native/libhadoop.dylib
+zlib:    true /usr/lib/libz.1.dylib
+zstd  :  false
+snappy:  true /usr/local/lib/libsnappy.1.dylib
+lz4:     true revision:10301
+bzip2:   false
+openssl: false build does not support openssl.
+ISA-L:   false libhadoop was built without ISA-L support
+2019-02-24 21:19:16,106 INFO util.ExitUtil: Exiting with status 1: ExitException
+```
 
 # Spark
 `brew install apache-spark scala`
@@ -162,8 +214,7 @@ brew install gcc autoconf automake libtool cmake snappy gzip bzip2 protobuf@2.5 
 
 在环境配置上有`HADOOP_CONF_DIR`才能用`spark-shell --master yarn`
 ```
-export HADOOP_HOME=/usr/local/Cellar/hadoop/3.1.1
-export HADOOP_CONF_DIR=$HADOOP_HOME/libexec/etc/hadoop
+export HADOOP_CONF_DIR=/usr/local/Cellar/hadoop/3.1.1/libexec/etc/hadoop
 ```
 不要忘记`source`
 
@@ -306,7 +357,7 @@ hive-site.xml
 
 <property>
   <name>hive.metastore.uris</name>
-  <value>thrift://<n.n.n.n>:9083</value>
+  <value>thrift://localhost:9083</value>
   <description>IP address (or fully-qualified domain name) and port of the metastore host</description>
 </property>
 ```
@@ -350,4 +401,28 @@ MetaException(message:Version information not found in metastore.)
   <name>hive.execution.engine</name>
   <value>spark</value>
 </property>
+```
+
+版本问题
+- [Hive on Spark: Getting Started](https://cwiki.apache.org/confluence/display/Hive/Hive+on+Spark%3A+Getting+Started)
+
+```
+Failed to execute spark task, with exception 'org.apache.hadoop.hive.ql.metadata.HiveException(Failed to create Spark client for Spark session 54d3f345-ca78-42c5-b3f4-5e7f07f77ae0)
+FAILED: Execution Error, return code 30041 from org.apache.hadoop.hive.ql.exec.spark.SparkTask. Failed to create Spark client for Spark session 54d3f345-ca78-42c5-b3f4-5e7f07f77ae0
+```
+spark 通过`hive.metastore.uris` 连接hive
+
+启动Hive Metastore Server
+`hive --service metastore`
+
+
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder\
+    .config("hive.metastore.uris", "thrift://localhost:9083/")\
+    .enableHiveSupport() \
+    .getOrCreate()
+    
+spark.sql('....')
 ```
