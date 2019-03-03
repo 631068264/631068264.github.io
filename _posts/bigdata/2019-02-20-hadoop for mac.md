@@ -412,6 +412,8 @@ FAILED: Execution Error, return code 30041 from org.apache.hadoop.hive.ql.exec.s
 ```
 spark 通过`hive.metastore.uris` 连接hive
 
+`cp hive-site.xml /usr/local/Cellar/apache-spark/2.4.0/libexec/conf`
+
 启动Hive Metastore Server
 `hive --service metastore`
 
