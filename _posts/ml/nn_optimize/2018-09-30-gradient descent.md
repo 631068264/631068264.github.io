@@ -1,7 +1,7 @@
 ---
 layout:     post
 rewards: false
-title:      NN优化算法
+title:      NN优化 gradient descent 算法
 categories:
     - ml
 tags:

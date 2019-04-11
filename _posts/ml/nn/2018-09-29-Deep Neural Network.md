@@ -64,4 +64,4 @@ $A^{\lbrack0\rbrack}$ 就是X。 只使用一次`for` 循环 从后往前层数l
 
 
 # 优化model
-[优化](/blog/2018/09/29/NN优化base-model/)
+[优化](/blog/2018/09/29/base-model/)

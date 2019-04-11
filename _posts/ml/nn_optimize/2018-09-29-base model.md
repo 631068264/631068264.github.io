@@ -269,4 +269,49 @@ $$\frac{||d\theta_{approx}-d\theta||_2}{||d\theta_{approx}||_2+||d\theta||_2}$$
 
 # Batch Normalization
 尽管使用 He初始化和 ELU（或任何 ReLU 变体）可以显著减少训练开始阶段的梯度消失/爆炸问题，但不保证在训练期间问题不会回来。
-[详细](/blog/2018/09/30/NN优化参数正则框架#batch-normalization)
+
+Batch Normalization不仅可以让调试超参数更加简单，而且可以让神经网络模型更加“健壮”。
+也就是说较好模型可接受的超参数范围更大一些，包容性更强，使得更容易去训练一个深度神经网络。
+[Normalizing input](#normalizing-input)只是对输入进行了处理，**Batch Normalization**各隐藏层的输入进行标准化处理。
+
+第l层隐藏层的输入就是第l-1层隐藏层的输出$A^{[l-1]}$。对$A^{[l-1]}$进行标准化处理，从原理上来说可以提高$W^{[l]}$和$b^{[l]}$的训练速度和准确度。
+这种对各隐藏层的标准化处理就是Batch Normalization。值得注意的是，实际应用中，一般是对$Z^{[l-1]}$进行标准化处理而不是$A^{[l-1]}$，其实差别不是很大。
+![](https://ws2.sinaimg.cn/large/006tNc79gy1fvshpr5ehvj31kw0v1n05.jpg)
+> Normalizing inputs和Batch Normalization有区别的,Normalizing inputs使所有输入的均值为0，方差为1。
+而Batch Normalization可使各隐藏层输入的均值和方差为任意值。实际上，从激活函数的角度来说，如果各隐藏层的输入均值在靠近0的区域即处于激活函数的线性区域，
+这样不利于训练好的非线性神经网络，得到的模型效果也不会太好。这也解释了为什么需要用**γ和β来对z[l](i)**作进一步处理。
+![](https://ws1.sinaimg.cn/large/006tNc79gy1fvshzkjj5cj31kw0mwjuv.jpg)
+
+如果实际应用的样本与训练样本分布不同，即发生了**covariate shift**，则一般是要对模型重新进行训练的。深度神经网络中，covariate shift会导致模型预测效果变差。
+而Batch Norm的作用恰恰是减小covariate shift的影响，让模型变得更加健壮，鲁棒性更强。Batch Norm减少了各层$W^{[l]}、B^{[l]}$之间的耦合性，让各层更加独立，
+实现自我训练学习的效果。也就是说，如果输入发生covariate shift，那么因为Batch Norm的作用，
+对个隐藏层输出$Z^{[l]}$进行均值和方差的归一化处理，$W^{[l]}和B^{[l]}$更加稳定，使得原来的模型也有不错的表现。
+
+从另一个方面来说，Batch Norm也起到轻微的正则化（regularization）效果。具体表现在：
+- 每个mini-batch都进行均值为0，方差为1的归一化操作
+- 每个mini-batch中，对各个隐藏层的$Z^{[l]}$添加了随机噪声，效果类似于Dropout
+- mini-batch越小，正则化效果越明显
+但是，Batch Norm的正则化效果比较微弱，正则化也不是Batch Norm的主要功能。
+
+
+# Softmax 多分类
+目前我们介绍的都是二分类问题，神经网络输出层只有一个神经元，
+表示预测输出$\hat y$是正类的概率$P(y=1|x)，$\hat y>0.5$则判断为正类，$\hat y<0.5$则判断为负类。
+
+对于**多分类问题**，用C表示种类个数，神经网络中输出层就有C个神经元，即$Cn^{[L]}=C$。
+其中，**每个神经元的输出依次对应属于该类的概率**，即$P(y=c|x)$。为了处理多分类问题，我们一般使用**Softmax**回归模型。
+
+Softmax回归模型输出层的激活函数
+
+Softmax回归模型输出层的激活函数如下所示：
+
+$$z^{[L]}=W^{[L]}a^{[L-1]}+b^{[L]}$$
+
+$$a^{[L]}_i=\frac{e^{z^{[L]}_i}}{\sum_{i=1}^Ce^{z^{[L]}_i}}$$
+
+输出层每个神经元的输出$a^{[L]}_i$对应属于该类的概率，满足：
+
+$$\sum_{i=1}^Ca^{[L]}_i=1$$
+
+所有的$a^{[L]}_i，即\hat y$，维度为(C, 1)。
+
