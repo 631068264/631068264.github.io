@@ -6,6 +6,9 @@ categories:
     - mysql
 ---
 
+[doc](https://dev.mysql.com/doc/refman/8.0/en/window-functions.html)
+
+
 # 概念
 MySQL中的使用窗口函数的时候，是不允许使用*的，必须显式指定每一个字段。8.0后才有Window Function，其他数据库貌似一早就有
 
