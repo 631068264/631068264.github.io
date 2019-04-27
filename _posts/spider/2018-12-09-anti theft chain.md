@@ -3,7 +3,9 @@ layout:     post
 rewards: false
 title:      anti防盗链
 categories:
-    - tools
+    - spider
+tags:
+    - spider
 ---
 
 # 图片防盗链
