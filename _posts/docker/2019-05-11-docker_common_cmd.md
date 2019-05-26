@@ -52,3 +52,7 @@ docker logs -f [container ID or NAMES]
 docker stats
 
 docker info
+
+# 交互
+
+`docker exec -it <container-name> bash`

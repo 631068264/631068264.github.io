@@ -79,3 +79,5 @@ Compose文件定义了两个服务：web和redis。
 `docker-compose stop`
 
 `docker-compose --help`
+
+`docker-compose -f .debug.docker-compose.yml up --build`
