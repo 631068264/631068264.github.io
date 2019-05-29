@@ -136,6 +136,13 @@ session.execute(stmt)
 session.commit()
 ```
 
+ERROR 
+```
+sqlalchemy.exc.OperationalError: (_mysql_exceptions.OperationalError) (1366, "Incorrect integer value: 'age + VALUES(age)' for column 'age' at row 1")
+[SQL: INSERT INTO user (name, age) VALUES (%s, %s) ON DUPLICATE KEY UPDATE age = %s]
+[parameters: ('bulko11', 11, 'age + VALUES(age)')]
+```
+
 然后只能 先select 在update <span class='heimu'>超傻逼</span>
 ```python
 for d in data:
@@ -156,14 +163,80 @@ for d in data:
         db.add(RiskInnerMachine(**d))
 ```
 
-ERROR 
+## 使用 compiles
+
+[Custom SQL Constructs and Compilation Extension](https://docs.sqlalchemy.org/en/13/core/compiler.html?highlight=compiler)
+[SQLAlchemy ON DUPLICATE KEY UPDATE](https://stackoverflow.com/a/10561643/5360312)
+
+```python
+from sqlalchemy.ext.compiler import compiles
+
+# 这个import很关键
+from sqlalchemy.sql.expression import Insert
+
+@compiles(Insert, 'mysql')
+def on_duplicate_key_update(insert, compiler, **kw):
+    def _gen_fv_dict(fv):
+        sql = []
+        if isinstance(fv, dict):
+            for f, v in fv.items():
+                sql.append(f' {f} = {v} ')
+
+        elif isinstance(fv, list):
+            for f in fv:
+                sql.append(f' {f} = VALUES({f}) ')
+        return ','.join(sql)
+
+    s = compiler.visit_insert(insert, **kw)
+    if 'on_duplicate_key_update' in insert.kwargs:
+        return s + ' ON DUPLICATE KEY UPDATE ' + _gen_fv_dict(insert.kwargs['on_duplicate_key_update'])
+    return s
 ```
-sqlalchemy.exc.OperationalError: (_mysql_exceptions.OperationalError) (1366, "Incorrect integer value: 'age + VALUES(age)' for column 'age' at row 1")
-[SQL: INSERT INTO user (name, age) VALUES (%s, %s) ON DUPLICATE KEY UPDATE age = %s]
-[parameters: ('bulko11', 11, 'age + VALUES(age)')]
+效果拔群，但是会拖慢正常的insert,拖慢很多
+
+**没用**`compiles`插1000个，用0.138sec ，**用了**0.624sec 1000个
+0.540一个。。。。
+
+test code 
+```python
+class User(BaseModel):
+    __tablename__ = 'user'
+    id = Column(INTEGER(unsigned=True), primary_key=True)
+    name = Column(VARCHAR(120))
+    age = Column(INTEGER(unsigned=True))
+    
+data = [{'name': f'bulk{i}', 'age': i} for i in range(0, 1000)]
+
+
+def test1():
+    # 0.138 0.624  0.540
+    with mysql() as db:
+        db.execute(User.__table__.insert(), data[0])
+        db.commit()
+
+
+def test2():
+    # 0.253 0.731
+    with mysql() as db:
+        db.execute(insert(User).values(data))
+        db.commit()
+
+
+def test3():
+    with mysql() as db:
+        db.add_all(data)
+        db.commit()
+
+
+import profile
+
+profile.run('test1()')
+# profile.run('test2()')
+# profile.run('test3()')
 ```
 
-# all() first() scalar()
+
+# all() & first() & scalar()
 
 只要一个object直接`first()` 多个用`all()` 数字用
 ```python
@@ -199,7 +272,7 @@ user = session.query(func.count('*')).filter(User.id == user_id).scalar()
 user = session.query(func.count('*')).filter(User.id == user_id).first()
 ```
 
-# 常用
+# 常用gist
 
 ## sqlalchemy object to list of dict
 
@@ -211,29 +284,15 @@ def sqlalchemy2dict(result: typing.List[_LW]) -> Results:
 ## 聚合
 
 ```python
-def get_wheres(query: Query) -> Query:
-    query = query.filter(
-        ((cls.src_ip == ip) | (cls.dst_ip == ip))
-    )
-    if kid is not None:
-        query = query.filter(cls.kid == kid)
-
-    return query.filter((start_ts <= cls.time) & (cls.time <= end_ts))
-
 # count
 select = session.query(func.count(
-    distinct(cls.signature_id)).label('count'))
+    distinct(cls.id)).label('count'))
 count = get_wheres(select).scalar()
 
 # query
 select = session.query(
-    func.group_concat(distinct(cls.src_ip)).label('src_ip'),
-    func.group_concat(distinct(cls.dst_ip)).label('dst_ip'),
-    func.any_value(cls.signature_id).label('signature_id'),
-    func.any_value(cls.level).label('level'),
-    func.any_value(cls.signature).label('signature'),
-    func.any_value(cls.category).label('category'),
-    func.any_value(cls.kid).label('kid'),
+    func.group_concat(distinct(cls.aa)).label('aa'),
+    func.any_value(cls.id).label('id'),
     func.sum(cls.count).label('count')
 )
 query = get_wheres(select).group_by(cls.signature_id).offset(
@@ -244,7 +303,6 @@ return count, sqlutil.sqlalchemy2dict(query)
 
 ```python
 query = session.query(
-            cls.sensor_id.label('sensorid'),
             # sum -> decimal to int
             func.sum(cls.count).op('div')(1).label('count'),
             func.Hour(func.FROM_UNIXTIME(cls.create_time)).label('hour'),
@@ -260,11 +318,9 @@ query = session.query(
 
 ```python
 or_list = []
-for i in ip_range_list:
-    ip_range = i[InnerIpRange.ip_range.key]
+for ip_range in ip_range_list:
     min_ip, max_ip = int(min(ip_range)), int(max(ip_range))
-    or_list.append(
-        and_(min_ip <= InnerMachine.ip4, InnerMachine.ip4 <= max_ip))
+    or_list.append(and_(min_ip <= xx.ip4, xx.ip4 <= max_ip))
 
 query = query.filter(or_(*or_list))
 ```
@@ -273,12 +329,12 @@ query = query.filter(or_(*or_list))
 
 ```python
 def get_wheres(query: Query) -> Query:
-    query = query.join(InnerMachine, cls.inner_machine_id == InnerMachine.id)
-    query = query.filter(InnerMachine.ip == ip)
+    query = query.join(xx, cls.id == xx.id)
+    query = query.filter(xx.ip == ip)
     return query
 
 # 列表
-select = session.query(cls.inner_machine_id, (cls.ignore_time > cls.update_time).label('ignore'))
+select = session.query(cls.id, (cls.c > cls.a).label('ignore'))
 query = get_wheres(select).limit(1)
 
 c = query.first()
@@ -287,7 +343,38 @@ if c is None:
 return True, c.ignore
 ```
 
+## 子查询 .subquery()
+
+```python
+sub = session.query(func.any_value(stat_column).label('name')) \
+    .join(xx, xx.id == cls.id) \
+    .filter((start_ts <= xx.date) & (xx.date <= end_ts)) \
+    .group_by(cls.md5).subquery()
+
+query = session.query('name', func.count('*').label('count')) \
+    .select_from(sub) \
+    .group_by('name') \
+    .order_by(desc('count'))
+```
+
 ## 模糊查询
+可以用 mysql concat `query =
+query.filter(func.concat(*columns).like(f'%{keyword}%'))` 将字段连起来查询
+
+但是会有造成以下情况 **kw 关键字 f 字段**
+
+kw = ab f1 = a f2=b 是匹配的 ,当然f1
+f2中间可以塞其他特殊字符作为**连接符**，但是很难保证kw输入什么。
+
+
+关于转义
+
+在mysql中，反斜杠在字符串中是转义字符，在进行语法解析时会进行**一次转义**，所以当我们在insert字符时，insert `\\`
+在数据库中最终只会存储`\`。
+
+而在mysql的like语法中，like后边的字符串除了会在语法解析时转义一次外，还会在正则匹配时进行**第二次的转义**。
+因此如果期望最终匹配到`\`，就要反转义两次，也即由`\`到`\\`再到`\\\\`。
+
 
 ```python
 def search_keyword(query: Query, keyword: str, columns: Columns) -> Query:
@@ -304,3 +391,96 @@ def search_keyword(query: Query, keyword: str, columns: Columns) -> Query:
             query = query.filter(columns.like(f'%{keyword}%'))
     return query
 ```
+
+## 动态filter
+
+```python
+class FILTER_OP(object):
+    EQ = "="
+    NE = "!="
+    GT = ">"
+    LT = "<"
+    LIKE = "like"
+    NOT_LIKE = "not like"
+    # https://docs.sqlalchemy.org/en/13/orm/internals.html#sqlalchemy.orm.properties.ColumnProperty.Comparator
+    NAME_DICT = {
+        EQ: 'eq',
+        NE: 'ne',
+        GT: 'gt',
+        LT: 'lt',
+        LIKE: 'like',
+        NOT_LIKE: 'notlike',
+    }
+
+    ALL = list(NAME_DICT.keys())
+
+'''
+raw_filter jsonschema 结构
+    
+'filter': {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'required': ['key', 'op', 'value'],
+                "properties": {
+                    "key": {"type": "string", "enum": 条件字段},
+                    "op": {"type": "string", "enum": const.FILTER_OP.ALL},
+                    "value": {},
+                }
+            }
+        },
+
+'''
+
+
+def sql_filter(query: Query, model: declarative_base, raw_filter: typing.List[typing.Dict]) -> Query:
+    """
+    动态filter and 连接
+    const.FILTER_OP 控制操作
+    """
+    if raw_filter:
+        for raw in raw_filter:
+            key, op, value = raw['key'], const.FILTER_OP.NAME_DICT[raw['op']], raw['value']
+            column = getattr(model, key)
+            attr = list(filter(lambda e: hasattr(column, e % op), ['%s', '%s_', '__%s__']))[0] % op
+            query = query.filter(getattr(column, attr)(value))
+
+    return query
+```
+
+
+## 时间间隔统计
+
+```python
+query = session.query(
+            func.count('*').label('count'),
+            cls.timestamp.op('div')(duration).label('time')
+        ).filter(
+            (start_ts <= cls.timestamp) & (cls.timestamp <= end_ts)
+        ).group_by('time').order_by('time')
+
+        result = []
+        record = query.all()
+        for r in record:
+            result.append({
+                'timestamp': r.time * duration,
+                'count': r.count,
+            })
+        return result
+        
+        
+def fill_timestamp_count(start_ts, end_ts: int, interval: int, raw_result: Results) -> Results:
+    """补全缺失的时间分布"""
+    if not raw_result:
+        return []
+    begin = start_ts // interval * interval
+    end = end_ts // interval * interval
+    raw_result = {r['timestamp']: r for r in raw_result}
+    result = {t: {'timestamp': t, 'count': 0} for t in range(begin, end + interval, interval)}
+
+    for r in raw_result:
+        result[r] = raw_result[r]
+
+    return sorted(result.values(), key=itemgetter('timestamp'))
+```
+
