@@ -28,7 +28,7 @@ Pycharm local debug docker
 
 重构 修改的部分
 
-```dockerfile
+```shell
 docker-compose -f .debug.docker-compose.yml up --build -d
 ```
 

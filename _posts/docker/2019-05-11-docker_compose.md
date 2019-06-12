@@ -80,4 +80,13 @@ Compose文件定义了两个服务：web和redis。
 
 `docker-compose --help`
 
+
+增量更新服务stop remove build start 
+
 `docker-compose -f .debug.docker-compose.yml up --build`
+
+
+`docker-compose exec <service-name> bash`
+
+
+`docker-compose logs -f <service-name>`
