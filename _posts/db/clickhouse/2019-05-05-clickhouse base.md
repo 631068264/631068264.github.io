@@ -6,11 +6,36 @@ categories:
     - clickhouse
 ---
 
+# what is OLAP
+
+- 大多数是读请求
+- 数据总是以相当大的批(> 1000 rows)进行写入
+- 不修改已添加的数据
+- 每次查询都从数据库中读取大量的行，但是同时又仅需要少量的列
+- 宽表，即每个表包含着大量的列
+- 较少的查询(通常每台服务器每秒数百个查询或更少)
+- 对于简单查询，允许延迟大约50毫秒
+- 列中的数据相对较小： 数字和短字符串(例如，每个URL 60个字节)
+- 处理单个查询时需要高吞吐量（每个服务器每秒高达数十亿行）
+- 事务不是必须的
+- 对数据一致性要求低
+- 每一个查询除了一个大表外都很小
+- 查询结果明显小于源数据，换句话说，数据被过滤或聚合后能够被盛放在单台服务器的内存中
+
+# why clickhouse
+<span class='gp-2'>
+    <img src='http://ww4.sinaimg.cn/large/006tNc79gy1g41p7txcy8j31iw0u0q7b.jpg' />
+    <img src='http://ww3.sinaimg.cn/large/006tNc79gy1g41pc5fdj8j31ma0u0tg1.jpg' />
+    <img src='http://ww1.sinaimg.cn/large/006tNc79gy1g41pdsxjgpj31h10u00v3.jpg' />
+</span>
+
 # what is clickhouse
 
 ClickHouse是一个用于联机分析(OLAP)的列式数据库管理系统(DBMS)
-
-![](https://ws1.sinaimg.cn/large/006tNc79gy1g2rk3fqq02j30xb0u0myq.jpg)
+<span class='gp-2'>
+    <img src='http://ww3.sinaimg.cn/large/006tNc79gy1g41pkq41fkj318o0kugod.jpg' />
+    <img src='http://ww2.sinaimg.cn/large/006tNc79gy1g41pl4hufhj314u0j2wg7.jpg' />
+</span>
 
 对于存储而言，列式数据库总是将同一列的数据存储在一起，不同列的数据也总是分开存储。
 
@@ -27,22 +52,6 @@ ClickHouse是一个用于联机分析(OLAP)的列式数据库管理系统(DBMS)
 - 仅能用于**批量删除或修改数据** 每次写入不少于1000行的批量写入，或每秒不超过一个写入请求
 - 没有完整的事务支持
 - 稀疏索引使得ClickHouse不适合通过其键检索单行的点查询。
-
-# what is OLAP
-
-- 大多数是读请求
-- 数据总是以相当大的批(> 1000 rows)进行写入
-- 不修改已添加的数据
-- 每次查询都从数据库中读取大量的行，但是同时又仅需要少量的列
-- 宽表，即每个表包含着大量的列
-- 较少的查询(通常每台服务器每秒数百个查询或更少)
-- 对于简单查询，允许延迟大约50毫秒
-- 列中的数据相对较小： 数字和短字符串(例如，每个URL 60个字节)
-- 处理单个查询时需要高吞吐量（每个服务器每秒高达数十亿行）
-- 事务不是必须的
-- 对数据一致性要求低
-- 每一个查询除了一个大表外都很小
-- 查询结果明显小于源数据，换句话说，数据被过滤或聚合后能够被盛放在单台服务器的内存中
 
 # IO
 
@@ -70,6 +79,12 @@ ClickHouse 会为**每个数据片段创建一个索引文件**，**索引文件
 
 **ClickHouse 不要求主键唯一。所以，你可以插入多条具有相同主键的行。**
 
+<span class='gp-2'>
+    <img src='http://ww3.sinaimg.cn/large/006tNc79gy1g41q7tsr9uj31ld0u0q7g.jpg' />
+    <img src='http://ww4.sinaimg.cn/large/006tNc79gy1g41q88nzx5j31ll0u075r.jpg' />
+    <img src='http://ww3.sinaimg.cn/large/006tNc79gy1g41qfiihtlj31ko0u0wlz.jpg' />
+    <img src='http://ww2.sinaimg.cn/large/006tNc79gy1g41qfz40htj31m30u041z.jpg' />
+</span>
 
 # 视图
 
@@ -113,3 +128,18 @@ SELECT level, sum(total) FROM daily GROUP BY level;
 
 当 MATERIALIZED VIEW 添加至引擎，它将会在后台收集数据。可以持续不断地从 Kafka 收集数据并通过 SELECT 将数据转换为所需要的格式。
 
+# 配置
+
+![](http://ww2.sinaimg.cn/large/006tNc79gy1g41qsxh7hgj31mr0u0n1k.jpg)
+![](http://ww3.sinaimg.cn/large/006tNc79gy1g41qvabku6j31jp0u0diu.jpg)
+![](http://ww1.sinaimg.cn/large/006tNc79gy1g41qx4h4ulj31mj0u0jtz.jpg)
+![](http://ww2.sinaimg.cn/large/006tNc79gy1g41qxzqvntj31qe0u0myt.jpg)
+![](http://ww4.sinaimg.cn/large/006tNc79gy1g41r0c8kl5j31m20u041b.jpg)
+![](http://ww4.sinaimg.cn/large/006tNc79gy1g41r1lxyw2j31ey0u0439.jpg)
+![](http://ww3.sinaimg.cn/large/006tNc79gy1g41r25bco9j31kl0u0qbf.jpg)
+![](http://ww4.sinaimg.cn/large/006tNc79gy1g41r4f77j4j31c00u0q8s.jpg)
+![](http://ww3.sinaimg.cn/large/006tNc79gy1g41r4n5p4rj31c00u0jvl.jpg)
+![](http://ww2.sinaimg.cn/large/006tNc79gy1g41r5fgyxjj31c00u0n24.jpg)
+![](http://ww2.sinaimg.cn/large/006tNc79gy1g41r68roxpj31c00u0775.jpg)
+![](http://ww3.sinaimg.cn/large/006tNc79gy1g41r7ajwcdj31c00u0jsv.jpg)
+![](http://ww3.sinaimg.cn/large/006tNc79gy1g41r8uwc0wj31c00u0q58.jpg)
