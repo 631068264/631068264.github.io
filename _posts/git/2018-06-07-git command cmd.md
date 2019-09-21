@@ -6,7 +6,7 @@ categories:
     - git
 ---
 
-### 删除远程分支
+# 删除远程分支
 ```
 git push origin --delete <branchName>
 
