@@ -3,9 +3,9 @@ layout:     post
 rewards: false
 title:      计算机网络
 categories:
-    - 计算机网络
+    - network
 tags:
-    - 计算机网络
+    - network
 ---
 
 # 体系结构
