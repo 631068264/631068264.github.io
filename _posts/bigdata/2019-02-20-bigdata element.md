@@ -147,7 +147,7 @@ term_length = FOREACH unique_terms GENERATE word, string_udf.num_chars(word) as 
 
 # Hive
 
-[Hive](/blog/2019/03/03/hive/)
+[Hive](/blog/2019/03/03/hive)
 
 # HBase
 
