@@ -248,7 +248,7 @@ term_length = FOREACH unique_terms GENERATE word, string_udf.num_chars(word) as 
 
 # Spark
 
-[Spark](/blog/2019/03/01/spark/)
+[Spark](/blog/2019/03/01/spark)
 
 # 流计算
 

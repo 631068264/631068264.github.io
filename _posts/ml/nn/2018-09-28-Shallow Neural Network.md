@@ -61,8 +61,8 @@ tanh函数在所有场合都**优于**sigmoid函数
 激活函数的**斜率（梯度）很小，最后就会接近于0**，
 导致**降低**梯度下降的速度
 
-> 所以输入层使|x|尽可能限定在零值附近，从而**提高**梯度下降算法运算速度 
-使用[Normalizing input](/blog/2018/09/29/base-model/#normalizing-input)
+> 所以输入层使|x|尽可能限定在零值附近，从而**提高**梯度下降算法运算速度 使用
+> [Normalizing input](/blog/2018/09/29/base-model#normalizing-input)
 
 
 ## ReLU激活函数

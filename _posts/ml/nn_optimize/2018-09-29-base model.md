@@ -229,7 +229,7 @@ hidden1 = tf.layers.dense(X, n_hidden1, activation=tf.nn.relu,
 ```
 
 ## 激活函数
-[详细](/blog/2018/09/28/Shallow-Neural-Network/#激活函数-activation-functions)
+[详细](/blog/2018/09/28/Shallow-Neural-Network#激活函数-activation-functions)
 
 ## Gradient checking
 Back Propagation神经网络有一项重要的测试是梯度检查（gradient checking）。
