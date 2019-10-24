@@ -1,0 +1,1850 @@
+<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/dash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head>
+  <meta name="referrer" content="never">
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="rnn," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Recurrent Neural Networks 循环神经网络">
+<meta name="keywords" content="rnn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RNN基础">
+<meta property="og:url" content="/blog/2018/10/03/RNN%E5%9F%BA%E7%A1%80">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="Recurrent Neural Networks 循环神经网络">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwgy1fvv7c47j1wj31kw0kemz4.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwgy1fvv7d032cij31kw0wqq5b.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwgy1fvv7km34upj30go08zmzc.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwgy1fvv7s740u4j30gq07kgme.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fwv8g4kwoij31260iyju2.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwgy1fvv8p00eejj30jr09ijrw.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwgy1fwvaex7ptzj30fq07n0sq.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwgy1fvvdrp6vwoj31kw0qr423.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwly1fvvzpvtc02j30kw04u3yh.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwgy1fvvf32ghw0j31kw0shgpf.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwgy1fvvf8w71uqj31kw1190ug.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fvvz903lcfj312k0duq38.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwly1fvw0a09x0pj314w0qa0v0.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwly1fvw0a7ermaj30zs0lgjv2.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwgy1fx4aomv448j30yq18o7bz.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNbRwgy1fvw8kuops4j30ho08lmxn.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwgy1fvw8qrx450j30gr07k74t.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RNN基础">
+<meta name="twitter:description" content="Recurrent Neural Networks 循环神经网络">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNbRwgy1fvv7c47j1wj31kw0kemz4.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>RNN基础 | Notes</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-120397256-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-book">
+          <a href="/book/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            库
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!--<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/bitcoincash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>-->
+
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/blog/2018/10/03/RNN%E5%9F%BA%E7%A1%80">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+          
+          
+            RNN基础
+          
+        </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-03T00:00:00+08:00">
+                2018-10-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/ml" itemprop="url" rel="index">
+                    <span itemprop="name">ml</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/blog/2018/10/03/RNN%E5%9F%BA%E7%A1%80" class="leancloud_visitors" data-flag-title="RNN基础">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <p>Recurrent Neural Networks 循环神经网络</p>
+
+<h1 id="应用领域">应用领域</h1>
+<p>语音识别，情感分类，机器翻译</p>
+
+<h1 id="notation">Notation</h1>
+<p>符号</p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fvv7c47j1wj31kw0kemz4.jpg" alt="" />
+<img src="https://ws3.sinaimg.cn/large/006tNbRwgy1fvv7d032cij31kw0wqq5b.jpg" alt="" /></p>
+
+<h1 id="recurrent-neural-network-model">Recurrent Neural Network Model</h1>
+<p><img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fvv7km34upj30go08zmzc.jpg" alt="" /></p>
+<ul>
+  <li><strong>不同样本</strong>的输入序列长度或输出序列<strong>长度不同</strong>，即$T_x^{(i)}\neq T_x^{(j)}$，$T_y^{(i)}\neq T_y^{(j)}$，造成<strong>模型难以统一</strong>。
+解决办法之一是设定一个最大序列长度，对每个输入和输出序列补零并统一到最大长度。但是这种做法实际效果并不理想。</li>
+  <li>这种标准神经网络结构<strong>无法共享序列</strong>不同<script type="math/tex">% <![CDATA[
+x^{<t>} %]]></script>之间的特征。例如，如果某个<script type="math/tex">% <![CDATA[
+x^{<t>} %]]></script>即“Harry”是人名成分，那么句子其它位置出现了“Harry”，
+也很可能也是人名。这是共享特征的结果，如同CNN网络特点一样。但是，上图所示的网络不具备共享特征的能力。
+值得一提的是，<strong>共享特征还有助于减少神经网络中的参数数量，一定程度上减小了模型的计算复杂度</strong>。</li>
+</ul>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fvv7s740u4j30gq07kgme.jpg" alt="" /></p>
+
+<p>序列模型从左到右，依次传递，此例中，$T_x=T_y$。<math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>x</mi><mrow><mo>&lt;</mo><mi>t</mi><mo>&gt;</mo></mrow></msup><mi>&#x5230;</mi><mo>&#xA0;</mo><mo>&#xA0;</mo><msup><mover><mi>y</mi><mo>^</mo></mover><mrow><mo>&lt;</mo><mi>t</mi><mo>&gt;</mo></mrow></msup><mi>&#x4E4B;</mi><mi>&#x95F4;</mi><mi>&#x662F;</mi><mi>&#x9690;</mi><mi>&#x85CF;</mi><mi>&#x795E;</mi><mi>&#x7ECF;</mi><mi>&#x5143;</mi><mo>&#x3002;</mo></math><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mrow><mo>&lt;</mo><mi>t</mi><mo>&gt;</mo></mrow></msup></math>会传入到第t+1个元素中，作为输入。其中，<math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>a</mi><mrow><mo>&lt;</mo><mn>0</mn><mo>&gt;</mo></mrow></msup></math>一般为零向量。
+<img src="https://ws3.sinaimg.cn/large/006tNbRwly1fwv8g4kwoij31260iyju2.jpg" alt="" /></p>
+
+<p><strong>RNN的正向传播</strong>（Forward Propagation）过程为：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+a^{<t>}=g(W_{aa}\cdot a^{<t-1>}+W_{ax}\cdot x^{<t>}+ba) %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\hat y^{<t>}=g(W_{ya}\cdot a^{<t>}+b_y) %]]></script>
+
+<p>其中，$g(\cdot)$表示激活函数，不同的问题需要使用不同的激活函数。</p>
+
+<p>简化为：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+a^{<t>}=g(W_a[a^{<t-1>},x^{<t>}]+b_a) %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\hat y^{<t>}=g(W_{y}\cdot a^{<t>}+b_y) %]]></script>
+
+<h1 id="backpropagation">Backpropagation</h1>
+<p>针对上面识别人名的例子，经过RNN正向传播，单个元素的Loss function为：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+L^{<t>}(\hat y^{<t>},y^{<t>})=-y^{<t>}log\ \hat y^{<t>}-(1-y^{<t>})log\ (1-\hat y^{<t>}) %]]></script>
+
+<p>该样本所有元素的Loss function为：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+L(\hat y,y)=\sum_{t=1}^{T_y}L^{<t>}(\hat y^{<t>},y^{<t>}) %]]></script>
+
+<p>然后，反向传播（Backpropagation）过程就是从右到左分别计算$L(\hat y,y)$对参数$W_{a}，W_{y}，b_a，b_y$</p>
+
+<h1 id="different-types-of-rnns">Different types of RNNs</h1>
+<p>RNN模型包含以下几个类型：</p>
+<ul>
+  <li>Many to many: $T_x=T_y$       seq to seq</li>
+  <li>Many to many: $T_x\neq T_y$</li>
+  <li>Many to one: $T_x&gt;1,T_y=1$</li>
+  <li>One to many: $T_x=1,T_y&gt;1$</li>
+  <li>One to one: $T_x=1,T_y=1$
+<img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fvv8p00eejj30jr09ijrw.jpg" alt="" /></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23</pre></td><td class="code"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+
+<span class="n">n_inputs</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">n_neurons</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">X0</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_inputs</span><span class="p">])</span>
+<span class="n">X1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_inputs</span><span class="p">])</span>
+<span class="n">Wx</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_normal</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">n_inputs</span><span class="p">,</span> <span class="n">n_neurons</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+<span class="n">Wy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_normal</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">n_neurons</span><span class="p">,</span> <span class="n">n_neurons</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_neurons</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+<span class="n">Y0</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">X0</span><span class="p">,</span> <span class="n">Wx</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">Y1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">Wy</span><span class="p">)</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">Wx</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">init</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+
+<span class="c"># Mini-batch: instance 0,instance 1,instance 2,instance 3</span>
+<span class="n">X0_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>  <span class="c"># t = 0</span>
+<span class="n">X1_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>  <span class="c"># t = 1</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+ <span class="n">init</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+ <span class="n">Y0_val</span><span class="p">,</span> <span class="n">Y1_val</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">Y0</span><span class="p">,</span> <span class="n">Y1</span><span class="p">],</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X0</span><span class="p">:</span> <span class="n">X0_batch</span><span class="p">,</span> <span class="n">X1</span><span class="p">:</span> <span class="n">X1_batch</span><span class="p">})</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">Y0_val</span><span class="p">,</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">Y1_val</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>相同模型</p>
+
+<p>static_rnn()函数为每个输入调用单元工厂的__call __()函数，创建单元的<strong>两个副本</strong>（每个单元包含 5 个循环神经元的循环层），
+并具有共享的权重和偏置项，像前面一样。</p>
+
+<p>static_rnn()函数返回两个对象。 第一个是包含<strong>每个时间步的输出张量</strong>的 Python 列表。
+第二个是包含网络<strong>最终状态</strong>的张量。 当你使用基本的单元时，最后的状态就等于最后的输出。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code><span class="n">X0</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_inputs</span><span class="p">])</span>
+<span class="n">X1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_inputs</span><span class="p">])</span>
+
+<span class="n">basic_cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">BasicRNNCell</span><span class="p">(</span><span class="n">num_units</span><span class="o">=</span><span class="n">n_neurons</span><span class="p">)</span>
+<span class="n">output_seqs</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">static_rnn</span><span class="p">(</span><span class="n">basic_cell</span><span class="p">,</span> <span class="p">[</span><span class="n">X0</span><span class="p">,</span> <span class="n">X1</span><span class="p">],</span>
+                                                <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">Y0</span><span class="p">,</span> <span class="n">Y1</span> <span class="o">=</span> <span class="n">output_seqs</span>
+</code></pre></td></tr></tbody></table></div></div>
+<p><strong>缺点</strong> 这种方法仍然会建立一个每个时间步包含一个单元的图。如果使用具有200个时间步长的输入进行调用，
+则创建一个具有200个RNN步长的静态图形。首先，图形创建很慢。其次，您无法传递比您最初指定的更长的序列（&gt; 200）。</p>
+
+<p><code class="highlighter-rouge">tf.nn.dynamic_rnn</code>解决了这个问题。它使用tf.While循环在执行时动态构造图形。这意味着图表创建速度更快，您可以提供可变大小的批量。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30</pre></td><td class="code"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">n_steps</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">n_inputs</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">n_neurons</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="s">"""
+    input shape [batch_size, n_steps, n_inputs]
+    """</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_inputs</span><span class="p">])</span>
+
+    <span class="n">basic_cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">BasicRNNCell</span><span class="p">(</span><span class="n">num_units</span><span class="o">=</span><span class="n">n_neurons</span><span class="p">)</span>
+    <span class="n">outputs</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">dynamic_rnn</span><span class="p">(</span><span class="n">basic_cell</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="n">init</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+
+    <span class="n">X_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">]],</span>  <span class="c"># instance 1</span>
+        <span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>  <span class="c"># instance 2</span>
+        <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span>  <span class="c"># instance 3</span>
+        <span class="p">[[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span>  <span class="c"># instance 4</span>
+    <span class="p">])</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+        <span class="n">init</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="n">outputs_val</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="nb">eval</span><span class="p">(</span><span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">X_batch</span><span class="p">})</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">outputs_val</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+<h2 id="变长输入序列">变长输入序列</h2>
+<p>你应该在调用<code class="highlighter-rouge">dynamic_rnn()</code>（或<code class="highlighter-rouge">static_rnn()</code>）函数时设置<code class="highlighter-rouge">sequence_length</code>参数</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27</pre></td><td class="code"><pre class="highlight"><code><span class="n">n_steps</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">n_inputs</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">n_neurons</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_inputs</span><span class="p">])</span>
+<span class="n">basic_cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">BasicRNNCell</span><span class="p">(</span><span class="n">num_units</span><span class="o">=</span><span class="n">n_neurons</span><span class="p">)</span>
+<span class="n">seq_length</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">])</span>
+<span class="n">outputs</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">dynamic_rnn</span><span class="p">(</span><span class="n">basic_cell</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+                                    <span class="n">sequence_length</span><span class="o">=</span><span class="n">seq_length</span><span class="p">)</span>
+
+<span class="s">"""
+例如，假设第二个输入序列只包含一个输入而不是两个输入。 为了适应输入张量X，必须填充零向量（因为输入张量的第二维是最长序列的大小，即 2）
+"""</span>
+<span class="n">X_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="c"># step 0     step 1</span>
+        <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">]],</span> <span class="c"># instance 1</span>
+        <span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="c"># instance 2 (padded with zero vectors)</span>
+        <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> <span class="c"># instance 3</span>
+        <span class="p">[[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="c"># instance 4</span>
+    <span class="p">])</span>
+<span class="n">seq_length_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="n">init</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="n">outputs_val</span><span class="p">,</span> <span class="n">states_val</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">outputs</span><span class="p">,</span> <span class="n">states</span><span class="p">],</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">X_batch</span><span class="p">,</span> <span class="n">seq_length</span><span class="p">:</span> <span class="n">seq_length_batch</span><span class="p">})</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>action
+<img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fwvaex7ptzj30fq07n0sq.jpg" alt="" /></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46</pre></td><td class="code"><pre class="highlight"><code><span class="n">n_steps</span> <span class="o">=</span> <span class="mi">28</span>
+<span class="n">n_inputs</span> <span class="o">=</span> <span class="mi">28</span>
+<span class="n">n_neurons</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">n_outputs</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.001</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_inputs</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="p">[</span><span class="bp">None</span><span class="p">])</span>
+
+<span class="n">basic_cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">BasicRNNCell</span><span class="p">(</span><span class="n">num_units</span><span class="o">=</span><span class="n">n_neurons</span><span class="p">)</span>
+<span class="n">outputs</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">dynamic_rnn</span><span class="p">(</span><span class="n">basic_cell</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="n">logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">n_outputs</span><span class="p">)</span>
+<span class="n">xentropy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sparse_softmax_cross_entropy_with_logits</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                                                          <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">xentropy</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">AdamOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+<span class="n">training_op</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+<span class="n">correct</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">in_top_k</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">correct</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+
+<span class="n">init</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+
+<span class="s">"""
+现在让我们加载 MNIST 数据，并按照网络的预期方式将测试数据重塑为[batch_size, n_steps, n_inputs]。 我们之后会关注训练数据的重塑。
+"""</span>
+<span class="kn">from</span> <span class="nn">tensorflow.examples.tutorials.mnist</span> <span class="kn">import</span> <span class="n">input_data</span>
+<span class="n">mnist</span> <span class="o">=</span> <span class="n">input_data</span><span class="o">.</span><span class="n">read_data_sets</span><span class="p">(</span><span class="s">"/tmp/data/"</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_inputs</span><span class="p">))</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">labels</span>
+
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">150</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="n">init</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mnist</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">num_examples</span> <span class="o">//</span> <span class="n">batch_size</span><span class="p">):</span>
+            <span class="n">X_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">next_batch</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+            <span class="n">X_batch</span> <span class="o">=</span> <span class="n">X_batch</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_inputs</span><span class="p">))</span>
+            <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">training_op</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">X_batch</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">y_batch</span><span class="p">})</span>
+        <span class="n">acc_train</span> <span class="o">=</span> <span class="n">accuracy</span><span class="o">.</span><span class="nb">eval</span><span class="p">(</span><span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">X_batch</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">y_batch</span><span class="p">})</span>
+        <span class="n">acc_test</span> <span class="o">=</span> <span class="n">accuracy</span><span class="o">.</span><span class="nb">eval</span><span class="p">(</span><span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">y_test</span><span class="p">})</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="s">"Train accuracy:"</span><span class="p">,</span> <span class="n">acc_train</span><span class="p">,</span> <span class="s">"Test accuracy:"</span><span class="p">,</span> <span class="n">acc_test</span><span class="p">)</span>
+
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="nlp">NLP</h1>
+<p>如何使用RNN构建语言模型</p>
+
+<p>大量的单词语句语料库（corpus）构成足够大的训练集，对corpus的每句话进行切分词（tokenize），建立vocabulary，对每个单词进行one-hot编码。
+<img src="https://ws2.sinaimg.cn/large/006tNbRwgy1fvvdrp6vwoj31kw0qr423.jpg" alt="" />
+对语料库的每条语句进行RNN模型训练，最终得到的模型可以根据给出语句的前几个单词预测其余部分，将语句补充完整。</p>
+
+<h1 id="循环神经网络的梯度消失vanishing-gradients-with-rnns">循环神经网络的梯度消失（Vanishing gradients with RNNs）</h1>
+<p>某个word可能与它距离较远的某个word具有强依赖关系。
+<img src="https://ws3.sinaimg.cn/large/006tNbRwly1fvvzpvtc02j30kw04u3yh.jpg" alt="" />
+一般的RNN模型每个元素受其周围附近的影响较大，<strong>难以建立跨度较大的依赖性</strong>。上面两句话的这种依赖关系，
+由于<strong>跨度很大</strong>，普通的RNN网络容易出现<strong>梯度消失</strong>，捕捉不到它们之间的依赖，造成语法错误。</p>
+
+<p>RNN也可能出现梯度爆炸的问题，即gradient过大。常用的解决办法是设定一个阈值，
+一旦梯度最大值达到这个阈值，就对整个梯度向量进行尺度缩小。这种做法被称为gradient clipping。</p>
+
+<h1 id="gru单元gated-recurrent-unitgru">GRU单元（Gated Recurrent Unit（GRU））</h1>
+<p>更好地捕捉<strong>深层连接</strong>，并<strong>改善了梯度消失</strong>问题
+<img src="https://ws3.sinaimg.cn/large/006tNbRwgy1fvvf32ghw0j31kw0shgpf.jpg" alt="" />
+为了解决梯度消失问题，对上述单元进行修改，添加了记忆单元，构建GRU(门控循环单元)</p>
+
+<p>GRU单元将会有个新的变量称为c，代表细胞（cell）,记忆细胞的作用是提供了记忆的能力。
+<script type="math/tex">% <![CDATA[
+我们将用一个候选值重写记忆细胞，即{\tilde{c}}^{<t>}的值，所以它就是个候选值，替代了c^{<t>}的值。 %]]></script>
+<script type="math/tex">GRU中真正重要的思想是我们有一个门，我先把这个门叫做\Gamma_u,这是个下标为u的大写希腊字母\Gamma，u代表更新门，这是一个0到1之间的值。</script></p>
+
+<p><span class="gp-2">
+    <img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fvvf8w71uqj31kw1190ug.jpg" />
+    <img src="https://ws4.sinaimg.cn/large/006tNbRwly1fvvz903lcfj312k0duq38.jpg" />
+</span>
+<script type="math/tex">% <![CDATA[
+如果这个更新值\Gamma_{u} =1，也就是说把这个新值，即c^{<t>}设为候选值，c^{<t>} = {\tilde{c}}^{<t>}。 %]]></script>
+<script type="math/tex">% <![CDATA[
+如果\Gamma_{u}= 0，意思就是说不更新它，就用旧的值。c^{<t>} =c^{<t-1>}。 %]]></script></p>
+
+<p>这就是<strong>GRU</strong>单元或者说是一个简化过的<strong>GRU</strong>单元，它的优点就是通过门决定，当你从左到右扫描一个句子的时候，
+这个时机是要更新某个记忆细胞，还是不更新，不更新直到你到你真的需要使用记忆细胞的时候，这可能在句子之前就决定了。
+因为sigmoid的值，<strong>现在因为门很容易取到0值，只要这个值是一个很大的负数，再由于数值上的四舍五入，上面这些门大体上就是0，或者说非常非常非常接近0。</strong>
+所以在这样的情况下，这非常有利于维持细胞的值。因为$\Gamma_{u}$很接近0，可能是0.000001或者更小，这就<strong>不会有梯度消失</strong>的问题了。
+因为$\Gamma_{u}$很接近0，这就是说$c^t$几乎就等于$c^{t-1}$，而且$c^t$的值也很好地被维持了，
+即使经过很多很多的时间步。这就是缓解梯度消失问题的关键，因此允许神经网络运行在非常庞大的依赖词上，比如说<strong>cat</strong>和<strong>was</strong>单词即使被中间的很多单词分割开。</p>
+
+<p>上面介绍的是简化的GRU模型，完整的GRU添加了另外一个gate，即$\Gamma_r$，表达式如下：
+<script type="math/tex">% <![CDATA[
+r代表相关性（**relevance**）。这个\Gamma_{r}门告诉你计算出的下一个c^{<t>}的候选值{\tilde{c}}^{<t>}跟c^{<t-1>}有多大的相关性。 %]]></script></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\tilde c^{<t>}=tanh(W_c[\Gamma_r*c^{<t-1>},x^{<t>}]+b_c) %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\Gamma_u=\sigma(W_u[c^{<t-1>},x^{<t>}]+b_u) %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\Gamma_r=\sigma(W_r[c^{<t-1>},x^{<t>}]+b_r) %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+c^{<t>}=\Gamma_u*\tilde c^{<t>}+(1-\Gamma_u)*c^{<t-1>} %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+a^{<t>}=c^{<t>} %]]></script>
+
+<h1 id="lstm">LSTM</h1>
+<p>长短期记忆 long short term memory
+<span class="gp-2">
+    <img src="https://ws1.sinaimg.cn/large/006tNbRwly1fvw0a09x0pj314w0qa0v0.jpg" />
+    <img src="https://ws4.sinaimg.cn/large/006tNbRwly1fvw0a7ermaj30zs0lgjv2.jpg" />
+</span>
+LSTM包含三个gates：Γu，Γf，Γo，分别对应update gate，forget gate和output gate。</p>
+
+<p><script type="math/tex">% <![CDATA[
+peephole connection(窥视孔连接)其实意思就是门值不仅取决于a^{<t-1>}和x^{<t>}，
+也取决于上一个记忆细胞的值（c^{<t-1>}）， %]]></script>
+<script type="math/tex">然后peephole connection就可以结合这三个门（\Gamma_{u}、\Gamma_{f}、\Gamma_{o}）来计算了。</script></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code><span class="n">lstm_cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">BasicLSTMCell</span><span class="p">(</span><span class="n">num_units</span><span class="o">=</span><span class="n">n_neurons</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fx4aomv448j30yq18o7bz.jpg" alt="" /></p>
+
+<h1 id="bidirectional-rnn">Bidirectional RNN</h1>
+<ul>
+  <li>在序列的某点处不仅可以获取之前的信息，还可以获取未来的信息。</li>
+  <li>深层的RNN
+<img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fvw8kuops4j30ho08lmxn.jpg" alt="" />
+双向循环神经网络，并且这些基本单元不仅仅是标准RNN单元，也可以是GRU单元或者LSTM单元。
+事实上，很多的NLP问题，对于大量有自然语言处理问题的文本，<strong>有LSTM单元的双向RNN模型是用的最多的</strong>。
+所以如果有NLP问题，并且文本句子都是完整的，首先需要标定这些句子，一个有LSTM单元的双向RNN模型，有前向和反向过程是一个不错的首选。</li>
+</ul>
+
+<p>缺点：</p>
+<ul>
+  <li>需要完整的数据的序列，才能预测任意位置。</li>
+</ul>
+
+<h1 id="deep-rnn">Deep RNN</h1>
+<p>深层循环神经网络</p>
+
+<p>RNN的多个层<strong>堆叠在一起构</strong>建更深的模型
+<img src="https://ws3.sinaimg.cn/large/006tNbRwgy1fvw8qrx450j30gr07k74t.jpg" alt="" />
+与DNN一样，用上标[l]表示层数。Deep RNNs中<script type="math/tex">% <![CDATA[
+a^{[l]<t>} %]]></script>的表达式为：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+a^{[l]<t>}=g(W_a^{[l]}[a^{[l]<t-1>},a^{[l-1]<t>}]+b_a^{[l]}) %]]></script>
+
+<p>我们知道DNN层数可达100多，而Deep RNNs一般没有那么多层，3层RNNs已经较复杂了。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code><span class="n">n_neurons</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">n_layers</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">basic_cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">BasicRNNCell</span><span class="p">(</span><span class="n">num_units</span><span class="o">=</span><span class="n">n_neurons</span><span class="p">)</span>
+<span class="n">multi_layer_cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">MultiRNNCell</span><span class="p">([</span><span class="n">basic_cell</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_layers</span><span class="p">)</span>
+<span class="n">outputs</span><span class="p">,</span> <span class="n">states</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">dynamic_rnn</span><span class="p">(</span><span class="n">multi_layer_cell</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>states 变量包含了每层的一个张量，这个张量就代表了该层神经单元的最终状态（维度为[batch_size, n_neurons]）</p>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      wyx
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="/blog/2018/10/03/RNN%E5%9F%BA%E7%A1%80" title="RNN基础">/blog/2018/10/03/RNN%E5%9F%BA%E7%A1%80</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/rnn" rel="tag"># rnn</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2018/10/03/%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB%E4%B8%8E%E7%A5%9E%E7%BB%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB" rel="next" title="人脸识别与神经风格迁移">
+                <i class="fa fa-chevron-left"></i> 人脸识别与神经风格迁移
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2018/10/02/CNN%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B" rel="prev" title="目标检测">
+                目标检测 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="wyx" />
+          <p class="site-author-name" itemprop="name">wyx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/631068264" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://stackoverflow.com/users/5360312/wyx" target="_blank" title="StackOverflow">
+                  
+                    <i class="fa fa-fw fa-stack-overflow"></i>
+                  
+                  StackOverflow
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#应用领域"> <span class="nav-number">1</span> <span class="nav-text">应用领域</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#notation"> <span class="nav-number">2</span> <span class="nav-text">Notation</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#recurrent-neural-network-model"> <span class="nav-number">3</span> <span class="nav-text">Recurrent Neural Network Model</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#backpropagation"> <span class="nav-number">4</span> <span class="nav-text">Backpropagation</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#different-types-of-rnns"> <span class="nav-number">5</span> <span class="nav-text">Different types of RNNs</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#变长输入序列"> <span class="nav-number">5.1</span> <span class="nav-text">变长输入序列</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#nlp"> <span class="nav-number">6</span> <span class="nav-text">NLP</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#循环神经网络的梯度消失vanishing-gradients-with-rnns"> <span class="nav-number">7</span> <span class="nav-text">循环神经网络的梯度消失（Vanishing gradients with RNNs）</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#gru单元gated-recurrent-unitgru"> <span class="nav-number">8</span> <span class="nav-text">GRU单元（Gated Recurrent Unit（GRU））</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#lstm"> <span class="nav-number">9</span> <span class="nav-text">LSTM</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#bidirectional-rnn"> <span class="nav-number">10</span> <span class="nav-text">Bidirectional RNN</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#deep-rnn"> <span class="nav-number">11</span> <span class="nav-text">Deep RNN</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2018 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wyx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var labels = ['gitalk','2018-10-03']
+</script>
+
+<script type="text/javascript">
+    labels.push('ml');
+</script>
+
+
+<script type="text/javascript">
+    labels.push('rnn');
+</script>
+
+
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'dd688ffd2be8512fc659',
+        clientSecret: '483255bda7b80acb108df487ac91a0be78710b0d',
+        repo: '631068264.github.io',
+        owner: '631068264',
+        admin: ['631068264'],
+        id: 'RNN基础',
+        title: 'RNN基础',
+        labels: labels,
+        perPage: 50,
+        distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("MQfAJm2nTUDaT5bEuS8i4Ygm-gzGzoHsz", "m4tqv3N9AepVgTk0YfSNe9kz");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  <!--custom css in _sass/_custom/custom.scss -->
+
+<script type="text/javascript">
+    // 黑幕提示语
+    $('span.heimu').attr('title', '你知道得太多了');
+</script>
+
+<script type="text/javascript">
+    // 多图显示 gp-列数
+    $('span[class^="gp-"]').each(function () {
+        var div_mulp = $(this);
+        if (div_mulp && div_mulp.attr('class')) {
+            var column_number = parseInt(div_mulp.attr('class').split('-')[1]);
+            var image = div_mulp.find('img');
+            if (image.size() > 0) {
+                div_mulp.removeClass()
+                    .addClass('post-gallery')
+                    .attr('itemscope', '')
+                    .attr('itemtype', 'http://schema.org/ImageGallery');
+
+                image.each(function (index) {
+                    var modulo = index % column_number;
+
+                    if (modulo === 0) {
+                        content = $('<div class="post-gallery-row"></div>')
+                    }
+                    var image_src = $(this).attr('src');
+                    content.append('<a class="post-gallery-img fancybox"\n' +
+                        '                 href="' + image_src + '" rel="gallery_"\n' +
+                        '                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">\n' +
+                        '                <img src="' + image_src + '" itemprop="contentUrl"/>\n' +
+                        '              </a>');
+
+                    if (modulo === column_number - 1) {
+                        div_mulp.append(content)
+                    }
+                });
+
+                var photo_size_modulo = image.size() % column_number;
+                if (photo_size_modulo > 0) {
+                    div_mulp.append(content);
+                }
+                image.remove();
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>
+

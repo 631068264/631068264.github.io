@@ -1,0 +1,1625 @@
+<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/dash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head>
+  <meta name="referrer" content="never">
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tensorflow," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="MNIST dataset Tensorflow ValueError: No variables to save from TensorFlow restore model Key Variable not found in checkpoint 这个是我自己的问题🤬未解决 已解决 和 name_scope有关 Tensorflow: how to save/restore a model? #!/usr/bin/env python # -*- coding: utf-8 -*- &quot;&quot;&quot; @author = &apos;wyx&apos; @time = 2018/11/7 15:45 @annotation = &apos;&apos; &quot;&quot;&quot; from datetime import datetime import tensorflow as tf from tensorflow.examples.tutorials.mnist import input_data from tensorflow.python.saved_model import tag_constants mnist = input_data.read_data_sets(&quot;MNIST_data/&quot;, one_hot=True) save_model_path = &apos;mnist_model/model.ckpt&apos; def train(): learning_rate = 0.05 batch_size = 100 max_epochs = 100 num_of_batch = int(mnist.train.num_examples / batch_size) now = datetime.utcnow().strftime(&quot;%Y%m%d%H%M%S&quot;) X = tf.placeholder(tf.float32, shape=[None, 784], name=&apos;X&apos;) y = tf.placeholder(tf.float32, shape=[None, 10], name=&apos;y&apos;) print(X.name, y.name) W = tf.get_variable(shape=[784, 10], name=&apos;weight&apos;) b = tf.get_variable(initializer=tf.zeros([10]), name=&apos;bais&apos;) tf.summary.histogram(&quot;weights&quot;, W) tf.summary.histogram(&quot;biases&quot;, b) with tf.name_scope(&apos;pred&apos;): y_pred = tf.nn.softmax(tf.matmul(X, W) + b, name=&apos;predict&apos;) print(y_pred.name) with tf.name_scope(&apos;loss&apos;): loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=y_pred)) tf.summary.scalar(&apos;loss&apos;, loss) optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss) with tf.name_scope(&apos;acc&apos;): correct_prediction = tf.equal(tf.argmax(y_pred, 1), tf.argmax(y, 1)) accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name=&apos;acc&apos;) print(accuracy.name) merged_summary_op = tf.summary.merge_all() init_op = tf.global_variables_initializer() saver = tf.train.Saver() with tf.Session() as sess: sess.run(init_op) loss_avg = 0 writer = tf.summary.FileWriter(&apos;mnist/{}&apos;.format(now), sess.graph) for epoch in range(max_epochs): for i in range(num_of_batch): batch_x, batch_y = mnist.train.next_batch(batch_size) summary_str, _, l = sess.run([merged_summary_op, optimizer, loss], feed_dict={X: batch_x, y: batch_y}) loss_avg += l global_step = epoch * num_of_batch + i writer.add_summary(summary_str, global_step) if global_step % 100 == 0: print(&apos;Epoch {}: {} save model&apos;.format(epoch, i)) # save model in halfway saver.save(sess, save_model_path, global_step=global_step) loss_avg /= num_of_batch print(&apos;Epoch {}: Loss {}&apos;.format(epoch, loss_avg)) print(sess.run(accuracy, feed_dict={X: mnist.test.images, y: mnist.test.labels})) saver.save(sess, save_model_path) tf.saved_model.simple_save(sess, &apos;simple_model&apos;, inputs={ &apos;X&apos;: X, &apos;y&apos;: y, }, outputs={ &apos;pred&apos;: y_pred, }) def predict(mode=1): def _predict(): graph = tf.get_default_graph() X = graph.get_tensor_by_name(&apos;X:0&apos;) y = graph.get_tensor_by_name(&apos;y:0&apos;) accuracy = graph.get_tensor_by_name(&apos;acc/acc:0&apos;) print(sess.run(accuracy, feed_dict={X: mnist.test.images, y: mnist.test.labels})) pred = graph.get_tensor_by_name(&apos;pred/predict:0&apos;) import matplotlib.pyplot as plt i = 90 img_orign = mnist.train.images[i] img = img_orign.reshape((28, 28)) plt.imshow(img, cmap=&apos;gray&apos;) plt.title(mnist.train.labels[i]) plt.show() a = sess.run(pred, feed_dict={X: img_orign.reshape(-1, 784)}) import numpy as np print(np.argmax(a)) if mode == 1: meta_path = &apos;mnist_model/model.ckpt.meta&apos; checkpoint_path = &apos;mnist_model&apos; elif mode == 2: # stupid var WTF ValueError: No variables to save _ = tf.Variable(0) saver = tf.train.Saver() with tf.Session() as sess: sess.run(tf.global_variables_initializer()) if mode == 1: saver = tf.train.import_meta_graph(meta_path) saver.restore(sess, tf.train.latest_checkpoint(checkpoint_path)) elif mode == 2: saver.restore(sess, save_model_path) elif mode == 3: tf.saved_model.loader.load(sess, [tag_constants.SERVING], &apos;simple_model&apos;) _predict() def check_ckpt(): from tensorflow.python.tools import inspect_checkpoint as chkp chkp.print_tensors_in_checkpoint_file(save_model_path, tensor_name=&apos;&apos;, all_tensors=True) if __name__ == &apos;__main__&apos;: # train() predict(mode=3) # check_ckpt() MLP def multi_layer(X): n_classes = 10 with tf.name_scope(&apos;layer&apos;): l1 = tf.layers.dense(X, 32, activation=tf.nn.relu) l2 = tf.layers.dense(l1, 16, activation=tf.nn.relu) out = tf.layers.dense(l2, n_classes) with tf.name_scope(&apos;pred&apos;): y_pred = tf.nn.softmax(out, name=&apos;predict&apos;) print(y_pred.name) return y_pred Liner layer def liner_layer(X): W = tf.get_variable(shape=[784, 10], name=&apos;weight&apos;) b = tf.get_variable(initializer=tf.zeros([10]), name=&apos;bais&apos;) tf.summary.histogram(&quot;weights&quot;, W) tf.summary.histogram(&quot;biases&quot;, b) with tf.name_scope(&apos;pred&apos;): y_pred = tf.nn.softmax(tf.matmul(X, W) + b, name=&apos;predict&apos;) print(y_pred.name) return y_pred">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mnist 分类 tensorflow">
+<meta property="og:url" content="/blog/2018/11/09/mnist_clf">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="MNIST dataset Tensorflow ValueError: No variables to save from TensorFlow restore model Key Variable not found in checkpoint 这个是我自己的问题🤬未解决 已解决 和 name_scope有关 Tensorflow: how to save/restore a model? #!/usr/bin/env python # -*- coding: utf-8 -*- &quot;&quot;&quot; @author = &apos;wyx&apos; @time = 2018/11/7 15:45 @annotation = &apos;&apos; &quot;&quot;&quot; from datetime import datetime import tensorflow as tf from tensorflow.examples.tutorials.mnist import input_data from tensorflow.python.saved_model import tag_constants mnist = input_data.read_data_sets(&quot;MNIST_data/&quot;, one_hot=True) save_model_path = &apos;mnist_model/model.ckpt&apos; def train(): learning_rate = 0.05 batch_size = 100 max_epochs = 100 num_of_batch = int(mnist.train.num_examples / batch_size) now = datetime.utcnow().strftime(&quot;%Y%m%d%H%M%S&quot;) X = tf.placeholder(tf.float32, shape=[None, 784], name=&apos;X&apos;) y = tf.placeholder(tf.float32, shape=[None, 10], name=&apos;y&apos;) print(X.name, y.name) W = tf.get_variable(shape=[784, 10], name=&apos;weight&apos;) b = tf.get_variable(initializer=tf.zeros([10]), name=&apos;bais&apos;) tf.summary.histogram(&quot;weights&quot;, W) tf.summary.histogram(&quot;biases&quot;, b) with tf.name_scope(&apos;pred&apos;): y_pred = tf.nn.softmax(tf.matmul(X, W) + b, name=&apos;predict&apos;) print(y_pred.name) with tf.name_scope(&apos;loss&apos;): loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=y_pred)) tf.summary.scalar(&apos;loss&apos;, loss) optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss) with tf.name_scope(&apos;acc&apos;): correct_prediction = tf.equal(tf.argmax(y_pred, 1), tf.argmax(y, 1)) accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name=&apos;acc&apos;) print(accuracy.name) merged_summary_op = tf.summary.merge_all() init_op = tf.global_variables_initializer() saver = tf.train.Saver() with tf.Session() as sess: sess.run(init_op) loss_avg = 0 writer = tf.summary.FileWriter(&apos;mnist/{}&apos;.format(now), sess.graph) for epoch in range(max_epochs): for i in range(num_of_batch): batch_x, batch_y = mnist.train.next_batch(batch_size) summary_str, _, l = sess.run([merged_summary_op, optimizer, loss], feed_dict={X: batch_x, y: batch_y}) loss_avg += l global_step = epoch * num_of_batch + i writer.add_summary(summary_str, global_step) if global_step % 100 == 0: print(&apos;Epoch {}: {} save model&apos;.format(epoch, i)) # save model in halfway saver.save(sess, save_model_path, global_step=global_step) loss_avg /= num_of_batch print(&apos;Epoch {}: Loss {}&apos;.format(epoch, loss_avg)) print(sess.run(accuracy, feed_dict={X: mnist.test.images, y: mnist.test.labels})) saver.save(sess, save_model_path) tf.saved_model.simple_save(sess, &apos;simple_model&apos;, inputs={ &apos;X&apos;: X, &apos;y&apos;: y, }, outputs={ &apos;pred&apos;: y_pred, }) def predict(mode=1): def _predict(): graph = tf.get_default_graph() X = graph.get_tensor_by_name(&apos;X:0&apos;) y = graph.get_tensor_by_name(&apos;y:0&apos;) accuracy = graph.get_tensor_by_name(&apos;acc/acc:0&apos;) print(sess.run(accuracy, feed_dict={X: mnist.test.images, y: mnist.test.labels})) pred = graph.get_tensor_by_name(&apos;pred/predict:0&apos;) import matplotlib.pyplot as plt i = 90 img_orign = mnist.train.images[i] img = img_orign.reshape((28, 28)) plt.imshow(img, cmap=&apos;gray&apos;) plt.title(mnist.train.labels[i]) plt.show() a = sess.run(pred, feed_dict={X: img_orign.reshape(-1, 784)}) import numpy as np print(np.argmax(a)) if mode == 1: meta_path = &apos;mnist_model/model.ckpt.meta&apos; checkpoint_path = &apos;mnist_model&apos; elif mode == 2: # stupid var WTF ValueError: No variables to save _ = tf.Variable(0) saver = tf.train.Saver() with tf.Session() as sess: sess.run(tf.global_variables_initializer()) if mode == 1: saver = tf.train.import_meta_graph(meta_path) saver.restore(sess, tf.train.latest_checkpoint(checkpoint_path)) elif mode == 2: saver.restore(sess, save_model_path) elif mode == 3: tf.saved_model.loader.load(sess, [tag_constants.SERVING], &apos;simple_model&apos;) _predict() def check_ckpt(): from tensorflow.python.tools import inspect_checkpoint as chkp chkp.print_tensors_in_checkpoint_file(save_model_path, tensor_name=&apos;&apos;, all_tensors=True) if __name__ == &apos;__main__&apos;: # train() predict(mode=3) # check_ckpt() MLP def multi_layer(X): n_classes = 10 with tf.name_scope(&apos;layer&apos;): l1 = tf.layers.dense(X, 32, activation=tf.nn.relu) l2 = tf.layers.dense(l1, 16, activation=tf.nn.relu) out = tf.layers.dense(l2, n_classes) with tf.name_scope(&apos;pred&apos;): y_pred = tf.nn.softmax(out, name=&apos;predict&apos;) print(y_pred.name) return y_pred Liner layer def liner_layer(X): W = tf.get_variable(shape=[784, 10], name=&apos;weight&apos;) b = tf.get_variable(initializer=tf.zeros([10]), name=&apos;bais&apos;) tf.summary.histogram(&quot;weights&quot;, W) tf.summary.histogram(&quot;biases&quot;, b) with tf.name_scope(&apos;pred&apos;): y_pred = tf.nn.softmax(tf.matmul(X, W) + b, name=&apos;predict&apos;) print(y_pred.name) return y_pred">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwgy1fx1yjs6el2j31kw0sa41l.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mnist 分类 tensorflow">
+<meta name="twitter:description" content="MNIST dataset Tensorflow ValueError: No variables to save from TensorFlow restore model Key Variable not found in checkpoint 这个是我自己的问题🤬未解决 已解决 和 name_scope有关 Tensorflow: how to save/restore a model? #!/usr/bin/env python # -*- coding: utf-8 -*- &quot;&quot;&quot; @author = &apos;wyx&apos; @time = 2018/11/7 15:45 @annotation = &apos;&apos; &quot;&quot;&quot; from datetime import datetime import tensorflow as tf from tensorflow.examples.tutorials.mnist import input_data from tensorflow.python.saved_model import tag_constants mnist = input_data.read_data_sets(&quot;MNIST_data/&quot;, one_hot=True) save_model_path = &apos;mnist_model/model.ckpt&apos; def train(): learning_rate = 0.05 batch_size = 100 max_epochs = 100 num_of_batch = int(mnist.train.num_examples / batch_size) now = datetime.utcnow().strftime(&quot;%Y%m%d%H%M%S&quot;) X = tf.placeholder(tf.float32, shape=[None, 784], name=&apos;X&apos;) y = tf.placeholder(tf.float32, shape=[None, 10], name=&apos;y&apos;) print(X.name, y.name) W = tf.get_variable(shape=[784, 10], name=&apos;weight&apos;) b = tf.get_variable(initializer=tf.zeros([10]), name=&apos;bais&apos;) tf.summary.histogram(&quot;weights&quot;, W) tf.summary.histogram(&quot;biases&quot;, b) with tf.name_scope(&apos;pred&apos;): y_pred = tf.nn.softmax(tf.matmul(X, W) + b, name=&apos;predict&apos;) print(y_pred.name) with tf.name_scope(&apos;loss&apos;): loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=y_pred)) tf.summary.scalar(&apos;loss&apos;, loss) optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss) with tf.name_scope(&apos;acc&apos;): correct_prediction = tf.equal(tf.argmax(y_pred, 1), tf.argmax(y, 1)) accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name=&apos;acc&apos;) print(accuracy.name) merged_summary_op = tf.summary.merge_all() init_op = tf.global_variables_initializer() saver = tf.train.Saver() with tf.Session() as sess: sess.run(init_op) loss_avg = 0 writer = tf.summary.FileWriter(&apos;mnist/{}&apos;.format(now), sess.graph) for epoch in range(max_epochs): for i in range(num_of_batch): batch_x, batch_y = mnist.train.next_batch(batch_size) summary_str, _, l = sess.run([merged_summary_op, optimizer, loss], feed_dict={X: batch_x, y: batch_y}) loss_avg += l global_step = epoch * num_of_batch + i writer.add_summary(summary_str, global_step) if global_step % 100 == 0: print(&apos;Epoch {}: {} save model&apos;.format(epoch, i)) # save model in halfway saver.save(sess, save_model_path, global_step=global_step) loss_avg /= num_of_batch print(&apos;Epoch {}: Loss {}&apos;.format(epoch, loss_avg)) print(sess.run(accuracy, feed_dict={X: mnist.test.images, y: mnist.test.labels})) saver.save(sess, save_model_path) tf.saved_model.simple_save(sess, &apos;simple_model&apos;, inputs={ &apos;X&apos;: X, &apos;y&apos;: y, }, outputs={ &apos;pred&apos;: y_pred, }) def predict(mode=1): def _predict(): graph = tf.get_default_graph() X = graph.get_tensor_by_name(&apos;X:0&apos;) y = graph.get_tensor_by_name(&apos;y:0&apos;) accuracy = graph.get_tensor_by_name(&apos;acc/acc:0&apos;) print(sess.run(accuracy, feed_dict={X: mnist.test.images, y: mnist.test.labels})) pred = graph.get_tensor_by_name(&apos;pred/predict:0&apos;) import matplotlib.pyplot as plt i = 90 img_orign = mnist.train.images[i] img = img_orign.reshape((28, 28)) plt.imshow(img, cmap=&apos;gray&apos;) plt.title(mnist.train.labels[i]) plt.show() a = sess.run(pred, feed_dict={X: img_orign.reshape(-1, 784)}) import numpy as np print(np.argmax(a)) if mode == 1: meta_path = &apos;mnist_model/model.ckpt.meta&apos; checkpoint_path = &apos;mnist_model&apos; elif mode == 2: # stupid var WTF ValueError: No variables to save _ = tf.Variable(0) saver = tf.train.Saver() with tf.Session() as sess: sess.run(tf.global_variables_initializer()) if mode == 1: saver = tf.train.import_meta_graph(meta_path) saver.restore(sess, tf.train.latest_checkpoint(checkpoint_path)) elif mode == 2: saver.restore(sess, save_model_path) elif mode == 3: tf.saved_model.loader.load(sess, [tag_constants.SERVING], &apos;simple_model&apos;) _predict() def check_ckpt(): from tensorflow.python.tools import inspect_checkpoint as chkp chkp.print_tensors_in_checkpoint_file(save_model_path, tensor_name=&apos;&apos;, all_tensors=True) if __name__ == &apos;__main__&apos;: # train() predict(mode=3) # check_ckpt() MLP def multi_layer(X): n_classes = 10 with tf.name_scope(&apos;layer&apos;): l1 = tf.layers.dense(X, 32, activation=tf.nn.relu) l2 = tf.layers.dense(l1, 16, activation=tf.nn.relu) out = tf.layers.dense(l2, n_classes) with tf.name_scope(&apos;pred&apos;): y_pred = tf.nn.softmax(out, name=&apos;predict&apos;) print(y_pred.name) return y_pred Liner layer def liner_layer(X): W = tf.get_variable(shape=[784, 10], name=&apos;weight&apos;) b = tf.get_variable(initializer=tf.zeros([10]), name=&apos;bais&apos;) tf.summary.histogram(&quot;weights&quot;, W) tf.summary.histogram(&quot;biases&quot;, b) with tf.name_scope(&apos;pred&apos;): y_pred = tf.nn.softmax(tf.matmul(X, W) + b, name=&apos;predict&apos;) print(y_pred.name) return y_pred">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNbRwgy1fx1yjs6el2j31kw0sa41l.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>mnist 分类 tensorflow | Notes</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-120397256-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-book">
+          <a href="/book/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            库
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!--<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/bitcoincash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>-->
+
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/blog/2018/11/09/mnist_clf">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+          
+          
+            mnist 分类 tensorflow
+          
+        </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-09T00:00:00+08:00">
+                2018-11-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/ml" itemprop="url" rel="index">
+                    <span itemprop="name">ml</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/blog/2018/11/09/mnist_clf" class="leancloud_visitors" data-flag-title="mnist 分类 tensorflow">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+  <li><a href="http://yann.lecun.com/exdb/mnist/">MNIST dataset</a></li>
+  <li><a href="https://stackoverflow.com/questions/38626435/tensorflow-valueerror-no-variables-to-save-from">Tensorflow ValueError: No variables to save from</a></li>
+  <li><a href="https://stackoverflow.com/questions/53204811/tensorflow-restore-model-key-variable-not-found-in-checkpoint">TensorFlow restore model Key Variable not found in checkpoint</a>
+<del>这个是我自己的问题🤬未解决</del> <a href="https://github.com/tensorflow/tensorflow/issues/23815">已解决 和 name_scope有关</a></li>
+  <li><a href="https://stackoverflow.com/questions/33759623/tensorflow-how-to-save-restore-a-model?answertab=active#tab-top">Tensorflow: how to save/restore a model?</a></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59<br/>60<br/>61<br/>62<br/>63<br/>64<br/>65<br/>66<br/>67<br/>68<br/>69<br/>70<br/>71<br/>72<br/>73<br/>74<br/>75<br/>76<br/>77<br/>78<br/>79<br/>80<br/>81<br/>82<br/>83<br/>84<br/>85<br/>86<br/>87<br/>88<br/>89<br/>90<br/>91<br/>92<br/>93<br/>94<br/>95<br/>96<br/>97<br/>98<br/>99<br/>100<br/>101<br/>102<br/>103<br/>104<br/>105<br/>106<br/>107<br/>108<br/>109<br/>110<br/>111<br/>112<br/>113<br/>114<br/>115<br/>116<br/>117<br/>118<br/>119<br/>120<br/>121<br/>122<br/>123<br/>124<br/>125<br/>126<br/>127<br/>128<br/>129<br/>130<br/>131<br/>132<br/>133</pre></td><td class="code"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="s">"""
+@author = 'wyx'
+@time = 2018/11/7 15:45
+@annotation = ''
+"""</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.examples.tutorials.mnist</span> <span class="kn">import</span> <span class="n">input_data</span>
+<span class="kn">from</span> <span class="nn">tensorflow.python.saved_model</span> <span class="kn">import</span> <span class="n">tag_constants</span>
+
+<span class="n">mnist</span> <span class="o">=</span> <span class="n">input_data</span><span class="o">.</span><span class="n">read_data_sets</span><span class="p">(</span><span class="s">"MNIST_data/"</span><span class="p">,</span> <span class="n">one_hot</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">save_model_path</span> <span class="o">=</span> <span class="s">'mnist_model/model.ckpt'</span>
+
+
+<span class="k">def</span> <span class="nf">train</span><span class="p">():</span>
+    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">max_epochs</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">num_of_batch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mnist</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">num_examples</span> <span class="o">/</span> <span class="n">batch_size</span><span class="p">)</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">Y</span><span class="si">%</span><span class="s">m</span><span class="si">%</span><span class="s">d</span><span class="si">%</span><span class="s">H</span><span class="si">%</span><span class="s">M</span><span class="si">%</span><span class="s">S"</span><span class="p">)</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">784</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">'X'</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">'y'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="n">W</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">'weight'</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">10</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s">'bais'</span><span class="p">)</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="s">"weights"</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="s">"biases"</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s">'pred'</span><span class="p">):</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predict'</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s">'loss'</span><span class="p">):</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_logits</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">logits</span><span class="o">=</span><span class="n">y_pred</span><span class="p">))</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">scalar</span><span class="p">(</span><span class="s">'loss'</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">AdamOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s">'acc'</span><span class="p">):</span>
+        <span class="n">correct_prediction</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">correct_prediction</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">'acc'</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">accuracy</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="n">merged_summary_op</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">merge_all</span><span class="p">()</span>
+    <span class="n">init_op</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+
+    <span class="n">saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">Saver</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+        <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">init_op</span><span class="p">)</span>
+
+        <span class="n">loss_avg</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">FileWriter</span><span class="p">(</span><span class="s">'mnist/{}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">now</span><span class="p">),</span> <span class="n">sess</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_epochs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_of_batch</span><span class="p">):</span>
+                <span class="n">batch_x</span><span class="p">,</span> <span class="n">batch_y</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">next_batch</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+                <span class="n">summary_str</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">merged_summary_op</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">loss</span><span class="p">],</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">batch_x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">batch_y</span><span class="p">})</span>
+                <span class="n">loss_avg</span> <span class="o">+=</span> <span class="n">l</span>
+                <span class="n">global_step</span> <span class="o">=</span> <span class="n">epoch</span> <span class="o">*</span> <span class="n">num_of_batch</span> <span class="o">+</span> <span class="n">i</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">add_summary</span><span class="p">(</span><span class="n">summary_str</span><span class="p">,</span> <span class="n">global_step</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">global_step</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s">'Epoch {}: {} save model'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+                    <span class="c"># save model in halfway</span>
+                    <span class="n">saver</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">save_model_path</span><span class="p">,</span> <span class="n">global_step</span><span class="o">=</span><span class="n">global_step</span><span class="p">)</span>
+
+            <span class="n">loss_avg</span> <span class="o">/=</span> <span class="n">num_of_batch</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">'Epoch {}: Loss {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">loss_avg</span><span class="p">))</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">mnist</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">images</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">mnist</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">labels</span><span class="p">}))</span>
+        <span class="n">saver</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">save_model_path</span><span class="p">)</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">saved_model</span><span class="o">.</span><span class="n">simple_save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="s">'simple_model'</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">'X'</span><span class="p">:</span> <span class="n">X</span><span class="p">,</span>
+            <span class="s">'y'</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span>
+        <span class="p">},</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">'pred'</span><span class="p">:</span> <span class="n">y_pred</span><span class="p">,</span>
+        <span class="p">})</span>
+
+
+<span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_predict</span><span class="p">():</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_default_graph</span><span class="p">()</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'X:0'</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'y:0'</span><span class="p">)</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'acc/acc:0'</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">mnist</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">images</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">mnist</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">labels</span><span class="p">}))</span>
+
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'pred/predict:0'</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">90</span>
+        <span class="n">img_orign</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">img_orign</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'gray'</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">mnist</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">img_orign</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">784</span><span class="p">)})</span>
+        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">meta_path</span> <span class="o">=</span> <span class="s">'mnist_model/model.ckpt.meta'</span>
+        <span class="n">checkpoint_path</span> <span class="o">=</span> <span class="s">'mnist_model'</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c"># stupid var WTF ValueError: No variables to save</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">Saver</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+        <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">import_meta_graph</span><span class="p">(</span><span class="n">meta_path</span><span class="p">)</span>
+            <span class="n">saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">latest_checkpoint</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">save_model_path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">tf</span><span class="o">.</span><span class="n">saved_model</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="p">[</span><span class="n">tag_constants</span><span class="o">.</span><span class="n">SERVING</span><span class="p">],</span> <span class="s">'simple_model'</span><span class="p">)</span>
+        <span class="n">_predict</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">check_ckpt</span><span class="p">():</span>
+    <span class="kn">from</span> <span class="nn">tensorflow.python.tools</span> <span class="kn">import</span> <span class="n">inspect_checkpoint</span> <span class="k">as</span> <span class="n">chkp</span>
+    <span class="n">chkp</span><span class="o">.</span><span class="n">print_tensors_in_checkpoint_file</span><span class="p">(</span><span class="n">save_model_path</span><span class="p">,</span> <span class="n">tensor_name</span><span class="o">=</span><span class="s">''</span><span class="p">,</span> <span class="n">all_tensors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="c"># train()</span>
+    <span class="n">predict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="c"># check_ckpt()</span>
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>MLP</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10</pre></td><td class="code"><pre class="highlight"><code><span class="k">def</span> <span class="nf">multi_layer</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">n_classes</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s">'layer'</span><span class="p">):</span>
+        <span class="n">l1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">)</span>
+        <span class="n">l2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">l2</span><span class="p">,</span> <span class="n">n_classes</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s">'pred'</span><span class="p">):</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predict'</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y_pred</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fx1yjs6el2j31kw0sa41l.jpg" alt="" /></p>
+
+<p>Liner layer</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code><span class="k">def</span> <span class="nf">liner_layer</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">784</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">'weight'</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">10</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s">'bais'</span><span class="p">)</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="s">"weights"</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="s">"biases"</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s">'pred'</span><span class="p">):</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'predict'</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">y_pred</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">y_pred</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      wyx
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="/blog/2018/11/09/mnist_clf" title="mnist 分类 tensorflow">/blog/2018/11/09/mnist_clf</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/tensorflow" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2018/11/19/encode_decode" rel="next" title="AE VAE GAE">
+                <i class="fa fa-chevron-left"></i> AE VAE GAE
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2018/10/05/seq2seq" rel="prev" title="seq2seq">
+                seq2seq <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="wyx" />
+          <p class="site-author-name" itemprop="name">wyx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/631068264" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://stackoverflow.com/users/5360312/wyx" target="_blank" title="StackOverflow">
+                  
+                    <i class="fa fa-fw fa-stack-overflow"></i>
+                  
+                  StackOverflow
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2018 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wyx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var labels = ['gitalk','2018-11-09']
+</script>
+
+<script type="text/javascript">
+    labels.push('ml');
+</script>
+
+
+<script type="text/javascript">
+    labels.push('tensorflow');
+</script>
+
+
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'dd688ffd2be8512fc659',
+        clientSecret: '483255bda7b80acb108df487ac91a0be78710b0d',
+        repo: '631068264.github.io',
+        owner: '631068264',
+        admin: ['631068264'],
+        id: 'mnist 分类 tensorflow',
+        title: 'mnist 分类 tensorflow',
+        labels: labels,
+        perPage: 50,
+        distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("MQfAJm2nTUDaT5bEuS8i4Ygm-gzGzoHsz", "m4tqv3N9AepVgTk0YfSNe9kz");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  <!--custom css in _sass/_custom/custom.scss -->
+
+<script type="text/javascript">
+    // 黑幕提示语
+    $('span.heimu').attr('title', '你知道得太多了');
+</script>
+
+<script type="text/javascript">
+    // 多图显示 gp-列数
+    $('span[class^="gp-"]').each(function () {
+        var div_mulp = $(this);
+        if (div_mulp && div_mulp.attr('class')) {
+            var column_number = parseInt(div_mulp.attr('class').split('-')[1]);
+            var image = div_mulp.find('img');
+            if (image.size() > 0) {
+                div_mulp.removeClass()
+                    .addClass('post-gallery')
+                    .attr('itemscope', '')
+                    .attr('itemtype', 'http://schema.org/ImageGallery');
+
+                image.each(function (index) {
+                    var modulo = index % column_number;
+
+                    if (modulo === 0) {
+                        content = $('<div class="post-gallery-row"></div>')
+                    }
+                    var image_src = $(this).attr('src');
+                    content.append('<a class="post-gallery-img fancybox"\n' +
+                        '                 href="' + image_src + '" rel="gallery_"\n' +
+                        '                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">\n' +
+                        '                <img src="' + image_src + '" itemprop="contentUrl"/>\n' +
+                        '              </a>');
+
+                    if (modulo === column_number - 1) {
+                        div_mulp.append(content)
+                    }
+                });
+
+                var photo_size_modulo = image.size() % column_number;
+                if (photo_size_modulo > 0) {
+                    div_mulp.append(content);
+                }
+                image.remove();
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>
+

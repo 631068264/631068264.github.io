@@ -1,0 +1,1914 @@
+<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/dash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head>
+  <meta name="referrer" content="never">
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="区块链," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="区块链交易数据解析">
+<meta name="keywords" content="区块链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="区块tx解析">
+<meta property="og:url" content="/blog/2019/01/06/%E5%8C%BA%E5%9D%97%E8%A7%A3%E6%9E%90">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="区块链交易数据解析">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fyw1nncjobj31a60lqacp.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fyw25scqkej31aw0u0n0w.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fyw28nrb7oj31dr0u0adn.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fyw2mh685tj31d40u0dlh.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fywwxdp087j31cx0u0q3v.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fywwxw0gg2j31o60u0t94.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fyx0ed4cr1j31li0u00uw.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fyx0hftco1j31px0u0jtb.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="区块tx解析">
+<meta name="twitter:description" content="区块链交易数据解析">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fyw1nncjobj31a60lqacp.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>区块tx解析 | Notes</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-120397256-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-book">
+          <a href="/book/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            库
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!--<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/bitcoincash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>-->
+
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/blog/2019/01/06/%E5%8C%BA%E5%9D%97%E8%A7%A3%E6%9E%90">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+          
+          
+            区块tx解析
+          
+        </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-06T00:00:00+08:00">
+                2019-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/%E5%8C%BA%E5%9D%97%E9%93%BE" itemprop="url" rel="index">
+                    <span itemprop="name">区块链</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/blog/2019/01/06/%E5%8C%BA%E5%9D%97%E8%A7%A3%E6%9E%90" class="leancloud_visitors" data-flag-title="区块tx解析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    区块链交易数据解析
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <p>维护节点需要巨额的资源，ssd硬盘，很大的内存等。钱包需要交易记录，之前完全没有碰过这方面记录一下。</p>
+
+<h1 id="eos">EOS</h1>
+
+<ul>
+  <li><a href="https://www.eosdocs.io/resources/apiendpoints/">EOS主网节点</a></li>
+  <li><a href="https://developers.eos.io/eosio-nodeos/reference">EOSrpc api</a>
+出块速度0.5s，好尼玛快，比我获取区块信息的速度快</li>
+</ul>
+
+<h2 id="get_info-获取高度">get_info 获取高度</h2>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8</pre></td><td class="code"><pre class="highlight"><code><span class="p">{</span><span class="w">
+	</span><span class="s2">"server_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d9ad8eec"</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"head_block_num"</span><span class="p">:</span><span class="w"> </span><span class="mi">8592</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"last_irreversible_block_num"</span><span class="p">:</span><span class="w"> </span><span class="mi">8591</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"head_block_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00002190e805475db152be7d3f4f1a075efaed42827cd551b0e23c7feabbedac"</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"head_block_time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-04-27T17:40:34"</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"head_block_producer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eosio"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></tbody></table></div></div>
+
+<p><code class="highlighter-rouge">last_irreversible_block_num</code> 就是最新的<code class="highlighter-rouge">不可逆</code>区块高度。</p>
+
+<h2 id="get_block-区块信息">get_block 区块信息</h2>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="err">'timestamp'</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">2019-01-05</span><span class="err">T</span><span class="mi">13</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mf">42.500</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'producer'</span><span class="p">:</span><span class="w"> </span><span class="err">'eosbeijingbp'</span><span class="p">,</span><span class="w"> </span><span class="err">'confirmed'</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="err">'previous'</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">0222e1</span><span class="err">cb</span><span class="mi">394</span><span class="err">fc</span><span class="mi">47010985</span><span class="err">ce</span><span class="mi">7</span><span class="err">f</span><span class="mi">2</span><span class="err">a</span><span class="mi">40</span><span class="err">d</span><span class="mi">65</span><span class="err">a</span><span class="mi">5333</span><span class="err">c</span><span class="mi">6</span><span class="err">b</span><span class="mi">620</span><span class="err">dac</span><span class="mi">48</span><span class="err">c</span><span class="mi">7948</span><span class="err">a</span><span class="mi">3</span><span class="err">bf</span><span class="mi">40315</span><span class="err">a</span><span class="mi">1</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'transaction_mroot'</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">4</span><span class="err">a</span><span class="mi">7</span><span class="err">f</span><span class="mi">7396734</span><span class="err">abcdd</span><span class="mi">519046362</span><span class="err">a</span><span class="mi">293</span><span class="err">a</span><span class="mi">17</span><span class="err">ddd</span><span class="mi">85</span><span class="err">fe</span><span class="mi">9</span><span class="err">a</span><span class="mi">9</span><span class="err">a</span><span class="mi">3</span><span class="err">ac</span><span class="mi">1</span><span class="err">d</span><span class="mi">12624320241</span><span class="err">df</span><span class="mi">6</span><span class="err">c</span><span class="mi">7</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'action_mroot'</span><span class="p">:</span><span class="w"> </span><span class="err">'a</span><span class="mi">80</span><span class="err">c</span><span class="mi">78</span><span class="err">de</span><span class="mi">8</span><span class="err">b</span><span class="mi">736</span><span class="err">d</span><span class="mi">8</span><span class="err">c</span><span class="mi">12</span><span class="err">c</span><span class="mi">7366</span><span class="err">aa</span><span class="mi">3</span><span class="err">a</span><span class="mi">799</span><span class="err">f</span><span class="mi">71</span><span class="err">b</span><span class="mi">8</span><span class="err">a</span><span class="mi">9</span><span class="err">ac</span><span class="mi">9</span><span class="err">b</span><span class="mi">8532</span><span class="err">c</span><span class="mi">4e3</span><span class="err">b</span><span class="mi">065</span><span class="err">b</span><span class="mi">315</span><span class="err">d</span><span class="mi">1</span><span class="err">b</span><span class="mi">4</span><span class="err">d</span><span class="mi">81</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="err">'schedule_version'</span><span class="p">:</span><span class="w"> </span><span class="mi">649</span><span class="p">,</span><span class="w">
+    </span><span class="err">'new_producers'</span><span class="p">:</span><span class="w"> </span><span class="err">None</span><span class="p">,</span><span class="w">
+    </span><span class="err">'header_extensions'</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="err">'producer_signature'</span><span class="p">:</span><span class="w"> </span><span class="err">'SIG_K</span><span class="mi">1</span><span class="err">_KmQRYtEYYqAKMyi</span><span class="mi">1</span><span class="err">RjQ</span><span class="mi">3</span><span class="err">YasVuBpqpjyUM</span><span class="mi">4</span><span class="err">eyQGrKvushRkVN</span><span class="mi">7</span><span class="err">GdyfkJLZPqoskXPqj</span><span class="mi">58</span><span class="err">BAVQdJN</span><span class="mi">4</span><span class="err">CJeW</span><span class="mi">5</span><span class="err">APBVjZZAQ</span><span class="mi">5</span><span class="err">R</span><span class="mi">6</span><span class="err">h'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'transactions'</span><span class="p">:[</span><span class="err">...</span><span class="p">]</span><span class="w">
+    </span><span class="err">'block_extensions'</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="err">'id'</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">0222e1</span><span class="err">cc</span><span class="mi">4</span><span class="err">d</span><span class="mi">5</span><span class="err">a</span><span class="mi">0</span><span class="err">d</span><span class="mi">80</span><span class="err">a</span><span class="mi">5</span><span class="err">eb</span><span class="mi">1</span><span class="err">df</span><span class="mi">4</span><span class="err">c</span><span class="mi">362</span><span class="err">be</span><span class="mi">4e97</span><span class="err">adcf</span><span class="mi">361</span><span class="err">ed</span><span class="mi">1402</span><span class="err">c</span><span class="mi">3724</span><span class="err">edd</span><span class="mi">35e1993</span><span class="err">dd'</span><span class="p">,</span><span class="w">
+    </span><span class="err">'block_num'</span><span class="p">:</span><span class="w"> </span><span class="mi">35840460</span><span class="p">,</span><span class="w">
+    </span><span class="err">'ref_block_prefix'</span><span class="p">:</span><span class="w"> </span><span class="mi">4095601573</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></tbody></table></div></div>
+
+<p><code class="highlighter-rouge">timestamp</code>是区块UTC时间<span class="heimu">这非常恶心,为什么不直接给个timestamp</span></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17</pre></td><td class="code"><pre class="highlight"><code><span class="k">def</span> <span class="nf">dt2ts</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">utc</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">utc</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">calendar</span><span class="o">.</span><span class="n">timegm</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">dt</span><span class="o">.</span><span class="n">tzinfo</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()))</span>
+    <span class="n">utc_dt</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">.</span><span class="n">tzutc</span><span class="p">())</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">calendar</span><span class="o">.</span><span class="n">timegm</span><span class="p">(</span><span class="n">utc_dt</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">dtstr2ts</span><span class="p">(</span><span class="n">dtstr</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s">'</span><span class="si">%</span><span class="s">Y-</span><span class="si">%</span><span class="s">m-</span><span class="si">%</span><span class="s">d </span><span class="si">%</span><span class="s">H:</span><span class="si">%</span><span class="s">M:</span><span class="si">%</span><span class="s">S'</span><span class="p">,</span> <span class="n">utc</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">dtstr</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dt2ts</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">utc</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">blockts</span><span class="p">(</span><span class="n">dtstr</span><span class="p">,</span> <span class="n">utc</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="s">'</span><span class="si">%</span><span class="s">Y-</span><span class="si">%</span><span class="s">m-</span><span class="si">%</span><span class="s">dT</span><span class="si">%</span><span class="s">H:</span><span class="si">%</span><span class="s">M:</span><span class="si">%</span><span class="s">S.</span><span class="si">%</span><span class="s">f'</span> <span class="k">if</span> <span class="s">'.'</span> <span class="ow">in</span> <span class="n">dtstr</span> <span class="k">else</span> <span class="s">'</span><span class="si">%</span><span class="s">Y-</span><span class="si">%</span><span class="s">m-</span><span class="si">%</span><span class="s">dT</span><span class="si">%</span><span class="s">H:</span><span class="si">%</span><span class="s">M:</span><span class="si">%</span><span class="s">S'</span>
+    <span class="k">return</span> <span class="n">dtstr2ts</span><span class="p">(</span><span class="n">dtstr</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">utc</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><code class="highlighter-rouge">transactions</code> 就是需要的交易记录</p>
+
+<h3 id="内联tx">内联tx</h3>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fyw1nncjobj31a60lqacp.jpg" alt="" />
+一般<strong>内联交易</strong>为<code class="highlighter-rouge">trx</code>是tx_hash，可以理解为函数里面的调用其他函数,合约代码执行<span class="heimu">个人看法</span>，看过有些内联交易可以包含很多<code class="highlighter-rouge">action</code></p>
+
+<h3 id="普通tx">普通tx</h3>
+<p>普通交易<span class="heimu">个人叫法 我也不知道叫法</span></p>
+
+<p>种类很多，还可以自定义<code class="highlighter-rouge">action</code>。看看 <a href="https://github.com/EOSIO/eosio.contracts">EOS智能合约的源码</a> 对比 <a href="https://eospark.com/">区块浏览器</a> 容易理解很多。</p>
+
+<p>普通交易<code class="highlighter-rouge">trx</code>里面通常长这个样子</p>
+
+<p>eos transfer
+<span class="gp-2">
+    <img src="https://ws4.sinaimg.cn/large/006tNc79gy1fyw25scqkej31aw0u0n0w.jpg" />
+    <img src="https://ws4.sinaimg.cn/large/006tNc79gy1fyw28nrb7oj31dr0u0adn.jpg" />
+</span></p>
+
+<p>个人看法：</p>
+
+<blockquote>
+  <p><code class="highlighter-rouge">account</code> 就是合约名=&gt;代码中包的名字,<code class="highlighter-rouge">name</code>就是<code class="highlighter-rouge">action</code>名=&gt;函数名，<code class="highlighter-rouge">data</code>=&gt;函数的参数</p>
+</blockquote>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fyw2mh685tj31d40u0dlh.jpg" alt="" />
+常用的<code class="highlighter-rouge">action</code>在源码的<code class="highlighter-rouge">eosio.system</code>和<code class="highlighter-rouge">eosio.token</code></p>
+
+<h2 id="总结">总结</h2>
+<p>EOS 共有三大资源：CPU、NET（网络带宽）和RAM（内存）</p>
+
+<blockquote>
+  <p>我们知道，比特币和以太坊中的交易手续费机制，其目的就是防止大量交易使系统拥堵。而EOS取消了交易手续费，
+那么如何避免系统资源的滥用？因而EOS设计了一种新的资源使用机制：根据账户中EOS的数量来分配系统资源，
+包括：RAM(内存), Network Ba​​ndWidth (NET带宽) 以及CPU BandWidth (CPU 带宽）。</p>
+</blockquote>
+
+<h3 id="ram内存">RAM(内存)</h3>
+<p>在EOS 中, RAM(内存)的主要特点包括：</p>
+
+<ul>
+  <li>要将数据存储在区块链中需要消耗RAM，比如在EOS 中转账、购买资源、投票等操作的时候，都有可能会消耗RAM (内存)。</li>
+  <li>如果你的RAM 消耗殆尽，那么你是无法进行上述这些需要消耗RAM的操作的，所以我们需要有足够的RAM。</li>
+  <li>通过购买获得的EOS RAM 资源可以买卖，买卖的价格根据市场行情动态调节，这个特点与买卖EOS一样。</li>
+  <li>RAM可以通过EOS购买的方式获得也可以通过好友帮你购买，这个特点和通过抵押方式获取CPU 资源以及NET 资源不太一样。</li>
+  <li>用户在买卖RAM 资源的时候，各需要消耗0.5 % (千分之五) 的手续费，总共是1% 的手续费。这笔费用被存在eosio.ramfee 中，由BP 节点进行管理。</li>
+  <li>内存是消耗资源，不可赎回，只能买卖。</li>
+  <li>RAM本质上是为智能合约中调用的每个交易提供资源的gas。</li>
+</ul>
+
+<h3 id="net带宽与cpu带宽">NET带宽与CPU带宽</h3>
+<p>在EOS中，NET带宽与CPU带宽的特性差不多，它们的主要特点包括：</p>
+
+<ul>
+  <li>它们采用抵押EOS的方式获取。当不再需要CPU与带宽时，抵押的EOS通证可以赎回，在赎回的时候，存在三天的赎回期。</li>
+  <li>如果你持有全网1%的EOS，那就可以抵押这些EOS来获得全网1%的CPU和带宽。这样就可以隔离开所有的DAPP，防止资源竞争和恶意的DDOS供给，无论其他的DAPP如何拥堵， 你自己的带宽都不受影响。</li>
+  <li>每次使用转账功能时，都会消耗网络带宽资源。</li>
+  <li>网络带宽取决于过去三天消费的平均值，作为你下一次执行操作的费率。</li>
+  <li>如果没有足够的网络带宽资源的话，你是无法使用EOS 网络转账等基本功能的。</li>
+  <li>带宽资源是可以随着时间的推移，自动释放。</li>
+  <li>NET带宽用于增加算力，CPU带宽增加网络资源</li>
+</ul>
+
+<h1 id="eth">ETH</h1>
+<ul>
+  <li><a href="https://github.com/ethereum/web3.py">web3 py</a>已经封装好大量api,虽然不太会用。</li>
+  <li><a href="https://github.com/blockchain-etl/ethereum-etl">解析参考</a></li>
+  <li><a href="https://infura.io/docs/gettingStarted/chooseaNetwork">数据源infura</a>
+15s出块</li>
+</ul>
+
+<h2 id="eth_blocknumber-获取高度">eth_blockNumber 获取高度</h2>
+<p>返回就是最新高度，这意味着<code class="highlighter-rouge">eth_blockNumber</code>-30个确认</p>
+
+<h2 id="eth_getblockbynumber-区块信息">eth_getBlockByNumber 区块信息</h2>
+<p>主要解析<code class="highlighter-rouge">transactions</code>中内容</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>.....
+from: 20 Bytes - address of the sender.
+to: 20 Bytes - address of the receiver. null when its a contract creation transaction.
+value: value transferred in Wei.
+gasPrice: gas price provided by the sender in Wei.
+gas: gas provided by the sender.
+input: the data send along with the transaction.
+</code></pre></td></tr></tbody></table></div></div>
+<p>这玩意只有ETH的transfer，token没有。对于手续费更是一无所知。 这些都需要绕一个弯<span class="heimu">刚接触的我懵逼了好久</span>。</p>
+
+<h2 id="eth_gettransactionreceipt">eth_getTransactionReceipt</h2>
+<p>用于确认tx执行情况</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>....
+from: 20 Bytes - address of the sender.
+to: 20 Bytes - address of the receiver. Null when the transaction is a contract creation transaction.
+gasUsed: the amount of gas used by this specific transaction alone.
+contractAddress: 20 Bytes - the contract address created, if the transaction was a contract creation, otherwise - null.
+logs: Array - Array of log objects, which this transaction generated.
+status: either 1 (success) or 0 (failure)
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><code class="highlighter-rouge">status</code>最终确认tx是否完成。</p>
+
+<h2 id="gas">gas</h2>
+<p>这涉及到<code class="highlighter-rouge">gas</code>的<a href="https://kb.myetherwallet.com/gas/what-is-gas-ethereum.html">理解</a></p>
+<ul>
+  <li>tx的执行依靠消耗gas支付给矿工，无论成功与否都要收取手续费。</li>
+  <li><code class="highlighter-rouge">gasPrice</code> 用户愿意花费于每个 Gas 单位的价钱， <code class="highlighter-rouge">gas</code> =&gt; <code class="highlighter-rouge">Gas limit</code>用户愿意为执行某个操作或确认交易支付的最大Gas量,<code class="highlighter-rouge">fee = gasUsed * gasPrice</code>手续费，
+用不完会退还给用户。</li>
+  <li><code class="highlighter-rouge">Gas Price</code>越高，交易优先级越高，打包交易速度越快。消耗的gas &gt; <code class="highlighter-rouge">Gas limit</code>则tx失败</li>
+</ul>
+
+<p>单位处理 一般都是区块中用最小单位WEI</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29</pre></td><td class="code"><pre class="highlight"><code><span class="c"># web3 api</span>
+<span class="s">'gas_price'</span> <span class="o">=</span> <span class="n">Web3</span><span class="o">.</span><span class="n">fromWei</span><span class="p">(</span><span class="n">raw_trx</span><span class="p">[</span><span class="s">'gasPrice'</span><span class="p">],</span> <span class="s">'ether'</span><span class="p">)</span>
+
+
+<span class="n">units</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'wei'</span><span class="p">:</span>          <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'kwei'</span><span class="p">:</span>         <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'babbage'</span><span class="p">:</span>      <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'femtoether'</span><span class="p">:</span>   <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'mwei'</span><span class="p">:</span>         <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'lovelace'</span><span class="p">:</span>     <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'picoether'</span><span class="p">:</span>    <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'gwei'</span><span class="p">:</span>         <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'shannon'</span><span class="p">:</span>      <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'nanoether'</span><span class="p">:</span>    <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'nano'</span><span class="p">:</span>         <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'szabo'</span><span class="p">:</span>        <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'microether'</span><span class="p">:</span>   <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'micro'</span><span class="p">:</span>        <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'finney'</span><span class="p">:</span>       <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'milliether'</span><span class="p">:</span>   <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'milli'</span><span class="p">:</span>        <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'ether'</span><span class="p">:</span>        <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'kether'</span><span class="p">:</span>       <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'grand'</span><span class="p">:</span>        <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'mether'</span><span class="p">:</span>       <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'gether'</span><span class="p">:</span>       <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000000000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+    <span class="s">'tether'</span><span class="p">:</span>       <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">'1000000000000000000000000000000'</span><span class="p">),</span>  <span class="c"># noqa: E241</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="token-transfer">token transfer</h2>
+
+<p>不要尝试解析 <a href="https://stackoverflow.com/questions/48004356/get-token-transfer-detail-from-transaction-hash-with-web3js">input data</a>,这是不准的，有可能会坑。</p>
+
+<p>例如<code class="highlighter-rouge">0x8ea17abad8c19cf910dcb97a060b1a74d461426c6c8dd8d7bbefc76ee3e84d9b</code>，最好的方法是解析logs。</p>
+
+<p>解析<code class="highlighter-rouge">logs</code> 每一个<code class="highlighter-rouge">log</code>就相当于<strong>EOS里面的action</strong>，也是多种多样的。</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>....
+address: 20 Bytes - address from which this log originated.
+data: contains one or more 32 Bytes non-indexed arguments of the log.
+topics: Array of 0 to 4 32 Bytes of indexed log arguments. (In solidity: The first topic is the hash of the signature of the event (e.g. Deposit(address,bytes32,uint256)), except you declared the event with the anonymous specifier.)
+....
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>注意力放在<code class="highlighter-rouge">topics</code>数组，通常正常的transfer，<code class="highlighter-rouge">topic[0]</code>是函数名,其他的是函数参数。</p>
+
+<p>token transfer的函数名</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code><span class="n">TOKEN_TRANSFER_EVENT_TOPIC</span> <span class="o">=</span> <span class="s">'0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><a href="https://ethereum.stackexchange.com/questions/12553/understanding-logs-and-log-blooms">这玩意是怎么来的</a></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code><span class="k">def</span> <span class="nf">test3</span><span class="p">():</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="s">'Transfer(address,address,uint256)'</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">Web3</span><span class="o">.</span><span class="n">sha3</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="nb">hex</span><span class="p">())</span>
+
+<span class="s">'0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">log.address</code> =&gt; token_address</li>
+</ul>
+
+<p>我们仍然不知道token的<code class="highlighter-rouge">symbol</code>是什么？</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code>contract ERC20Interface {
+    function totalSupply() public constant returns (uint);
+    function balanceOf(address tokenOwner) public constant returns (uint balance);
+    function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
+    function transfer(address to, uint tokens) public returns (bool success);
+    function approve(address spender, uint tokens) public returns (bool success);
+    function transferFrom(address from, address to, uint tokens) public returns (bool success);
+
+    event Transfer(address indexed from, address indexed to, uint tokens);
+    event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>ETH合约编译后产生<strong>ABI</strong>,<strong>ABI</strong>就是告诉我们合约怎样解析，如果没有严格遵循ERC20的规则，就可能解析不出来。<strong>字符集必须使用utf8mb4</strong>。</p>
+
+<p>解析token需要获取<code class="highlighter-rouge">symbol</code>和<code class="highlighter-rouge">decimals</code>，<code class="highlighter-rouge">decimals</code>是小数点偏移的位数</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code>
+<span class="n">ERC20_ABI</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s">'''
+[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_owner","type":"address"},{"indexed":true,"name":"_spender","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Approval","type":"event"}]
+'''</span><span class="p">)</span>
+
+<span class="n">checksum_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_web3</span><span class="o">.</span><span class="n">toChecksumAddress</span><span class="p">(</span><span class="n">token_address</span><span class="p">)</span>
+<span class="n">contract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_web3</span><span class="o">.</span><span class="n">eth</span><span class="o">.</span><span class="n">contract</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="n">checksum_address</span><span class="p">,</span> <span class="n">abi</span><span class="o">=</span><span class="n">eth_config</span><span class="o">.</span><span class="n">ERC20_ABI</span><span class="p">)</span>
+<span class="c"># symbol 入库用utf8mb4 utf8mb4是utf8的超集 支持更多的特殊符号</span>
+<span class="n">symbol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_contract_function</span><span class="p">(</span><span class="n">contract</span><span class="o">.</span><span class="n">functions</span><span class="o">.</span><span class="n">symbol</span><span class="p">())</span>
+<span class="n">decimals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_contract_function</span><span class="p">(</span><span class="n">contract</span><span class="o">.</span><span class="n">functions</span><span class="o">.</span><span class="n">decimals</span><span class="p">())</span>
+
+</code></pre></td></tr></tbody></table></div></div>
+<p>通过 <a href="https://etherscan.io/token/0xB8c77482e45F1F44dE1745F52C74426C631bDD52#readContract">etherscan.io 查看BNB</a> read contract</p>
+
+<p><span class="gp-2">
+    <img src="https://ws2.sinaimg.cn/large/006tNc79gy1fywwxdp087j31cx0u0q3v.jpg" />
+    <img src="https://ws2.sinaimg.cn/large/006tNc79gy1fywwxw0gg2j31o60u0t94.jpg" />
+</span></p>
+
+<p>通常topic有三项</p>
+<ul>
+  <li><code class="highlighter-rouge">topic[0]</code> =&gt; 函数名 <code class="highlighter-rouge">TOKEN_TRANSFER_EVENT_TOPIC</code></li>
+  <li><code class="highlighter-rouge">topic[1]</code> =&gt; from 发送人 uint256</li>
+  <li><code class="highlighter-rouge">topic[2]</code> =&gt; to 接收者 uint256</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14</pre></td><td class="code"><pre class="highlight"><code># uint256 还在前面补0 实质上获取后40位就可以了
+def address(addr_str, eth_addr_len=eth_cfg.ETH_ADDRESS_LEN):
+    addr_str = addr_str.strip()
+    if addr_str is None:
+        return None
+    if addr_str and len(addr_str) &gt; eth_addr_len:
+        return ('0x' + addr_str[-eth_addr_len:]).lower()
+    return normalized_address(addr_str)
+
+
+def normalized_address(address):
+    if address is None or not isinstance(address, str):
+        return address
+    return address.lower().strip()
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">log.data</code> =&gt; quantity 发送数量 <code class="highlighter-rouge">token_value( hex_to_int , token获得的 decimals )</code></li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19</pre></td><td class="code"><pre class="highlight"><code>def hex_to_int(hex_string):
+    if hex_string is None:
+        return None
+    if hex_string == '0x':
+        return 0
+    return int(hex_string, 16)
+
+# 单位转化
+def token_value(int_value, decimals):
+    if decimals is None:
+        return decimal.Decimal(int_value)
+
+    unit = decimal.Decimal(10 ** decimals)
+    with localcontext() as ctx:
+        ctx.prec = 999
+        d = decimal.Decimal(value=int_value, context=ctx)
+        result_value = d / unit
+
+    return result_value
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="总结-1">总结</h2>
+<ul>
+  <li>智能合约传上以太坊之后，它就变得不可更改, 这种永固性意味着你的代码永远不能被调整或更新。完全不用担心函数被人篡改而得到意外的结果。</li>
+  <li>可以留个<strong>后门</strong>修改DAPP的关键部分，同时声明合约函数的<strong>所有权</strong>，不然后门被人随便用。所以最好阅读并理解它的源代码，才能防止其中没有被部署者恶意植入后门，也可以找到别人的漏洞为所欲为。</li>
+  <li>合约中有些不要gas的<code class="highlighter-rouge">view</code>函数,存储操作非常多的gas</li>
+</ul>
+
+<p>在 ETH 中有两种类型的账户:</p>
+<ul>
+  <li>一种是被私钥控制的账户，它没有任何的代码.</li>
+  <li>合约代码控制的账户，能够在每一次收到消息时，执行保存在 contract_code 中的代码，所有的合约在网络中都能够响应其他账户的请求和消息并提供一些服务。</li>
+</ul>
+
+<p>账户余额模型
+每一个账户都包含四个字段 (nonce, ether_balance, contact_code, storage)
+所有账户的 nonce 都必须从 0 开始递增，当前账户每使用 nonce 签发并广播一笔交易之后，都会将其 +1,来解决重放攻击的问题。</p>
+
+<h1 id="btc">BTC</h1>
+
+<ul>
+  <li><a href="http://cw.hubwiz.com/card/c/bitcoin-json-rpc-api/">json-rpc-api</a>
+10min出块，解析起来比ETH更难</li>
+</ul>
+
+<h2 id="getblockhash--getblock">getblockhash &amp; getblock</h2>
+
+<p>height -&gt; getblockhash -&gt; block_hash -&gt; getblock</p>
+
+<p>解析出来 只有tx_id数组</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>...
+tx：区块内所有交易组成的数组，成员为交易id
+...
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="getrawtransaction">getrawtransaction</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29</pre></td><td class="code"><pre class="highlight"><code>{
+    。。。。
+    "vin": [
+        {
+            "txid": "2ac0daff49a4ff82a35a4864797f99f23c396b0529c5ba1e04b3d7b97521feba",
+            "vout": 0,
+            "scriptSig": {
+                "asm": "3044022013d212c22f0b46bb33106d148493b9a9723adb2c3dd3a3ebe3a9c9e3b95d8cb00220461661710202fbab550f973068af45c294667fc4dc526627a7463eb23ab39e9b[ALL] 0479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8",
+                "hex": "473044022013d212c22f0b46bb33106d148493b9a9723adb2c3dd3a3ebe3a9c9e3b95d8cb00220461661710202fbab550f973068af45c294667fc4dc526627a7463eb23ab39e9b01410479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8"
+            },
+            "sequence": 4294967295
+        }
+    ],
+    "vout": [
+        {
+            "value": 0.06990000,
+            "n": 0,
+            "scriptPubKey": {
+            "asm": "OP_DUP OP_HASH160 01b81d5fa1e55e069e3cc2db9c19e2e80358f306 OP_EQUALVERIFY OP_CHECKSIG",
+                "hex": "76a91401b81d5fa1e55e069e3cc2db9c19e2e80358f30688ac",
+                "reqSigs": 1,
+                "type": "pubkeyhash",
+                "addresses": [
+                    "1A6Ei5cRfDJ8jjhwxfzLJph8B9ZEthR9Z"
+                ]
+            }
+        }
+    ]
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="uxto">UXTO</h2>
+<p>Unspent Transaction output  未被使用的交易输出。</p>
+
+<p>把UXTO想象成一张<strong>纸币</strong>，是不可分割的整体，使用时存在着<strong>找零</strong>。账户中的余额并非是一个数字，
+而是由当前区块链网络中所有跟当前账户有关的UTXO组成的。</p>
+
+<p>基于 UTXO 模型的tx由输入和输出两个部分组成。</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>
+sum(inputs.value) = sum(outputs.value) + fee
+sum(outputs.value) = 需要转账的数量 + 找零
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><code class="highlighter-rouge">vin</code>里面<code class="highlighter-rouge">txid</code>,<code class="highlighter-rouge">vout</code>说明了in的来源。换句话说 UXTO就是较早已确认区块的未作为in的out</p>
+
+<p><span class="gp-2">
+    <img src="https://ws3.sinaimg.cn/large/006tNc79ly1fyx0ed4cr1j31li0u00uw.jpg" />
+    <img src="https://ws4.sinaimg.cn/large/006tNc79ly1fyx0hftco1j31px0u0jtb.jpg" />
+</span></p>
+
+<p>左图的<code class="highlighter-rouge">vin</code>中txid=’5f01378fae317945e37200f0445aaf160271c506a48d465c09c8b814ba84b3c8’ vout=2
+如此类推，就好像一条链一样，有因才有果，可以防止同一个UXTO被使用两次。</p>
+
+<p>由于解析有点复杂，因为每个in都不知道对应的地址和数量，
+必须通过请求一次getrawtransaction才知道答案，而BTC的tx有点多都是几千，一个tx有若干个in（曾经试过一个tx900+in）,从主网节点拿数据，解析很慢。
+除非从创世块开始保存。</p>
+
+<p>由于结构比较怪异类似于多对多的结构，所以分开in、out两个表用tx_hash连接</p>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      wyx
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="/blog/2019/01/06/%E5%8C%BA%E5%9D%97%E8%A7%A3%E6%9E%90" title="区块tx解析">/blog/2019/01/06/%E5%8C%BA%E5%9D%97%E8%A7%A3%E6%9E%90</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E5%8C%BA%E5%9D%97%E9%93%BE" rel="tag"># 区块链</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/01/10/lottery" rel="next" title="抽奖问题">
+                <i class="fa fa-chevron-left"></i> 抽奖问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/01/04/%E4%B8%80%E8%87%B4%E6%80%A7" rel="prev" title="区块共识">
+                区块共识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="wyx" />
+          <p class="site-author-name" itemprop="name">wyx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/631068264" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://stackoverflow.com/users/5360312/wyx" target="_blank" title="StackOverflow">
+                  
+                    <i class="fa fa-fw fa-stack-overflow"></i>
+                  
+                  StackOverflow
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#eos"> <span class="nav-number">1</span> <span class="nav-text">EOS</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#get_info-获取高度"> <span class="nav-number">1.1</span> <span class="nav-text">get_info 获取高度</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#get_block-区块信息"> <span class="nav-number">1.2</span> <span class="nav-text">get_block 区块信息</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#内联tx"> <span class="nav-number">1.2.1</span> <span class="nav-text">内联tx</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#普通tx"> <span class="nav-number">1.2.2</span> <span class="nav-text">普通tx</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#总结"> <span class="nav-number">1.3</span> <span class="nav-text">总结</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#ram内存"> <span class="nav-number">1.3.1</span> <span class="nav-text">RAM(内存)</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#net带宽与cpu带宽"> <span class="nav-number">1.3.2</span> <span class="nav-text">NET带宽与CPU带宽</span> </a> </li> </ol> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#eth"> <span class="nav-number">2</span> <span class="nav-text">ETH</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#eth_blocknumber-获取高度"> <span class="nav-number">2.1</span> <span class="nav-text">eth_blockNumber 获取高度</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#eth_getblockbynumber-区块信息"> <span class="nav-number">2.2</span> <span class="nav-text">eth_getBlockByNumber 区块信息</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#eth_gettransactionreceipt"> <span class="nav-number">2.3</span> <span class="nav-text">eth_getTransactionReceipt</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#gas"> <span class="nav-number">2.4</span> <span class="nav-text">gas</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#token-transfer"> <span class="nav-number">2.5</span> <span class="nav-text">token transfer</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#总结-1"> <span class="nav-number">2.6</span> <span class="nav-text">总结</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#btc"> <span class="nav-number">3</span> <span class="nav-text">BTC</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#getblockhash--getblock"> <span class="nav-number">3.1</span> <span class="nav-text">getblockhash &amp; getblock</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#getrawtransaction"> <span class="nav-number">3.2</span> <span class="nav-text">getrawtransaction</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#uxto"> <span class="nav-number">3.3</span> <span class="nav-text">UXTO</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2018 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wyx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var labels = ['gitalk','2019-01-06']
+</script>
+
+<script type="text/javascript">
+    labels.push('区块链');
+</script>
+
+
+<script type="text/javascript">
+    labels.push('区块链');
+</script>
+
+
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'dd688ffd2be8512fc659',
+        clientSecret: '483255bda7b80acb108df487ac91a0be78710b0d',
+        repo: '631068264.github.io',
+        owner: '631068264',
+        admin: ['631068264'],
+        id: '区块tx解析',
+        title: '区块tx解析',
+        labels: labels,
+        perPage: 50,
+        distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("MQfAJm2nTUDaT5bEuS8i4Ygm-gzGzoHsz", "m4tqv3N9AepVgTk0YfSNe9kz");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  <!--custom css in _sass/_custom/custom.scss -->
+
+<script type="text/javascript">
+    // 黑幕提示语
+    $('span.heimu').attr('title', '你知道得太多了');
+</script>
+
+<script type="text/javascript">
+    // 多图显示 gp-列数
+    $('span[class^="gp-"]').each(function () {
+        var div_mulp = $(this);
+        if (div_mulp && div_mulp.attr('class')) {
+            var column_number = parseInt(div_mulp.attr('class').split('-')[1]);
+            var image = div_mulp.find('img');
+            if (image.size() > 0) {
+                div_mulp.removeClass()
+                    .addClass('post-gallery')
+                    .attr('itemscope', '')
+                    .attr('itemtype', 'http://schema.org/ImageGallery');
+
+                image.each(function (index) {
+                    var modulo = index % column_number;
+
+                    if (modulo === 0) {
+                        content = $('<div class="post-gallery-row"></div>')
+                    }
+                    var image_src = $(this).attr('src');
+                    content.append('<a class="post-gallery-img fancybox"\n' +
+                        '                 href="' + image_src + '" rel="gallery_"\n' +
+                        '                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">\n' +
+                        '                <img src="' + image_src + '" itemprop="contentUrl"/>\n' +
+                        '              </a>');
+
+                    if (modulo === column_number - 1) {
+                        div_mulp.append(content)
+                    }
+                });
+
+                var photo_size_modulo = image.size() % column_number;
+                if (photo_size_modulo > 0) {
+                    div_mulp.append(content);
+                }
+                image.remove();
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>
+

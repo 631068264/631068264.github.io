@@ -1,0 +1,2266 @@
+<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/dash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head>
+  <meta name="referrer" content="never">
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="big data," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spark 集群计算框架,相对于Hadoop的MapReduce会在运行完工作后将中介数据存放到磁盘中，内存内运算，比Hadoop快100倍。 spark pyspark">
+<meta name="keywords" content="big data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark">
+<meta property="og:url" content="/blog/2019/03/01/spark">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="Spark 集群计算框架,相对于Hadoop的MapReduce会在运行完工作后将中介数据存放到磁盘中，内存内运算，比Hadoop快100倍。 spark pyspark">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0k5pas9inj31gk0u0kjg.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0k5t6pl0jj30u00v81kx.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1g0k5xunnzgj31o20l6wvf.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g0kt7wzmijj312l0u04qp.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0k8af2tsoj31de0biaja.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0k6x29qopj312e0n4qi3.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0k8n3uokxj31ce0g84c8.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g0ks41tsqcj31230u01jx.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0n1wsxjzej31aa0aswfo.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1g0ksvf169ij31070u0hcy.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g0kt4ieuxpj31lv0u01kx.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0far6sw53j314a0u0gnq.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0fatrgcq7j318u0u0di1.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0o970imq2j30rm0asdg9.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0obcijmsvj31i80niq55.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0oc9bya2jj31lq0re0vu.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0ochzjyiij31h00u0n2w.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0odk9u5dyj320g0s4wge.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0oemmzoirj31fw09q0tt.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0osu002ekj31i80tun06.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0osvqhr6lj31510u00wp.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0oswag83ij31ac0u0jtq.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark">
+<meta name="twitter:description" content="Spark 集群计算框架,相对于Hadoop的MapReduce会在运行完工作后将中介数据存放到磁盘中，内存内运算，比Hadoop快100倍。 spark pyspark">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0k5pas9inj31gk0u0kjg.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>Spark | Notes</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-120397256-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-book">
+          <a href="/book/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            库
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!--<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/bitcoincash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>-->
+
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/blog/2019/03/01/spark">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+          
+          
+            Spark
+          
+        </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-01T00:00:00+08:00">
+                2019-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/big%20data" itemprop="url" rel="index">
+                    <span itemprop="name">big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/blog/2019/03/01/spark" class="leancloud_visitors" data-flag-title="Spark">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="spark">Spark</h1>
+<p>集群计算框架,相对于Hadoop的MapReduce会在运行完工作后将中介数据存放到磁盘中，内存内运算，比Hadoop快100倍。</p>
+<ul>
+  <li><a href="https://github.com/apache/spark">spark</a></li>
+  <li><a href="http://spark.apache.org/docs/latest/api/python/index.html">pyspark</a></li>
+</ul>
+
+<h1 id="优势">优势</h1>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0k5pas9inj31gk0u0kjg.jpg" alt="" /></p>
+
+<p>Hadoop比
+<img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0k5t6pl0jj30u00v81kx.jpg" alt="" /></p>
+
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1g0k5xunnzgj31o20l6wvf.jpg" alt="" /></p>
+
+<h1 id="架构">架构</h1>
+
+<p>其基础的程序抽象则称为<strong>弹性分布式数据集（RDDs）</strong>，是一个可以并行操作、有容错机制的数据集合。</p>
+
+<p>Spark应用程序作为集群上的独立进程集运行，由SparkContext 主程序中的对象<code class="highlighter-rouge">driver program</code>主导</p>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1g0kt7wzmijj312l0u04qp.jpg" alt="" />
+<img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0k8af2tsoj31de0biaja.jpg" alt="" /></p>
+<ul>
+  <li>应用提交driver创建SparkContext，SparkContext向Cluster Manager注册，申请运行Executor资源</li>
+  <li>申请资源后，Executor启动，将运行状况发送到Cluster Manager</li>
+  <li>SparkContext根据RDD依赖关系构建DAG，DAGScheduler解析DAG分成多个Stage(阶段 任务集)，计算Stage之间依赖关系,将Stages交给TaskScheduler</li>
+  <li>Executor向SparkContext申请任务，TaskScheduler分发将任务到Executor，SparkContext分发应用代码到Executor</li>
+  <li>任务在Executor上执行，反馈到TaskScheduler，DAGScheduler。完成后写入数据，释放资源。</li>
+</ul>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0k6x29qopj312e0n4qi3.jpg" alt="" /></p>
+
+<h1 id="rdd">RDD</h1>
+
+<h2 id="好处">好处</h2>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0k8n3uokxj31ce0g84c8.jpg" alt="" /></p>
+
+<h2 id="结构">结构</h2>
+<p>只读分区记录集合，一个RDD多个分区（数据集片段），不同分区可存储到集群上不同节点进行并行计算。</p>
+
+<p>RDD不能直接修改</p>
+<ul>
+  <li>只能基于物理存储的数据转换创建RDD</li>
+  <li>基于其他RDD转换创建新的RDD。</li>
+</ul>
+
+<h2 id="transformations-and-actions">transformations and actions</h2>
+
+<ul>
+  <li>transformat操作(map,filter,groupBy,join)接受RDD返回RDD</li>
+  <li>action操作(collect,collect)接受RDD返回一个值或者结果。</li>
+</ul>
+
+<p>transformat不会马上计算，Spark会记住对于base dataset的所有转换（RDD依赖关系）。当有action时才会计算出结果（Spark根据RDD依赖关系生成DAG）返回到<code class="highlighter-rouge">the driver program</code>。</p>
+
+<p>避免多次转换操作之间数据同步等待，不担心有过多的中间数据。DAG拓扑排序连接一系列RDD操作实现<strong>管道化</strong>。</p>
+
+<p>默认情况下，每次action都会计算，即使是相同的transform。 可以通过持久化（缓存）机制避免这种重复计算的开销。
+可以使用<strong>persist()</strong>方法对一个RDD标记为持久化，之所以说“标记为持久化”，是因为出现<strong>persist()</strong>语句的地方，并不会马上计算生成RDD并把它持久化，
+而是要等到遇到<strong>第一个行动操作触发真正计算</strong>以后，才会把计算结果进行持久化，持久化后的RDD将会被保留在计算节点的内存中被后面的行动操作重复使用。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s">"Hadoop"</span><span class="p">,</span><span class="s">"Spark"</span><span class="p">,</span><span class="s">"Hive"</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">rdd</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>  <span class="o">//</span><span class="err">会调用</span><span class="n">persist</span><span class="p">(</span><span class="n">MEMORY_ONLY</span><span class="p">)</span><span class="err">，但是，语句执行到这里，并不会缓存</span><span class="n">rdd</span><span class="err">，这是</span><span class="n">rdd</span><span class="err">还没有被计算生成</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">rdd</span><span class="o">.</span><span class="n">count</span><span class="p">())</span> <span class="o">//</span><span class="err">第一次行动操作，触发一次真正从头到尾的计算，这时才会执行上面的</span><span class="n">rdd</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span><span class="err">，把这个</span><span class="n">rdd</span><span class="err">放到缓存中</span>
+<span class="mi">3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="s">','</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rdd</span><span class="o">.</span><span class="n">collect</span><span class="p">()))</span> <span class="o">//</span><span class="err">第二次行动操作，不需要触发从头到尾的计算，只需要重复使用上面缓存中的</span><span class="n">rdd</span>
+<span class="n">Hadoop</span><span class="p">,</span><span class="n">Spark</span><span class="p">,</span><span class="n">Hive</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li><a href="http://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD">RDD API</a></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code><span class="k">def</span> <span class="nf">t_map</span><span class="p">():</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+    <span class="k">with</span> <span class="n">SparkContext</span><span class="p">()</span> <span class="k">as</span> <span class="n">sc</span><span class="p">:</span>
+        <span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">gl</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="why-高效">Why 高效</h2>
+
+<ul>
+  <li>高容错
+    <blockquote>
+      <p>根据DAG重新计算，获得丢失数据，避免数据复制高开销，重算过程多节点并行</p>
+    </blockquote>
+  </li>
+  <li>中间结果持久化到内存</li>
+  <li>存放数据都是Java对象，减少序列化和反序列化</li>
+</ul>
+
+<h2 id="rdd依赖">RDD依赖</h2>
+<p>看RDD分区
+<img src="https://ws3.sinaimg.cn/large/006tKfTcly1g0ks41tsqcj31230u01jx.jpg" alt="" /></p>
+
+<p>设置分区
+分区原则是使得分区的个数尽量等于集群中的CPU核心（core）数目
+<img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0n1wsxjzej31aa0aswfo.jpg" alt="" /></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="c">#设置两个分区</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="划分dag">划分DAG</h2>
+<p>在<strong>DAG</strong>中进行反向解析，遇到<strong>宽依赖</strong>就断开，遇到<strong>窄依赖</strong>把当前RDD加入到当前stage，尽量<strong>窄依赖</strong>划分到同一个阶段。
+<img src="https://ws3.sinaimg.cn/large/006tKfTcly1g0ksvf169ij31070u0hcy.jpg" alt="" /></p>
+
+<h2 id="运行过程">运行过程</h2>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g0kt4ieuxpj31lv0u01kx.jpg" alt="" /></p>
+
+<h1 id="run">RUN</h1>
+
+<h2 id="interactive">Interactive</h2>
+<p>master 参数</p>
+
+<ul>
+  <li>local
+Run Spark with one worker thread.</li>
+  <li>local[n]
+Run Spark with n worker threads.</li>
+  <li>spark://HOST:PORT
+Connect to a Spark standalone cluster.</li>
+  <li>mesos://HOST:PORT
+Connect to a Mesos cluster.</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>pyspark --master local[4]
+</code></pre></td></tr></tbody></table></div></div>
+<h2 id="run-1">run</h2>
+<p>run spark script</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>spark-submit --master local word_count.py
+</code></pre></td></tr></tbody></table></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>sc = SparkContext(master='local[4]')
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="py-local">py local</h2>
+
+<blockquote>
+  <p>The RDD.glom() method returns a list of all of the elements within each partition, 
+and the RDD.collect() method brings all the elements to the driver node.</p>
+</blockquote>
+
+<h2 id="get-rdd-from-collect">get RDD from collect</h2>
+<p><code class="highlighter-rouge">sc.parallelize</code>
+<img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0far6sw53j314a0u0gnq.jpg" alt="" /></p>
+
+<h2 id="get-file">get file</h2>
+<p><code class="highlighter-rouge">sc.textFile</code>
+<img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0fatrgcq7j318u0u0di1.jpg" alt="" /></p>
+
+<h2 id="diff-flatmap-and-map">diff flatMap and map</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38</pre></td><td class="code"><pre class="highlight"><code><span class="k">def</span> <span class="nf">t_map</span><span class="p">():</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]</span>
+    <span class="k">with</span> <span class="n">SparkContext</span><span class="p">()</span> <span class="k">as</span> <span class="n">sc</span><span class="p">:</span>
+        <span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">gl</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="s">"""
+[[1, 2], [], [3, 4, 5]]
+"""</span>
+
+<span class="k">def</span> <span class="nf">t_flatmap</span><span class="p">():</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]</span>
+    <span class="k">with</span> <span class="n">SparkContext</span><span class="p">()</span> <span class="k">as</span> <span class="n">sc</span><span class="p">:</span>
+        <span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">gl</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">gl</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+<span class="s">"""
+[1, 2, 3, 4, 5]
+"""</span>
+
+ 
+<span class="k">def</span> <span class="nf">t_flatmap1</span><span class="p">():</span>
+    <span class="c"># 先map 再flat</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]</span>
+    <span class="k">with</span> <span class="n">SparkContext</span><span class="p">()</span> <span class="k">as</span> <span class="n">sc</span><span class="p">:</span>
+        <span class="n">rdd</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">gl</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">gl</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+
+<span class="s">"""
+[1, 2, 1, 2, 3, 4, 5, 3, 4, 5]
+"""</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">t_map</span><span class="p">()</span>
+    <span class="n">t_flatmap</span><span class="p">()</span>
+    <span class="n">t_flatmap1</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="print">print</h2>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>rdd.take(100).foreach(print)
+rdd.foreach(print)
+
+但是，由于collect()方法会把各个worker节点上的所有RDD元素都抓取到Driver Program中，因此，这可能会导致内存溢出
+rdd.collect().foreach(print)
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="共享变量-broadcastaccumulators">共享变量 broadcast/accumulators</h2>
+
+<ul>
+  <li>广播变量用来把变量在所有节点的内存之间进行共享</li>
+  <li>累加器则支持在所有不同节点之间进行累加计算（比如计数或者求和）</li>
+</ul>
+
+<h3 id="广播变量">广播变量</h3>
+<p>允许程序开发人员在每个机器上缓存一个只读的变量，而不是为机器上的每个任务都生成一个副本。</p>
+
+<ul>
+  <li>When use Broadcast variable
+    <blockquote>
+      <p>只有在跨多个阶段的任务需要相同数据,数据重要，不更改的值。仅在需要时加载，数据仅发送到包含需要它的执行程序的节点。</p>
+      <div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code><span class="o">&gt;&gt;</span> <span class="n">broadcastVar</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">broadcast</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="o">&gt;&gt;</span> <span class="n">broadcastVar</span><span class="o">.</span><span class="n">value</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+</code></pre></td></tr></tbody></table></div>      </div>
+    </blockquote>
+  </li>
+  <li><a href="https://stackoverflow.com/questions/40685469/in-spark-how-does-broadcast-work">In spark, how does broadcast work?</a></li>
+</ul>
+
+<h3 id="累加器">累加器</h3>
+<p>运行在集群中的任务，就可以使用add方法来把数值累加到累加器上，但是，
+这些任务只能做累加操作，不能读取累加器的值，只有任务控制节点（Driver Program）可以使用value方法来读取累加器的值。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">accum</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">accumulator</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span><span class="o">.</span><span class="n">foreach</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">accum</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">accum</span><span class="o">.</span><span class="n">value</span>
+<span class="mi">10</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="文件读写">文件读写</h2>
+<p>因为Spark采用了惰性机制，在执行转换操作的时候，即使我们输入了错误的语句，
+pyspark也不会马上报错，而是等到执行“行动”类型的语句时启动真正的计算，那个时候“转换”操作语句中的错误就会显示出来</p>
+
+<ul>
+  <li>
+    <p>本地
+<code class="highlighter-rouge">file:///usr/local/spark/mycode/wordcount/writeback.txt</code></p>
+  </li>
+  <li>
+    <p>hdfs
+<code class="highlighter-rouge">hdfs://localhost:9000/user/hadoop/word.txt</code></p>
+  </li>
+</ul>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="k">val</span> <span class="n">textFile</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"hdfs://localhost:9000/user/hadoop/word.txt"</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">val</span> <span class="n">textFile</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"/user/hadoop/word.txt"</span><span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">val</span> <span class="n">textFile</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="o">(</span><span class="s">"word.txt"</span><span class="o">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span>
+
+<span class="n">PATH</span> <span class="o">=</span> <span class="s">'hdfs://localhost:9000'</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">appName</span><span class="o">=</span><span class="s">'sparkwordcount'</span><span class="p">)</span> <span class="k">as</span> <span class="n">sc</span><span class="p">:</span>
+        <span class="c"># 采用了惰性机制 即使路径错误 也不会马上报错</span>
+        <span class="n">input_file</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="n">PATH</span> <span class="o">+</span> <span class="s">'/user/wyx/input/input.txt'</span><span class="p">)</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">input_file</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> \
+            <span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">word</span><span class="p">:</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> \
+            <span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+        <span class="c"># 是一个目录路径</span>
+        <span class="n">counts</span><span class="o">.</span><span class="n">saveAsTextFile</span><span class="p">(</span><span class="n">PATH</span> <span class="o">+</span> <span class="s">'/user/wyx/output'</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13</pre></td><td class="code"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">peopleDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">"json"</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">"file:///usr/local/spark/examples/src/main/resources/people.json"</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">peopleDF</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">"name"</span><span class="p">,</span> <span class="s">"age"</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">"csv"</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">"file:///usr/local/spark/mycode/newpeople.csv"</span><span class="p">)</span>
+
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">peopleDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">"json"</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">"file:///usr/local/spark/examples/src/main/resources/people.json"</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">peopleDF</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="n">saveAsTextFile</span><span class="p">(</span><span class="s">"file:///usr/local/spark/mycode/newpeople.txt"</span><span class="p">)</span>
+
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="s">'file:///Users/wyx/project/py3.7aio/spark/a.json'</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s">"username"</span><span class="p">),</span> <span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="s">'file:///Users/wyx/project/py3.7aio/spark/a.csv'</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">'overwrite'</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="s">'file:///Users/wyx/project/py3.7aio/spark/a.csv'</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="dataframe">dataframe</h2>
+<ul>
+  <li><a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#module-pyspark.sql.functions">pyspark.sql.functions</a></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="s">'file:///Users/wyx/project/py3.7aio/spark/a.json'</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">desc</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">asc</span><span class="p">())</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s">"age"</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">avg</span><span class="p">(</span><span class="s">"age"</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s">"avg_age"</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s">"username"</span><span class="p">),</span> <span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">price</span> <span class="o">!=</span> <span class="s">'面议'</span><span class="p">)</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s">"price"</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s">"price"</span><span class="p">]</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">IntegerType</span><span class="p">()))</span><span class="o">.</span>\
+    <span class="nb">filter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">price</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">price</span> <span class="o">&lt;=</span> <span class="mi">40000</span><span class="p">)</span>
+
+<span class="n">mean_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">area</span> <span class="o">==</span> <span class="s">"海沧"</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s">"price"</span><span class="p">:</span> <span class="s">"mean"</span><span class="p">})</span><span class="o">.</span><span class="n">first</span><span class="p">()[</span><span class="s">'avg(price)'</span><span class="p">]</span>
+<span class="n">max_list</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">area</span> <span class="o">==</span> <span class="s">"同安"</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s">"price"</span><span class="p">:</span> <span class="s">"max"</span><span class="p">})</span><span class="o">.</span><span class="n">first</span><span class="p">()[</span><span class="s">'max(price)'</span><span class="p">]</span>
+<span class="n">mid_list</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">area</span> <span class="o">==</span> <span class="s">"同安"</span><span class="p">)</span><span class="o">.</span><span class="n">approxQuantile</span><span class="p">(</span><span class="s">"price"</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">],</span> <span class="mf">0.01</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">spark.ml</span> <span class="kn">import</span> <span class="n">spark</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[(</span><span class="s">'A'</span><span class="p">,</span> <span class="s">'xx'</span><span class="p">,</span> <span class="s">'D'</span><span class="p">,</span> <span class="s">'vv'</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s">'C'</span><span class="p">,</span> <span class="s">'xxx'</span><span class="p">,</span> <span class="s">'D'</span><span class="p">,</span> <span class="s">'vv'</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="s">'A'</span><span class="p">,</span> <span class="s">'x'</span><span class="p">,</span> <span class="s">'A'</span><span class="p">,</span> <span class="s">'xx'</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">'E'</span><span class="p">,</span> <span class="s">'xxx'</span><span class="p">,</span> <span class="s">'B'</span><span class="p">,</span> <span class="s">'vv'</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s">'E'</span><span class="p">,</span> <span class="s">'xxx'</span><span class="p">,</span> <span class="s">'F'</span><span class="p">,</span> <span class="s">'vvv'</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s">'F'</span><span class="p">,</span> <span class="s">'xxxx'</span><span class="p">,</span> <span class="s">'F'</span><span class="p">,</span> <span class="s">'vvv'</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">'G'</span><span class="p">,</span> <span class="s">'xxx'</span><span class="p">,</span> <span class="s">'G'</span><span class="p">,</span> <span class="s">'xxx'</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s">'G'</span><span class="p">,</span> <span class="s">'xxx'</span><span class="p">,</span> <span class="s">'G'</span><span class="p">,</span> <span class="s">'xx'</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s">'G'</span><span class="p">,</span> <span class="s">'xxx'</span><span class="p">,</span> <span class="s">'G'</span><span class="p">,</span> <span class="s">'xxx'</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+            <span class="p">(</span><span class="s">'B'</span><span class="p">,</span> <span class="s">'xxxx'</span><span class="p">,</span> <span class="s">'B'</span><span class="p">,</span> <span class="s">'xx'</span><span class="p">,</span> <span class="mi">13</span><span class="p">)]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="p">[</span><span class="s">'col1'</span><span class="p">,</span> <span class="s">'col2'</span><span class="p">,</span> <span class="s">'col3'</span><span class="p">,</span> <span class="s">'col4'</span><span class="p">,</span> <span class="s">'d'</span><span class="p">])</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c"># in</span>
+<span class="n">df</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s">'col4'</span><span class="p">)</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s">'vv'</span><span class="p">,</span><span class="s">'xx'</span><span class="p">]))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c"># not in</span>
+<span class="n">df</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="o">~</span><span class="n">col</span><span class="p">(</span><span class="s">'col4'</span><span class="p">)</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s">'vv'</span><span class="p">,</span><span class="s">'xx'</span><span class="p">]))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">df</span><span class="o">.</span><span class="nb">filter</span><span class="p">((</span><span class="n">df</span><span class="o">.</span><span class="n">d</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s">'col1'</span><span class="p">)</span> <span class="o">!=</span> <span class="n">col</span><span class="p">(</span><span class="s">'col3'</span><span class="p">))</span> <span class="o">|</span>
+        <span class="p">((</span><span class="n">col</span><span class="p">(</span><span class="s">'col1'</span><span class="p">)</span> <span class="o">==</span> <span class="n">col</span><span class="p">(</span><span class="s">'col3'</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s">'col2'</span><span class="p">)</span> <span class="o">!=</span> <span class="n">col</span><span class="p">(</span><span class="s">'col4'</span><span class="p">)))</span>
+<span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>rdd to df</p>
+
+<ul>
+  <li>反射机制推断RDD</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16</pre></td><td class="code"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">Row</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="o">...</span>     <span class="n">rel</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="o">...</span>     <span class="n">rel</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">...</span>     <span class="n">rel</span><span class="p">[</span><span class="s">'age'</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">...</span>     <span class="k">return</span> <span class="n">rel</span>
+<span class="o">...</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">peopleDF</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="s">"file:///usr/local/spark/examples/src/main/resources/people.txt"</span><span class="p">)</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span> <span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">))</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Row</span><span class="p">(</span><span class="o">**</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span><span class="o">.</span><span class="n">toDF</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">peopleDF</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s">"people"</span><span class="p">)</span>  <span class="o">//</span><span class="err">必须注册为临时表才能供下面的查询使用</span>
+ 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">personsDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s">"select * from people"</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">personsDF</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span> <span class="p">:</span> <span class="s">"Name:"</span><span class="o">+</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">","</span><span class="o">+</span><span class="s">"Age:"</span><span class="o">+</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">foreach</span><span class="p">(</span><span class="k">print</span><span class="p">)</span>
+ 
+<span class="n">Name</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span><span class="n">Age</span><span class="p">:</span><span class="n">Justin</span>
+<span class="n">Name</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span><span class="n">Age</span><span class="p">:</span><span class="n">Michael</span>
+<span class="n">Name</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span><span class="n">Age</span><span class="p">:</span><span class="n">Andy</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>编程方式定义RDD</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30</pre></td><td class="code"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span>  <span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">Row</span>
+<span class="o">&gt;&gt;&gt;</span>  <span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">StructType</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">StructField</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">StringType</span>
+ 
+<span class="o">//</span><span class="err">生成</span> <span class="n">RDD</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">peopleRDD</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="s">"file:///usr/local/spark/examples/src/main/resources/people.txt"</span><span class="p">)</span>
+ 
+<span class="o">//</span><span class="err">定义一个模式字符串</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">schemaString</span> <span class="o">=</span> <span class="s">"name age"</span>
+ 
+<span class="o">//</span><span class="err">根据模式字符串生成模式</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span> <span class="k">lambda</span> <span class="n">fieldName</span> <span class="p">:</span> <span class="n">StructField</span><span class="p">(</span><span class="n">fieldName</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="n">nullable</span> <span class="o">=</span> <span class="bp">True</span><span class="p">),</span> <span class="n">schemaString</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">schema</span> <span class="o">=</span> <span class="n">StructType</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+<span class="o">//</span><span class="err">从上面信息可以看出，</span><span class="n">schema</span><span class="err">描述了模式信息，模式中包含</span><span class="n">name</span><span class="err">和</span><span class="n">age</span><span class="err">两个字段</span>
+ 
+ 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">rowRDD</span> <span class="o">=</span> <span class="n">peopleRDD</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span> <span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">))</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">attributes</span> <span class="p">:</span> <span class="n">Row</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+ 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">peopleDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">rowRDD</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+ 
+<span class="o">//</span><span class="err">必须注册为临时表才能供下面查询使用</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">peopleDF</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s">"people"</span><span class="p">)</span>
+ 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s">"SELECT * FROM people"</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">results</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span> <span class="k">lambda</span> <span class="n">attributes</span> <span class="p">:</span> <span class="s">"name: "</span> <span class="o">+</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">","</span><span class="o">+</span><span class="s">"age:"</span><span class="o">+</span><span class="n">attributes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">foreach</span><span class="p">(</span><span class="k">print</span><span class="p">)</span>
+ 
+<span class="n">name</span><span class="p">:</span> <span class="n">Michael</span><span class="p">,</span><span class="n">age</span><span class="p">:</span> <span class="mi">29</span>
+<span class="n">name</span><span class="p">:</span> <span class="n">Andy</span><span class="p">,</span><span class="n">age</span><span class="p">:</span> <span class="mi">30</span>
+<span class="n">name</span><span class="p">:</span> <span class="n">Justin</span><span class="p">,</span><span class="n">age</span><span class="p">:</span> <span class="mi">19</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="stream">stream</h1>
+
+<h2 id="创建-streamingcontext">创建 StreamingContext</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span>
+<span class="kn">from</span> <span class="nn">pyspark.streaming</span> <span class="kn">import</span> <span class="n">StreamingContext</span>
+<span class="c"># 1表示每隔1秒钟就自动执行一次流计算，这个秒数可以自由设定。</span>
+<span class="n">ssc</span> <span class="o">=</span> <span class="n">StreamingContext</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+<p>setAppName(“TestDStream”)是用来设置应用程序名称。
+setMaster(“local[2]”)括号里的参数<strong>local[2]</strong>字符串表示运行在本地模式下，并且启动<strong>2个工作线程</strong>。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span><span class="p">,</span> <span class="n">SparkConf</span>
+<span class="kn">from</span> <span class="nn">pyspark.streaming</span> <span class="kn">import</span> <span class="n">StreamingContext</span>
+<span class="n">conf</span> <span class="o">=</span> <span class="n">SparkConf</span><span class="p">()</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">setAppName</span><span class="p">(</span><span class="s">'TestDStream'</span><span class="p">)</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">setMaster</span><span class="p">(</span><span class="s">'local[2]'</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">conf</span> <span class="o">=</span> <span class="n">conf</span><span class="p">)</span>
+<span class="n">ssc</span> <span class="o">=</span> <span class="n">StreamingContext</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="file流">File流</h2>
+
+<p>输入ssc.start()以后，程序就开始自动进入循环监听状态，
+监听程序只监听目录下在程序<strong>启动后新增的文件，不会去处理历史上已经存在的文件</strong>。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span><span class="p">,</span> <span class="n">SparkConf</span>
+<span class="kn">from</span> <span class="nn">pyspark.streaming</span> <span class="kn">import</span> <span class="n">StreamingContext</span>
+<span class="n">conf</span> <span class="o">=</span> <span class="n">SparkConf</span><span class="p">()</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">setAppName</span><span class="p">(</span><span class="s">'TestDStream'</span><span class="p">)</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">setMaster</span><span class="p">(</span><span class="s">'local[2]'</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">conf</span> <span class="o">=</span> <span class="n">conf</span><span class="p">)</span>
+<span class="n">ssc</span> <span class="o">=</span> <span class="n">StreamingContext</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">ssc</span><span class="o">.</span><span class="n">textFileStream</span><span class="p">(</span><span class="s">'file:///usr/local/spark/mycode/streaming/logfile'</span><span class="p">)</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">))</span>
+<span class="n">wordCounts</span> <span class="o">=</span> <span class="n">words</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="n">add</span><span class="p">)</span>
+<span class="n">wordCounts</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
+<span class="n">ssc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">ssc</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="socket">socket</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code><span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">appName</span><span class="o">=</span><span class="s">"PythonStreamingNetworkWordCount"</span><span class="p">)</span>
+<span class="n">ssc</span> <span class="o">=</span> <span class="n">StreamingContext</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">lines</span> <span class="o">=</span> <span class="n">ssc</span><span class="o">.</span><span class="n">socketTextStream</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">))</span>\
+              <span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">word</span><span class="p">:</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>\
+              <span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span>
+<span class="n">counts</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
+
+<span class="n">ssc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">ssc</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="rdd队列流dstream">RDD队列流(DStream)</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18</pre></td><td class="code"><pre class="highlight"><code><span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">appName</span><span class="o">=</span><span class="s">"PythonStreamingQueueStream"</span><span class="p">)</span>
+<span class="n">ssc</span> <span class="o">=</span> <span class="n">StreamingContext</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c"># Create the queue through which RDDs can be pushed to</span>
+<span class="c"># a QueueInputDStream</span>
+<span class="n">rddQueue</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">rddQueue</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ssc</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">parallelize</span><span class="p">([</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)],</span> <span class="mi">10</span><span class="p">)]</span>
+
+<span class="c"># Create the QueueInputDStream and use it do some processing</span>
+<span class="n">inputStream</span> <span class="o">=</span> <span class="n">ssc</span><span class="o">.</span><span class="n">queueStream</span><span class="p">(</span><span class="n">rddQueue</span><span class="p">)</span>
+<span class="n">mappedStream</span> <span class="o">=</span> <span class="n">inputStream</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">reducedStream</span> <span class="o">=</span> <span class="n">mappedStream</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">reducedStream</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
+
+<span class="n">ssc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">ssc</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">stopSparkContext</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">stopGraceFully</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="高级流">高级流</h2>
+<p>Kafka和Flume等高级输入源，需要依赖独立的库（jar文件）。按照我们前面安装好的Spark版本，这些jar包都不在里面。需要自己下载对应jar
+(spark-streaming-kafka spark-streaming-flume),<strong>复制到Spark目录的jars目录</strong></p>
+<ul>
+  <li>Kafka</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span>
+<span class="kn">from</span> <span class="nn">pyspark.streaming</span> <span class="kn">import</span> <span class="n">StreamingContext</span>
+<span class="kn">from</span> <span class="nn">pyspark.streaming.kafka</span> <span class="kn">import</span> <span class="n">KafkaUtils</span>
+ 
+   
+ 
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">appName</span><span class="o">=</span><span class="s">"PythonStreamingKafkaWordCount"</span><span class="p">)</span>
+<span class="n">ssc</span> <span class="o">=</span> <span class="n">StreamingContext</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">kvs</span> <span class="o">=</span> <span class="n">KafkaUtils</span><span class="o">.</span><span class="n">createStream</span><span class="p">(</span><span class="n">ssc</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span><span class="n">port</span><span class="p">,</span> <span class="s">"spark-streaming-consumer"</span><span class="p">,</span> <span class="p">{</span><span class="n">topic</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">kvs</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">))</span> \
+    <span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">word</span><span class="p">:</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> \
+    <span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span>
+<span class="n">counts</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
+
+<span class="n">ssc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">ssc</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+<ul>
+  <li>Flume</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span>
+<span class="kn">from</span> <span class="nn">pyspark.streaming</span> <span class="kn">import</span> <span class="n">StreamingContext</span>
+<span class="kn">from</span> <span class="nn">pyspark.streaming.flume</span> <span class="kn">import</span> <span class="n">FlumeUtils</span>
+<span class="kn">import</span> <span class="nn">pyspark</span>
+
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">appName</span><span class="o">=</span><span class="s">"FlumeEventCount"</span><span class="p">)</span>
+<span class="n">ssc</span> <span class="o">=</span> <span class="n">StreamingContext</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">stream</span> <span class="o">=</span> <span class="n">FlumeUtils</span><span class="o">.</span><span class="n">createStream</span><span class="p">(</span><span class="n">ssc</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span><span class="n">pyspark</span><span class="o">.</span><span class="n">StorageLevel</span><span class="o">.</span><span class="n">MEMORY_AND_DISK_SER_2</span><span class="p">)</span>
+<span class="n">stream</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">cnt</span> <span class="p">:</span> <span class="s">"Recieve "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span> <span class="o">+</span><span class="s">" Flume events!!!!"</span><span class="p">)</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
+
+<span class="n">ssc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">ssc</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="dstearm-transfer">Dstearm transfer</h2>
+
+<ul>
+  <li>无状态转换：每个批次的处理不依赖于之前批次的数据。</li>
+  <li>有状态转换：当前批次的处理需要<strong>使用之前批次的数据或者中间结果</strong>。有状态转换包括基于<strong>滑动窗口</strong>的转换和<strong>追踪状态变化</strong>的转换(updateStateByKey)。</li>
+</ul>
+
+<p><code class="highlighter-rouge">updateStateByKey</code> 跨批次之间维护状态</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10</pre></td><td class="code"><pre class="highlight"><code><span class="c"># RDD with initial state (key, value) pairs</span>
+<span class="n">initialStateRDD</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">([(</span><span class="s">u'hello'</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s">u'world'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+
+<span class="k">def</span> <span class="nf">updateFunc</span><span class="p">(</span><span class="n">new_values</span><span class="p">,</span> <span class="n">last_sum</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">new_values</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">last_sum</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">lines</span> <span class="o">=</span> <span class="n">ssc</span><span class="o">.</span><span class="n">socketTextStream</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+<span class="n">running_counts</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">flatMap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">))</span>\
+                      <span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">word</span><span class="p">:</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>\
+                      <span class="o">.</span><span class="n">updateStateByKey</span><span class="p">(</span><span class="n">updateFunc</span><span class="p">,</span> <span class="n">initialRDD</span><span class="o">=</span><span class="n">initialStateRDD</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><code class="highlighter-rouge">window</code></p>
+
+<p>设定一个滑动窗口的长度,并且设定滑动窗口的时间间隔（每隔多长时间执行一次计算)
+<img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0o970imq2j30rm0asdg9.jpg" alt="" />
+下面给给出一些窗口转换操作的含义：</p>
+<ul>
+  <li>window(windowLength, slideInterval) 基于源DStream产生的窗口化的批数据，计算得到一个新的DStream；</li>
+  <li>countByWindow(windowLength, slideInterval) 返回流中元素的一个滑动窗口数；</li>
+  <li>reduceByWindow(func, windowLength, slideInterval) 返回一个单元素流。利用函数func聚集滑动时间间隔的流的元素创建这个单元素流。函数func必须满足结合律，从而可以支持并行计算；</li>
+  <li>reduceByKeyAndWindow(func, windowLength, slideInterval, [numTasks]) 应用到一个(K,V)键值对组成的DStream上时，会返回一个由(K,V)键值对组成的新的DStream。每一个key的值均由给定的reduce函数(func函数)进行聚合计算。注意：在默认情况下，这个算子利用了Spark默认的并发任务数去分组。可以通过numTasks参数的设置来指定不同的任务数；</li>
+  <li>reduceByKeyAndWindow(func, invFunc, windowLength, slideInterval, [numTasks]) 更加高效的reduceByKeyAndWindow，每个窗口的reduce值，是基于先前窗口的reduce值进行增量计算得到的；它会对进入滑动窗口的新数据进行reduce操作，并对离开窗口的老数据进行“逆向reduce”操作。但是，只能用于“可逆reduce函数”，即那些reduce函数都有一个对应的“逆向reduce函数”（以InvFunc参数传入）；</li>
+  <li>countByValueAndWindow(windowLength, slideInterval, [numTasks]) 当应用到一个(K,V)键值对组成的DStream上，返回一个由(K,V)键值对组成的新的DStream。每个key的值都是它们在滑动窗口中出现的频率。</li>
+</ul>
+
+<h2 id="dstearm-output">Dstearm output</h2>
+
+<p><code class="highlighter-rouge">saveAsTextFiles</code>
+<img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0obcijmsvj31i80niq55.jpg" alt="" /></p>
+
+<p>存储到mysql</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">rdd</span><span class="p">):</span>
+    <span class="s">"""
+    每次保存RDD到MySQL中，都需要启动数据库连接，如果RDD分区数量太大，那么就会带来多次数据库连接开销，
+    为了减少开销，就有必要把RDD的分区数量控制在较小的范围内，所以，这里就把RDD的分区数量重新设置为3
+    """</span>
+    <span class="n">repartitionedRDD</span> <span class="o">=</span> <span class="n">rdd</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">repartitionedRDD</span><span class="o">.</span><span class="n">foreachPartition</span><span class="p">(</span><span class="n">dbfunc</span><span class="p">)</span>
+ 
+<span class="n">running_counts</span><span class="o">.</span><span class="n">foreachRDD</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="mllib">MLLib</h1>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0oc9bya2jj31lq0re0vu.jpg" alt="" />
+Spark官方推荐使用spark.ml
+<img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0ochzjyiij31h00u0n2w.jpg" alt="" /></p>
+
+<h2 id="pipline">pipline</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pyspark.ml</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml.classification</span> <span class="kn">import</span> <span class="n">LogisticRegression</span><span class="p">,</span> <span class="n">SparkSession</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">HashingTF</span><span class="p">,</span> <span class="n">Tokenizer</span>
+
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">master</span><span class="p">(</span><span class="s">"local"</span><span class="p">)</span><span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s">"Word Count"</span><span class="p">)</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="n">training</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">([</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"a b c d e spark"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"b d"</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">"spark f g h"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s">"hadoop mapreduce"</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="p">],</span> <span class="p">[</span><span class="s">"id"</span><span class="p">,</span> <span class="s">"text"</span><span class="p">,</span> <span class="s">"label"</span><span class="p">])</span>
+
+<span class="n">test</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">([</span>
+    <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s">"spark i j k"</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s">"l m n"</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s">"spark hadoop spark"</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="s">"apache hadoop"</span><span class="p">)</span>
+<span class="p">],</span> <span class="p">[</span><span class="s">"id"</span><span class="p">,</span> <span class="s">"text"</span><span class="p">])</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="s">"text"</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s">"words"</span><span class="p">)</span>
+<span class="n">hashingTF</span> <span class="o">=</span> <span class="n">HashingTF</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">getOutputCol</span><span class="p">(),</span> <span class="n">outputCol</span><span class="o">=</span><span class="s">"features"</span><span class="p">)</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">maxIter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">regParam</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="p">[</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">hashingTF</span><span class="p">,</span> <span class="n">lr</span><span class="p">])</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">training</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+
+<span class="n">prediction</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">selected</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">"id"</span><span class="p">,</span> <span class="s">"text"</span><span class="p">,</span> <span class="s">"probability"</span><span class="p">,</span> <span class="s">"prediction"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">selected</span><span class="o">.</span><span class="n">collect</span><span class="p">():</span>
+    <span class="n">rid</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">prob</span><span class="p">,</span> <span class="n">prediction</span> <span class="o">=</span> <span class="n">row</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"(</span><span class="si">%</span><span class="s">d, </span><span class="si">%</span><span class="s">s) --&gt; prob=</span><span class="si">%</span><span class="s">s, prediction=</span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="p">(</span><span class="n">rid</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">prob</span><span class="p">),</span> <span class="n">prediction</span><span class="p">))</span>
+    
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">+---+------------------+--------------------+--------------------+--------------------+--------------------+----------+</span>
+<span class="o">|</span> <span class="nb">id</span><span class="o">|</span>              <span class="n">text</span><span class="o">|</span>               <span class="n">words</span><span class="o">|</span>            <span class="n">features</span><span class="o">|</span>       <span class="n">rawPrediction</span><span class="o">|</span>         <span class="n">probability</span><span class="o">|</span><span class="n">prediction</span><span class="o">|</span>
+<span class="o">+---+------------------+--------------------+--------------------+--------------------+--------------------+----------+</span>
+<span class="o">|</span>  <span class="mi">4</span><span class="o">|</span>       <span class="n">spark</span> <span class="n">i</span> <span class="n">j</span> <span class="n">k</span><span class="o">|</span>    <span class="p">[</span><span class="n">spark</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span><span class="o">|</span><span class="p">(</span><span class="mi">262144</span><span class="p">,[</span><span class="mi">20197</span><span class="p">,</span><span class="mf">24.</span><span class="o">..|</span><span class="p">[</span><span class="o">-</span><span class="mf">1.6609033227472</span><span class="o">...|</span><span class="p">[</span><span class="mf">0.15964077387874</span><span class="o">...|</span>       <span class="mf">1.0</span><span class="o">|</span>
+<span class="o">|</span>  <span class="mi">5</span><span class="o">|</span>             <span class="n">l</span> <span class="n">m</span> <span class="n">n</span><span class="o">|</span>           <span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span><span class="o">|</span><span class="p">(</span><span class="mi">262144</span><span class="p">,[</span><span class="mi">18910</span><span class="p">,</span><span class="mf">10.</span><span class="o">..|</span><span class="p">[</span><span class="mf">1.64218895265644</span><span class="o">...|</span><span class="p">[</span><span class="mf">0.83783256854767</span><span class="o">...|</span>       <span class="mf">0.0</span><span class="o">|</span>
+<span class="o">|</span>  <span class="mi">6</span><span class="o">|</span><span class="n">spark</span> <span class="n">hadoop</span> <span class="n">spark</span><span class="o">|</span><span class="p">[</span><span class="n">spark</span><span class="p">,</span> <span class="n">hadoop</span><span class="p">,</span> <span class="n">s</span><span class="o">...|</span><span class="p">(</span><span class="mi">262144</span><span class="p">,[</span><span class="mi">155117</span><span class="p">,</span><span class="mf">2.</span><span class="o">..|</span><span class="p">[</span><span class="o">-</span><span class="mf">2.5980142174393</span><span class="o">...|</span><span class="p">[</span><span class="mf">0.06926633132976</span><span class="o">...|</span>       <span class="mf">1.0</span><span class="o">|</span>
+<span class="o">|</span>  <span class="mi">7</span><span class="o">|</span>     <span class="n">apache</span> <span class="n">hadoop</span><span class="o">|</span>    <span class="p">[</span><span class="n">apache</span><span class="p">,</span> <span class="n">hadoop</span><span class="p">]</span><span class="o">|</span><span class="p">(</span><span class="mi">262144</span><span class="p">,[</span><span class="mi">66695</span><span class="p">,</span><span class="mf">15.</span><span class="o">..|</span><span class="p">[</span><span class="mf">4.00817033336812</span><span class="o">...|</span><span class="p">[</span><span class="mf">0.98215753334442</span><span class="o">...|</span>       <span class="mf">0.0</span><span class="o">|</span>
+<span class="o">+---+------------------+--------------------+--------------------+--------------------+--------------------+----------+</span>
+
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">spark</span> <span class="n">i</span> <span class="n">j</span> <span class="n">k</span><span class="p">)</span> <span class="o">--&gt;</span> <span class="n">prob</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1596407738787475</span><span class="p">,</span><span class="mf">0.8403592261212525</span><span class="p">],</span> <span class="n">prediction</span><span class="o">=</span><span class="mf">1.000000</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">l</span> <span class="n">m</span> <span class="n">n</span><span class="p">)</span> <span class="o">--&gt;</span> <span class="n">prob</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8378325685476744</span><span class="p">,</span><span class="mf">0.16216743145232562</span><span class="p">],</span> <span class="n">prediction</span><span class="o">=</span><span class="mf">0.000000</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">spark</span> <span class="n">hadoop</span> <span class="n">spark</span><span class="p">)</span> <span class="o">--&gt;</span> <span class="n">prob</span><span class="o">=</span><span class="p">[</span><span class="mf">0.06926633132976037</span><span class="p">,</span><span class="mf">0.9307336686702395</span><span class="p">],</span> <span class="n">prediction</span><span class="o">=</span><span class="mf">1.000000</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">apache</span> <span class="n">hadoop</span><span class="p">)</span> <span class="o">--&gt;</span> <span class="n">prob</span><span class="o">=</span><span class="p">[</span><span class="mf">0.9821575333444218</span><span class="p">,</span><span class="mf">0.01784246665557808</span><span class="p">],</span> <span class="n">prediction</span><span class="o">=</span><span class="mf">0.000000</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="tf-idf">TF-IDF</h2>
+<p>词语由t表示，文档由d表示，语料库由D表示。</p>
+<ul>
+  <li>词频TF(t,d)是词语t在文档d中出现的次数</li>
+  <li>文件频率DF(t,D)是包含词语的文档的个数</li>
+</ul>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0odk9u5dyj320g0s4wge.jpg" alt="" />
+首先使用分解器Tokenizer把句子划分为单个词语。对每一个句子（词袋），我们使用HashingTF将句子转换为特征向量，最后使用IDF重新调整特征向量。这种转换通常可以提高使用文本特征的性能。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31</pre></td><td class="code"><pre class="highlight"><code><span class="n">sentenceData</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"I heard about Spark and I love Spark"</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"I wish Java could use case classes"</span><span class="p">),</span>
+     <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"Logistic regression models are neat"</span><span class="p">)])</span><span class="o">.</span><span class="n">toDF</span><span class="p">(</span><span class="s">"label"</span><span class="p">,</span> <span class="s">"sentence"</span><span class="p">)</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="s">"sentence"</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s">"words"</span><span class="p">)</span>
+<span class="n">wordsData</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sentenceData</span><span class="p">)</span>
+<span class="n">hashingTF</span> <span class="o">=</span> <span class="n">HashingTF</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="s">"words"</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s">"rawFeatures"</span><span class="p">,</span> <span class="n">numFeatures</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">featurizedData</span> <span class="o">=</span> <span class="n">hashingTF</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">wordsData</span><span class="p">)</span>
+<span class="n">idf</span> <span class="o">=</span> <span class="n">IDF</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="s">"rawFeatures"</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s">"features"</span><span class="p">)</span>
+<span class="n">idfModel</span> <span class="o">=</span> <span class="n">idf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">featurizedData</span><span class="p">)</span>
+<span class="n">rescaledData</span> <span class="o">=</span> <span class="n">idfModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">featurizedData</span><span class="p">)</span>
+
+<span class="n">rescaledData</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">"label"</span><span class="p">,</span> <span class="s">"features"</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">rescaledData</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">+-----+--------------------+</span>
+<span class="o">|</span><span class="n">label</span><span class="o">|</span>            <span class="n">features</span><span class="o">|</span>
+<span class="o">+-----+--------------------+</span>
+<span class="o">|</span>    <span class="mi">0</span><span class="o">|</span><span class="p">(</span><span class="mi">20</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">17</span><span class="p">]</span><span class="o">...|</span>
+<span class="o">|</span>    <span class="mi">0</span><span class="o">|</span><span class="p">(</span><span class="mi">20</span><span class="p">,[</span><span class="mi">2</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">15</span><span class="p">]</span><span class="o">...|</span>
+<span class="o">|</span>    <span class="mi">1</span><span class="o">|</span><span class="p">(</span><span class="mi">20</span><span class="p">,[</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mf">18.</span><span class="o">..|</span>
+<span class="o">+-----+--------------------+</span>
+
+<span class="o">+-----+--------------------+--------------------+--------------------+--------------------+</span>
+<span class="o">|</span><span class="n">label</span><span class="o">|</span>            <span class="n">sentence</span><span class="o">|</span>               <span class="n">words</span><span class="o">|</span>         <span class="n">rawFeatures</span><span class="o">|</span>            <span class="n">features</span><span class="o">|</span>
+<span class="o">+-----+--------------------+--------------------+--------------------+--------------------+</span>
+<span class="o">|</span>    <span class="mi">0</span><span class="o">|</span><span class="n">I</span> <span class="n">heard</span> <span class="n">about</span> <span class="n">Spa</span><span class="o">...|</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">heard</span><span class="p">,</span> <span class="n">about</span><span class="p">,</span><span class="o">...|</span><span class="p">(</span><span class="mi">20</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">17</span><span class="p">]</span><span class="o">...|</span><span class="p">(</span><span class="mi">20</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">17</span><span class="p">]</span><span class="o">...|</span>
+<span class="o">|</span>    <span class="mi">0</span><span class="o">|</span><span class="n">I</span> <span class="n">wish</span> <span class="n">Java</span> <span class="n">could</span><span class="o">...|</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">wish</span><span class="p">,</span> <span class="n">java</span><span class="p">,</span> <span class="n">c</span><span class="o">...|</span><span class="p">(</span><span class="mi">20</span><span class="p">,[</span><span class="mi">2</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">15</span><span class="p">]</span><span class="o">...|</span><span class="p">(</span><span class="mi">20</span><span class="p">,[</span><span class="mi">2</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">15</span><span class="p">]</span><span class="o">...|</span>
+<span class="o">|</span>    <span class="mi">1</span><span class="o">|</span><span class="n">Logistic</span> <span class="n">regressi</span><span class="o">...|</span><span class="p">[</span><span class="n">logistic</span><span class="p">,</span> <span class="n">regres</span><span class="o">...|</span><span class="p">(</span><span class="mi">20</span><span class="p">,[</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mf">18.</span><span class="o">..|</span><span class="p">(</span><span class="mi">20</span><span class="p">,[</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mf">18.</span><span class="o">..|</span>
+<span class="o">+-----+--------------------+--------------------+--------------------+--------------------+</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="word2vec">word2vec</h2>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0oemmzoirj31fw09q0tt.jpg" alt="" /></p>
+<ul>
+  <li>CBOW ，其思想是通过每个词的上下文窗口词词向量来预测中心词的词向量。</li>
+  <li>Skip-gram，其思想是通过每个中心词来预测其上下文窗口词，并根据预测结果来修正中心词的词向量</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25</pre></td><td class="code"><pre class="highlight"><code><span class="n">documentDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">([</span>
+    <span class="p">(</span><span class="s">"Hi I heard about Spark"</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">),),</span>
+    <span class="p">(</span><span class="s">"I wish Java could use case classes"</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">),),</span>
+    <span class="p">(</span><span class="s">"Logistic regression models are neat"</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">),)</span>
+<span class="p">],</span> <span class="p">[</span><span class="s">"text"</span><span class="p">])</span>
+
+<span class="n">word2Vec</span> <span class="o">=</span> <span class="n">Word2Vec</span><span class="p">(</span><span class="n">vectorSize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">minCount</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inputCol</span><span class="o">=</span><span class="s">"text"</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s">"result"</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">word2Vec</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">documentDF</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">documentDF</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">collect</span><span class="p">():</span>
+    <span class="n">text</span><span class="p">,</span> <span class="n">vector</span> <span class="o">=</span> <span class="n">row</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Text: [</span><span class="si">%</span><span class="s">s] =&gt; </span><span class="se">\n</span><span class="s">Vector: </span><span class="si">%</span><span class="s">s</span><span class="se">\n</span><span class="s">"</span> <span class="o">%</span> <span class="p">(</span><span class="s">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">vector</span><span class="p">)))</span>
+
+<span class="o">&gt;&gt;&gt;&gt;</span>
+<span class="n">Text</span><span class="p">:</span> <span class="p">[</span><span class="n">Hi</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">heard</span><span class="p">,</span> <span class="n">about</span><span class="p">,</span> <span class="n">Spark</span><span class="p">]</span> <span class="o">=&gt;</span> 
+<span class="n">Vector</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.02057519257068634</span><span class="p">,</span><span class="mf">0.027896256744861604</span><span class="p">,</span><span class="mf">0.0453112430870533</span><span class="p">]</span>
+
+<span class="n">Text</span><span class="p">:</span> <span class="p">[</span><span class="n">I</span><span class="p">,</span> <span class="n">wish</span><span class="p">,</span> <span class="n">Java</span><span class="p">,</span> <span class="n">could</span><span class="p">,</span> <span class="n">use</span><span class="p">,</span> <span class="n">case</span><span class="p">,</span> <span class="n">classes</span><span class="p">]</span> <span class="o">=&gt;</span> 
+<span class="n">Vector</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.014936649905783788</span><span class="p">,</span><span class="o">-</span><span class="mf">0.0039047444505350927</span><span class="p">,</span><span class="o">-</span><span class="mf">0.009782610195023673</span><span class="p">]</span>
+
+<span class="n">Text</span><span class="p">:</span> <span class="p">[</span><span class="n">Logistic</span><span class="p">,</span> <span class="n">regression</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">are</span><span class="p">,</span> <span class="n">neat</span><span class="p">]</span> <span class="o">=&gt;</span> 
+<span class="n">Vector</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.08842044896446169</span><span class="p">,</span><span class="mf">0.010355661995708943</span><span class="p">,</span><span class="o">-</span><span class="mf">0.04723416268825531</span><span class="p">]</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="countvectorizer-词频统计">CountVectorizer 词频统计</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19</pre></td><td class="code"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">([</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"a b c"</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)),</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">"a b c a a"</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">))</span>
+<span class="p">],</span> <span class="p">[</span><span class="s">"id"</span><span class="p">,</span> <span class="s">"words"</span><span class="p">])</span>
+
+<span class="c"># fit a CountVectorizerModel from the corpus.</span>
+<span class="n">cv</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="s">"words"</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s">"features"</span><span class="p">,</span> <span class="n">vocabSize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">minDF</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">truncate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">+---+---------------+-------------------------+</span>
+<span class="o">|</span><span class="nb">id</span> <span class="o">|</span><span class="n">words</span>          <span class="o">|</span><span class="n">features</span>                 <span class="o">|</span>
+<span class="o">+---+---------------+-------------------------+</span>
+<span class="o">|</span><span class="mi">0</span>  <span class="o">|</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span>      <span class="o">|</span><span class="p">(</span><span class="mi">3</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span><span class="o">|</span>
+<span class="o">|</span><span class="mi">1</span>  <span class="o">|</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">]</span><span class="o">|</span><span class="p">(</span><span class="mi">3</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mf">3.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span><span class="o">|</span>
+<span class="o">+---+---------------+-------------------------+</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="trick">trick</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 数据集随机分成训练集和测试集，其中训练集占70%</span>
+<span class="n">trainingData</span><span class="p">,</span> <span class="n">testData</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.3</span><span class="p">])</span>
+
+<span class="c"># 还能看到我们已经设置的参数的结果</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"LogisticRegression parameters:</span><span class="se">\n</span><span class="s">"</span> <span class="o">+</span> <span class="n">LogisticRegression</span><span class="p">()</span><span class="o">.</span><span class="n">explainParams</span><span class="p">())</span>
+
+
+<span class="c"># 模型评估</span>
+<span class="n">evaluator</span> <span class="o">=</span> <span class="n">MulticlassClassificationEvaluator</span><span class="p">()</span><span class="o">.</span><span class="n">setLabelCol</span><span class="p">(</span><span class="s">"indexedLabel"</span><span class="p">)</span><span class="o">.</span><span class="n">setPredictionCol</span><span class="p">(</span><span class="s">"prediction"</span><span class="p">)</span>
+<span class="n">lrAccuracy</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">lrPredictions</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Test Error = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">lrAccuracy</span><span class="p">))</span>
+
+<span class="n">evaluatorClassifier</span> <span class="o">=</span> <span class="n">MulticlassClassificationEvaluator</span><span class="p">()</span><span class="o">.</span><span class="n">setLabelCol</span><span class="p">(</span><span class="s">"indexedLabel"</span><span class="p">)</span><span class="o">.</span><span class="n">setPredictionCol</span><span class="p">(</span><span class="s">"prediction"</span><span class="p">)</span><span class="o">.</span><span class="n">setMetricName</span><span class="p">(</span><span class="s">"accuracy"</span><span class="p">)</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="n">evaluatorClassifier</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">predictionsClassifier</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Test Error = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">accuracy</span><span class="p">))</span>
+
+<span class="n">evaluatorRegressor</span> <span class="o">=</span> <span class="n">RegressionEvaluator</span><span class="p">()</span><span class="o">.</span><span class="n">setLabelCol</span><span class="p">(</span><span class="s">"indexedLabel"</span><span class="p">)</span><span class="o">.</span><span class="n">setPredictionCol</span><span class="p">(</span><span class="s">"prediction"</span><span class="p">)</span><span class="o">.</span><span class="n">setMetricName</span><span class="p">(</span><span class="s">"rmse"</span><span class="p">)</span>
+<span class="n">rmse</span> <span class="o">=</span> <span class="n">evaluatorRegressor</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">predictionsRegressor</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Root Mean Squared Error (RMSE) on test data = "</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">rmse</span><span class="p">))</span>
+
+
+<span class="c"># pipeline get stage</span>
+<span class="n">lrModel</span> <span class="o">=</span> <span class="n">lrPipelineModel</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Coefficients: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lrModel</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span><span class="o">+</span><span class="s">"Intercept: "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lrModel</span><span class="o">.</span><span class="n">intercept</span><span class="p">)</span><span class="o">+</span><span class="s">"numClasses: "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lrModel</span><span class="o">.</span><span class="n">numClasses</span><span class="p">)</span><span class="o">+</span><span class="s">"numFeatures: "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lrModel</span><span class="o">.</span><span class="n">numFeatures</span><span class="p">))</span>
+<span class="n">Coefficients</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.0396171957643483</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.07240315639651046</span><span class="p">]</span><span class="n">Intercept</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.23127346342015379</span><span class="n">numClasses</span><span class="p">:</span> <span class="mi">2</span><span class="n">numFeatures</span><span class="p">:</span> <span class="mi">4</span>
+
+</code></pre></td></tr></tbody></table></div></div>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0osu002ekj31i80tun06.jpg" alt="" />
+<img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0osvqhr6lj31510u00wp.jpg" alt="" />
+<img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0oswag83ij31ac0u0jtq.jpg" alt="" /></p>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      wyx
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="/blog/2019/03/01/spark" title="Spark">/blog/2019/03/01/spark</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/big%20data" rel="tag"># big data</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/03/03/hive" rel="next" title="Hive">
+                <i class="fa fa-chevron-left"></i> Hive
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/02/24/homebrew-install-specific-version" rel="prev" title="brew install 指定 version">
+                brew install 指定 version <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="wyx" />
+          <p class="site-author-name" itemprop="name">wyx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/631068264" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://stackoverflow.com/users/5360312/wyx" target="_blank" title="StackOverflow">
+                  
+                    <i class="fa fa-fw fa-stack-overflow"></i>
+                  
+                  StackOverflow
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#spark"> <span class="nav-number">1</span> <span class="nav-text">Spark</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#优势"> <span class="nav-number">2</span> <span class="nav-text">优势</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#架构"> <span class="nav-number">3</span> <span class="nav-text">架构</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#rdd"> <span class="nav-number">4</span> <span class="nav-text">RDD</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#好处"> <span class="nav-number">4.1</span> <span class="nav-text">好处</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#结构"> <span class="nav-number">4.2</span> <span class="nav-text">结构</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#transformations-and-actions"> <span class="nav-number">4.3</span> <span class="nav-text">transformations and actions</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#why-高效"> <span class="nav-number">4.4</span> <span class="nav-text">Why 高效</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#rdd依赖"> <span class="nav-number">4.5</span> <span class="nav-text">RDD依赖</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#划分dag"> <span class="nav-number">4.6</span> <span class="nav-text">划分DAG</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#运行过程"> <span class="nav-number">4.7</span> <span class="nav-text">运行过程</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#run"> <span class="nav-number">5</span> <span class="nav-text">RUN</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#interactive"> <span class="nav-number">5.1</span> <span class="nav-text">Interactive</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#run-1"> <span class="nav-number">5.2</span> <span class="nav-text">run</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#py-local"> <span class="nav-number">5.3</span> <span class="nav-text">py local</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#get-rdd-from-collect"> <span class="nav-number">5.4</span> <span class="nav-text">get RDD from collect</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#get-file"> <span class="nav-number">5.5</span> <span class="nav-text">get file</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#diff-flatmap-and-map"> <span class="nav-number">5.6</span> <span class="nav-text">diff flatMap and map</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#print"> <span class="nav-number">5.7</span> <span class="nav-text">print</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#共享变量-broadcastaccumulators"> <span class="nav-number">5.8</span> <span class="nav-text">共享变量 broadcast/accumulators</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#广播变量"> <span class="nav-number">5.8.1</span> <span class="nav-text">广播变量</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#累加器"> <span class="nav-number">5.8.2</span> <span class="nav-text">累加器</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#文件读写"> <span class="nav-number">5.9</span> <span class="nav-text">文件读写</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#dataframe"> <span class="nav-number">5.10</span> <span class="nav-text">dataframe</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#stream"> <span class="nav-number">6</span> <span class="nav-text">stream</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#创建-streamingcontext"> <span class="nav-number">6.1</span> <span class="nav-text">创建 StreamingContext</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#file流"> <span class="nav-number">6.2</span> <span class="nav-text">File流</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#socket"> <span class="nav-number">6.3</span> <span class="nav-text">socket</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#rdd队列流dstream"> <span class="nav-number">6.4</span> <span class="nav-text">RDD队列流(DStream)</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#高级流"> <span class="nav-number">6.5</span> <span class="nav-text">高级流</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#dstearm-transfer"> <span class="nav-number">6.6</span> <span class="nav-text">Dstearm transfer</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#dstearm-output"> <span class="nav-number">6.7</span> <span class="nav-text">Dstearm output</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#mllib"> <span class="nav-number">7</span> <span class="nav-text">MLLib</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#pipline"> <span class="nav-number">7.1</span> <span class="nav-text">pipline</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#tf-idf"> <span class="nav-number">7.2</span> <span class="nav-text">TF-IDF</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#word2vec"> <span class="nav-number">7.3</span> <span class="nav-text">word2vec</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#countvectorizer-词频统计"> <span class="nav-number">7.4</span> <span class="nav-text">CountVectorizer 词频统计</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#trick"> <span class="nav-number">7.5</span> <span class="nav-text">trick</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2018 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wyx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var labels = ['gitalk','2019-03-01']
+</script>
+
+<script type="text/javascript">
+    labels.push('big data');
+</script>
+
+
+<script type="text/javascript">
+    labels.push('big data');
+</script>
+
+
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'dd688ffd2be8512fc659',
+        clientSecret: '483255bda7b80acb108df487ac91a0be78710b0d',
+        repo: '631068264.github.io',
+        owner: '631068264',
+        admin: ['631068264'],
+        id: 'Spark',
+        title: 'Spark',
+        labels: labels,
+        perPage: 50,
+        distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("MQfAJm2nTUDaT5bEuS8i4Ygm-gzGzoHsz", "m4tqv3N9AepVgTk0YfSNe9kz");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  <!--custom css in _sass/_custom/custom.scss -->
+
+<script type="text/javascript">
+    // 黑幕提示语
+    $('span.heimu').attr('title', '你知道得太多了');
+</script>
+
+<script type="text/javascript">
+    // 多图显示 gp-列数
+    $('span[class^="gp-"]').each(function () {
+        var div_mulp = $(this);
+        if (div_mulp && div_mulp.attr('class')) {
+            var column_number = parseInt(div_mulp.attr('class').split('-')[1]);
+            var image = div_mulp.find('img');
+            if (image.size() > 0) {
+                div_mulp.removeClass()
+                    .addClass('post-gallery')
+                    .attr('itemscope', '')
+                    .attr('itemtype', 'http://schema.org/ImageGallery');
+
+                image.each(function (index) {
+                    var modulo = index % column_number;
+
+                    if (modulo === 0) {
+                        content = $('<div class="post-gallery-row"></div>')
+                    }
+                    var image_src = $(this).attr('src');
+                    content.append('<a class="post-gallery-img fancybox"\n' +
+                        '                 href="' + image_src + '" rel="gallery_"\n' +
+                        '                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">\n' +
+                        '                <img src="' + image_src + '" itemprop="contentUrl"/>\n' +
+                        '              </a>');
+
+                    if (modulo === column_number - 1) {
+                        div_mulp.append(content)
+                    }
+                });
+
+                var photo_size_modulo = image.size() % column_number;
+                if (photo_size_modulo > 0) {
+                    div_mulp.append(content);
+                }
+                image.remove();
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>
+

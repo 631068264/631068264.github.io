@@ -1,0 +1,1838 @@
+<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/dash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head>
+  <meta name="referrer" content="never">
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="big data," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Pig pig online doc 高级数据流语言 Pig Latin 运行Pig Latin程序的执行环境">
+<meta name="keywords" content="big data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bigdata Element">
+<meta property="og:url" content="/blog/2019/02/20/bigdata-element">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="Pig pig online doc 高级数据流语言 Pig Latin 运行Pig Latin程序的执行环境">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0jz6f0kp0j31gw0bk7fh.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0egcywet8j30zu09m3yr.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0eghch92lj30ek0bidg5.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0egi7gevyj31hw0imaav.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0egkxb7cpj31h60jswfo.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0ehjnt6a6j31hg0jujsk.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0ehsqlwbwj318b0u0wg2.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j0kby1r1j31sw0u07wh.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0iufa0m5hj30ls0euq7x.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j0ofjbh9j31u80gyqfm.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j036smpmj31ai04g771.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j063g65gj31w40dutlm.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j08zji2tj31e00u04qp.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j0cbtd0uj31ti04ydk6.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j0davtrdj31ss07cdme.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j0emqp1jj31tc0c2tlj.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j0vyl9z4j31tc0o27hu.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0j0xh0892j31460u0b29.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j10j0m8lj31ti0gitpj.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j1b6nlxdj31v40t84qp.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j27rn5jmj316g0owwrb.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j2e19djxj31dl0u0nof.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j2k466laj31g00p0dzp.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j2l8eelij31ie0dm14t.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j1frorkej31f80u04qp.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0j1ltajqij31uk0b0qcx.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j1x3cpv4j31bc0u0no6.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j200u1u3j31260u01kx.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0j22s6oo9j31800u0x51.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j2qvmpcij313l0u07v1.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0j3evboptj31gc0iiwqf.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j3j6dkl4j31hc0n8avu.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j31qmnmcj31g609ith9.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j2rfgaj2j31gu084tf3.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j16237y9j31uw0bwans.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0jl40p0b9j317u0u0nig.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0l0c3ng4ij31kk0f0gsc.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1g0kzn90nq6j31z60g67hy.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l0iquglqj31620u0e81.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0l0la1nw4j31zs0f6nad.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l0nnadogj32080r41kx.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0l1wd0pygj31og0dok3c.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0l1wr0ns8j31mg08in4f.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l25gbhzjj31ye0a47ee.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l2789t0gj31y60iek5o.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0l2955g4dj31yk0ouqkk.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0l3bj04hgj30ly0eoaax.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l2l4brccj31ze0kmtr7.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcgy1g0l2slgdavj31xy0kah7e.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0l2zth5awj31y00oydve.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcgy1g0l3u9pl8lj31y40r4e5z.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l3xi6k1oj31xq0deh0q.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bigdata Element">
+<meta name="twitter:description" content="Pig pig online doc 高级数据流语言 Pig Latin 运行Pig Latin程序的执行环境">
+<meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tKfTcgy1g0jz6f0kp0j31gw0bk7fh.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>Bigdata Element | Notes</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-120397256-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-book">
+          <a href="/book/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            库
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!--<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/bitcoincash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>-->
+
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/blog/2019/02/20/bigdata-element">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+          
+          
+            Bigdata Element
+          
+        </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-20T00:00:00+08:00">
+                2019-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/big%20data" itemprop="url" rel="index">
+                    <span itemprop="name">big data</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/blog/2019/02/20/bigdata-element" class="leancloud_visitors" data-flag-title="Bigdata Element">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="pig">Pig</h1>
+<p><a href="https://pig.apache.org/docs/latest/index.html">pig online doc</a></p>
+<ul>
+  <li>高级数据流语言 Pig Latin</li>
+  <li>运行Pig Latin程序的执行环境</li>
+</ul>
+
+<p>Pig能够让你专心于数据及业务本身，而不是纠结于数据的格式转换以及MapReduce程序的编写。
+<img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0jz6f0kp0j31gw0bk7fh.jpg" alt="" /></p>
+
+<h2 id="execution-modes">Execution Modes</h2>
+
+<h3 id="local">local</h3>
+<p>only requires a single machine. Pig will run on the local host and access the local filesystem.
+<code class="highlighter-rouge">pig -x local ...</code></p>
+
+<h3 id="mapreduce">MapReduce</h3>
+<p><code class="highlighter-rouge">pig ...</code></p>
+
+<h2 id="interactive-mode">Interactive Mode</h2>
+<p>Pig can be run interactively in the Grunt shell.</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>pig -x local
+...
+grunt&gt;
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="batch-mode">Batch Mode</h2>
+<p>use pig script
+<code class="highlighter-rouge">pig -x local id.pig</code></p>
+
+<h2 id="pig-语法">pig 语法</h2>
+<p>Each statement is an operator that takes a relation as an input, performs a transformation on that relation,
+and produces a relation as an out‐ put. Statements can span multiple lines,<code class="highlighter-rouge">;</code>结尾。</p>
+
+<ul>
+  <li>A LOAD statement that reads the data from the filesystem</li>
+  <li>One or more statements to transform the data</li>
+  <li>A DUMP or STORE statement to view or store the results</li>
+</ul>
+
+<h3 id="load">load</h3>
+<p>USING default keyword <code class="highlighter-rouge">\t</code> 
+AS default not named and type bytearray</p>
+<pre><code class="language-pig">LOAD 'data' [USING function] [AS schema];
+</code></pre>
+
+<pre><code class="language-pig">A = LOAD 'students' AS (name:chararray, age:int);
+DUMP A; 
+
+(john,21,3.89) 
+(sally,19,2.56) 
+(alice,22,3.76) 
+(doug,19,1.98) 
+(susan,26,3.25)
+</code></pre>
+
+<h3 id="transforming-data">Transforming Data</h3>
+<p>条件关系 and or not</p>
+
+<h4 id="filter">FILTER</h4>
+<p>处理列</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code>A = LOAD 'students' AS (name:chararray, age:int, gpa:float);
+
+DUMP A; 
+(john,21,3.89)
+(sally,19,2.56) 
+(alice,22,3.76)
+(doug,19,1.98)
+(susan,26,3.25)
+
+R = FILTER A BY age&gt;=20;
+DUMP R; 
+
+(john,21,3.89) 
+(alice,22,3.76) 
+(susan,26,3.25)
+</code></pre></td></tr></tbody></table></div></div>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0egcywet8j30zu09m3yr.jpg" alt="" /></p>
+
+<h4 id="foreach">FOREACH</h4>
+<p>处理行 有点像select</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>R = FOREACH A GENERATE *;
+</code></pre></td></tr></tbody></table></div></div>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0eghch92lj30ek0bidg5.jpg" alt="" /></p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0egi7gevyj31hw0imaav.jpg" alt="" /></p>
+
+<h4 id="group">GROUP</h4>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>B = GROUP A BY age;
+</code></pre></td></tr></tbody></table></div></div>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0egkxb7cpj31h60jswfo.jpg" alt="" /></p>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0ehjnt6a6j31hg0jujsk.jpg" alt="" /></p>
+
+<h4 id="store">STORE</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>STORE alias INTO 'directory' [USING function];
+</code></pre></td></tr></tbody></table></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>A = LOAD 'students' AS (name:chararray, age:int, gpa:float);
+STORE A INTO 'output' USING PigStore('|');
+CAT output;
+</code></pre></td></tr></tbody></table></div></div>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0ehsqlwbwj318b0u0wg2.jpg" alt="" /></p>
+
+<h2 id="udf">UDF</h2>
+
+<p><a href="https://github.com/apache/pig/tree/trunk/src/python/streaming">pig_util</a></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pig.pig_util</span> <span class="kn">import</span> <span class="n">outputSchema</span>
+
+
+<span class="nd">@outputSchema</span><span class="p">(</span><span class="s">'word:chararray'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">reverse</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="s">"""
+    Return the reverse text of the provided word """</span>
+    <span class="k">return</span> <span class="n">word</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="nd">@outputSchema</span><span class="p">(</span><span class="s">'length:int'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">num_chars</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="s">"""
+    Return the length of the provided word """</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>REGISTER 'my_udf.py' USING streaming_python AS string_udf;
+term_length = FOREACH unique_terms GENERATE word, string_udf.num_chars(word) as length;
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="hive">Hive</h1>
+
+<p><a href="/blog/2019/03/03/hive">Hive</a></p>
+
+<h1 id="hbase">HBase</h1>
+
+<h2 id="数据模型概念">数据模型概念</h2>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j0kby1r1j31sw0u07wh.jpg" alt="" />
+<img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0iufa0m5hj30ls0euq7x.jpg" alt="" />
+<img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j0ofjbh9j31u80gyqfm.jpg" alt="" /></p>
+
+<h3 id="表">表</h3>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j036smpmj31ai04g771.jpg" alt="" /></p>
+
+<h3 id="行">行</h3>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j063g65gj31w40dutlm.jpg" alt="" /></p>
+
+<h3 id="列族">列族</h3>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j08zji2tj31e00u04qp.jpg" alt="" /></p>
+
+<h3 id="限定字符">限定字符</h3>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j0cbtd0uj31ti04ydk6.jpg" alt="" /></p>
+
+<h3 id="单元格">单元格</h3>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j0davtrdj31ss07cdme.jpg" alt="" /></p>
+
+<h3 id="时间戳">时间戳</h3>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j0emqp1jj31tc0c2tlj.jpg" alt="" /></p>
+
+<h2 id="列族存储">列族存储</h2>
+
+<p><span class="gp-2">
+    <img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j0vyl9z4j31tc0o27hu.jpg" />
+    <img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0j0xh0892j31460u0b29.jpg" />
+</span></p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j10j0m8lj31ti0gitpj.jpg" alt="" /></p>
+
+<ul>
+  <li>降低IO</li>
+  <li>大并发查询</li>
+  <li>高数据压缩比</li>
+</ul>
+
+<h2 id="架构">架构</h2>
+<p>与Hadoop访问过程，结构有点像
+<img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j1b6nlxdj31v40t84qp.jpg" alt="" />
+<img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j27rn5jmj316g0owwrb.jpg" alt="" /></p>
+
+<h3 id="zookeeper">zookeeper</h3>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j2e19djxj31dl0u0nof.jpg" alt="" /></p>
+
+<h3 id="master">master</h3>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j2k466laj31g00p0dzp.jpg" alt="" /></p>
+
+<h3 id="region">region</h3>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j2l8eelij31ie0dm14t.jpg" alt="" /></p>
+
+<h4 id="表-region">表 Region</h4>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j1frorkej31f80u04qp.jpg" alt="" />
+<img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0j1ltajqij31uk0b0qcx.jpg" alt="" /></p>
+
+<h4 id="region-定位">Region 定位</h4>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0j1x3cpv4j31bc0u0no6.jpg" alt="" />
+<img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j200u1u3j31260u01kx.jpg" alt="" />
+<img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0j22s6oo9j31800u0x51.jpg" alt="" /></p>
+
+<h4 id="结构">结构</h4>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j2qvmpcij313l0u07v1.jpg" alt="" /></p>
+
+<p><strong>MemStore</strong>容量有限，周期性写入到<strong>StoreFile</strong>,HLog写入一个标记。每次缓存刷新生成新的<strong>StoreFile</strong>，
+当<strong>StoreFile</strong>数量到达某个阈值，会合并一个大<strong>StoreFile</strong>。当大<strong>StoreFile</strong>大小到达某个阈值，会分裂。
+<img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0j3evboptj31gc0iiwqf.jpg" alt="" /></p>
+
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j3j6dkl4j31hc0n8avu.jpg" alt="" />
+<img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j31qmnmcj31g609ith9.jpg" alt="" /></p>
+
+<h4 id="读写">读写</h4>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0j2rfgaj2j31gu084tf3.jpg" alt="" /></p>
+
+<h2 id="局限">局限</h2>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0j16237y9j31uw0bwans.jpg" alt="" /></p>
+
+<h1 id="nosql">NoSQL</h1>
+<p>不需要事务，读写实时性，没有复杂SQL查询。</p>
+
+<h2 id="种类">种类</h2>
+
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0jl40p0b9j317u0u0nig.jpg" alt="" /></p>
+
+<h1 id="spark">Spark</h1>
+
+<p><a href="/blog/2019/03/01/spark">Spark</a></p>
+
+<h1 id="流计算">流计算</h1>
+
+<ul>
+  <li>静态数据 批量计算 时间充足批量处理海量数据</li>
+  <li>流数据 实时计算
+<img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0l0c3ng4ij31kk0f0gsc.jpg" alt="" /></li>
+</ul>
+
+<h2 id="流数据特征">流数据特征</h2>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1g0kzn90nq6j31z60g67hy.jpg" alt="" /></p>
+
+<h2 id="实时采集">实时采集</h2>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l0iquglqj31620u0e81.jpg" alt="" /></p>
+
+<h2 id="实时计算">实时计算</h2>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0l0la1nw4j31zs0f6nad.jpg" alt="" /></p>
+
+<h2 id="实时查询">实时查询</h2>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l0nnadogj32080r41kx.jpg" alt="" /></p>
+
+<h2 id="storm">Storm</h2>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1g0l1wd0pygj31og0dok3c.jpg" alt="" />
+<img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0l1wr0ns8j31mg08in4f.jpg" alt="" /></p>
+
+<ul>
+  <li><a href="https://github.com/Parsely/streamparse">streamparse</a></li>
+</ul>
+
+<h3 id="基本组件">基本组件</h3>
+<p>在Storm上实际上运行的是Topology</p>
+
+<h4 id="stream">stream</h4>
+<p>无限Tuple序列
+<img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l25gbhzjj31ye0a47ee.jpg" alt="" /></p>
+
+<h4 id="spouts">spouts</h4>
+<p>Tuple序列源头
+<img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l2789t0gj31y60iek5o.jpg" alt="" /></p>
+
+<h4 id="bolts">bolts</h4>
+<p>处理Tuples ,创建stream。
+<img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0l2955g4dj31yk0ouqkk.jpg" alt="" /></p>
+
+<h4 id="topology">Topology</h4>
+<p>spouts和bolts组成的网络抽象成Topology，组件之间沟通
+<img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0l3bj04hgj30ly0eoaax.jpg" alt="" /></p>
+
+<h4 id="stream-groups">Stream Groups</h4>
+<p>告知Topology如何在两个组件之间进行Tuple传输。
+<img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l2l4brccj31ze0kmtr7.jpg" alt="" /></p>
+
+<h3 id="架构-1">架构</h3>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1g0l2slgdavj31xy0kah7e.jpg" alt="" /></p>
+
+<p>Zookeeper作为分布式协调组件，负责Nimbus和多个supervisor之间的协调工作。
+<img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0l2zth5awj31y00oydve.jpg" alt="" /></p>
+
+<h2 id="spark-streaming">Spark Streaming</h2>
+<p>将stream拆分成小量批处理, 做不到<strong>毫秒级别</strong>，<strong>storm</strong> 可以
+<img src="https://ws2.sinaimg.cn/large/006tKfTcgy1g0l3u9pl8lj31y40r4e5z.jpg" alt="" /></p>
+
+<h3 id="对比storm">对比storm</h3>
+<p>做不到<strong>毫秒级别</strong>，<strong>storm</strong> 可以
+<img src="https://ws3.sinaimg.cn/large/006tKfTcgy1g0l3xi6k1oj31xq0deh0q.jpg" alt="" /></p>
+
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      wyx
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="/blog/2019/02/20/bigdata-element" title="Bigdata Element">/blog/2019/02/20/bigdata-element</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/big%20data" rel="tag"># big data</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2019/02/20/hadoop-for-mac" rel="next" title="Bigdata for Mac Install">
+                <i class="fa fa-chevron-left"></i> Bigdata for Mac Install
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2019/02/16/apk" rel="prev" title="apk">
+                apk <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="wyx" />
+          <p class="site-author-name" itemprop="name">wyx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/631068264" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://stackoverflow.com/users/5360312/wyx" target="_blank" title="StackOverflow">
+                  
+                    <i class="fa fa-fw fa-stack-overflow"></i>
+                  
+                  StackOverflow
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#pig"> <span class="nav-number">1</span> <span class="nav-text">Pig</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#execution-modes"> <span class="nav-number">1.1</span> <span class="nav-text">Execution Modes</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#local"> <span class="nav-number">1.1.1</span> <span class="nav-text">local</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#mapreduce"> <span class="nav-number">1.1.2</span> <span class="nav-text">MapReduce</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#interactive-mode"> <span class="nav-number">1.2</span> <span class="nav-text">Interactive Mode</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#batch-mode"> <span class="nav-number">1.3</span> <span class="nav-text">Batch Mode</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#pig-语法"> <span class="nav-number">1.4</span> <span class="nav-text">pig 语法</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#load"> <span class="nav-number">1.4.1</span> <span class="nav-text">load</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#transforming-data"> <span class="nav-number">1.4.2</span> <span class="nav-text">Transforming Data</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#filter"> <span class="nav-number">1.4.2.1</span> <span class="nav-text">FILTER</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#foreach"> <span class="nav-number">1.4.2.2</span> <span class="nav-text">FOREACH</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#group"> <span class="nav-number">1.4.2.3</span> <span class="nav-text">GROUP</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#store"> <span class="nav-number">1.4.2.4</span> <span class="nav-text">STORE</span> </a> </li> </ol> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#udf"> <span class="nav-number">1.5</span> <span class="nav-text">UDF</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#hive"> <span class="nav-number">2</span> <span class="nav-text">Hive</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#hbase"> <span class="nav-number">3</span> <span class="nav-text">HBase</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#数据模型概念"> <span class="nav-number">3.1</span> <span class="nav-text">数据模型概念</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#表"> <span class="nav-number">3.1.1</span> <span class="nav-text">表</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#行"> <span class="nav-number">3.1.2</span> <span class="nav-text">行</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#列族"> <span class="nav-number">3.1.3</span> <span class="nav-text">列族</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#限定字符"> <span class="nav-number">3.1.4</span> <span class="nav-text">限定字符</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#单元格"> <span class="nav-number">3.1.5</span> <span class="nav-text">单元格</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#时间戳"> <span class="nav-number">3.1.6</span> <span class="nav-text">时间戳</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#列族存储"> <span class="nav-number">3.2</span> <span class="nav-text">列族存储</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#架构"> <span class="nav-number">3.3</span> <span class="nav-text">架构</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#zookeeper"> <span class="nav-number">3.3.1</span> <span class="nav-text">zookeeper</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#master"> <span class="nav-number">3.3.2</span> <span class="nav-text">master</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#region"> <span class="nav-number">3.3.3</span> <span class="nav-text">region</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#表-region"> <span class="nav-number">3.3.3.1</span> <span class="nav-text">表 Region</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#region-定位"> <span class="nav-number">3.3.3.2</span> <span class="nav-text">Region 定位</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#结构"> <span class="nav-number">3.3.3.3</span> <span class="nav-text">结构</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#读写"> <span class="nav-number">3.3.3.4</span> <span class="nav-text">读写</span> </a> </li> </ol> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#局限"> <span class="nav-number">3.4</span> <span class="nav-text">局限</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#nosql"> <span class="nav-number">4</span> <span class="nav-text">NoSQL</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#种类"> <span class="nav-number">4.1</span> <span class="nav-text">种类</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#spark"> <span class="nav-number">5</span> <span class="nav-text">Spark</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#流计算"> <span class="nav-number">6</span> <span class="nav-text">流计算</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#流数据特征"> <span class="nav-number">6.1</span> <span class="nav-text">流数据特征</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#实时采集"> <span class="nav-number">6.2</span> <span class="nav-text">实时采集</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#实时计算"> <span class="nav-number">6.3</span> <span class="nav-text">实时计算</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#实时查询"> <span class="nav-number">6.4</span> <span class="nav-text">实时查询</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#storm"> <span class="nav-number">6.5</span> <span class="nav-text">Storm</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#基本组件"> <span class="nav-number">6.5.1</span> <span class="nav-text">基本组件</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-4"> <a class="nav-link" href="#stream"> <span class="nav-number">6.5.1.1</span> <span class="nav-text">stream</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#spouts"> <span class="nav-number">6.5.1.2</span> <span class="nav-text">spouts</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#bolts"> <span class="nav-number">6.5.1.3</span> <span class="nav-text">bolts</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#topology"> <span class="nav-number">6.5.1.4</span> <span class="nav-text">Topology</span> </a> </li> <li class="nav-item nav-level-4"> <a class="nav-link" href="#stream-groups"> <span class="nav-number">6.5.1.5</span> <span class="nav-text">Stream Groups</span> </a> </li> </ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#架构-1"> <span class="nav-number">6.5.2</span> <span class="nav-text">架构</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#spark-streaming"> <span class="nav-number">6.6</span> <span class="nav-text">Spark Streaming</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#对比storm"> <span class="nav-number">6.6.1</span> <span class="nav-text">对比storm</span> </a> </li> </ol> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2018 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wyx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var labels = ['gitalk','2019-02-20']
+</script>
+
+<script type="text/javascript">
+    labels.push('big data');
+</script>
+
+
+<script type="text/javascript">
+    labels.push('big data');
+</script>
+
+
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'dd688ffd2be8512fc659',
+        clientSecret: '483255bda7b80acb108df487ac91a0be78710b0d',
+        repo: '631068264.github.io',
+        owner: '631068264',
+        admin: ['631068264'],
+        id: 'Bigdata Element',
+        title: 'Bigdata Element',
+        labels: labels,
+        perPage: 50,
+        distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("MQfAJm2nTUDaT5bEuS8i4Ygm-gzGzoHsz", "m4tqv3N9AepVgTk0YfSNe9kz");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  <!--custom css in _sass/_custom/custom.scss -->
+
+<script type="text/javascript">
+    // 黑幕提示语
+    $('span.heimu').attr('title', '你知道得太多了');
+</script>
+
+<script type="text/javascript">
+    // 多图显示 gp-列数
+    $('span[class^="gp-"]').each(function () {
+        var div_mulp = $(this);
+        if (div_mulp && div_mulp.attr('class')) {
+            var column_number = parseInt(div_mulp.attr('class').split('-')[1]);
+            var image = div_mulp.find('img');
+            if (image.size() > 0) {
+                div_mulp.removeClass()
+                    .addClass('post-gallery')
+                    .attr('itemscope', '')
+                    .attr('itemtype', 'http://schema.org/ImageGallery');
+
+                image.each(function (index) {
+                    var modulo = index % column_number;
+
+                    if (modulo === 0) {
+                        content = $('<div class="post-gallery-row"></div>')
+                    }
+                    var image_src = $(this).attr('src');
+                    content.append('<a class="post-gallery-img fancybox"\n' +
+                        '                 href="' + image_src + '" rel="gallery_"\n' +
+                        '                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">\n' +
+                        '                <img src="' + image_src + '" itemprop="contentUrl"/>\n' +
+                        '              </a>');
+
+                    if (modulo === column_number - 1) {
+                        div_mulp.append(content)
+                    }
+                });
+
+                var photo_size_modulo = image.size() % column_number;
+                if (photo_size_modulo > 0) {
+                    div_mulp.append(content);
+                }
+                image.remove();
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>
+

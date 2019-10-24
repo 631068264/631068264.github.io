@@ -1,0 +1,1799 @@
+<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/dash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head>
+  <meta name="referrer" content="never">
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="tensorflow," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="创建一个graph， TensorFlow 会话(Session)负责处理在诸如 CPU 和 GPU 之类的设备上的操作并运行它们，并且它保留所有变量值。 常量 a = tf.constant(5) b = 5 + a c = a + b with tf.Session() as sess: result = sess.run(c) print(result) 10 变量 训练过程中会不断优化 当值需要在会话中更新时，我们使用可变张量 x = tf.Variable(1, name=&quot;x&quot;) y = tf.Variable(2, name=&quot;y&quot;) f = (x + y) * a # 使用一个Variable初始化另一个Variable weights = tf.Variable(tf.random_normal([100,100],stddev=2)) weight2=tf.Variable(weights.initialized_value(), name=&apos;w2&apos;) global_variables_initializer必须运行在所有Variable声明之后 不然报错 fuck session 和 变量初始化不能搞在一起吗? # 初始化变量 init_var = tf.global_variables_initializer() with tf.Session() as sess: sess.run(init_var) &quot;&quot;&quot; 想要高效地评估f和c，在一次图形运行中评估f和c,所有节点值都在图运行之间删除，除了变量值, b会重复求值 单进程TensorFlow中,每个会话都有自己的每个变量副本 多个会话不共享任何状态，即使它们重复使用同一个图。 变量在其初始化程序运行时启动其生命周期，并且在会话关闭时结束。 &quot;&quot;&quot; con_, var_ = sess.run([f, c]) print(con_, var_) 15 10 assign 变量的再赋值 Difference between tf.assign and assignment operator (=) scope get_variable and Variable tf.Variable 必须有初始值 tf.Variable 始终创建一个新变量，已存在具有此类名称的变量，则可能会为变量名称添加后缀 tf.get_variable 从graph中获取具有这些参数的现有变量，如果它不存在，它将创建一个新变量,存在的话会报错 get_variable初始化相关 from pprint import pprint tf.Variable(0, name=&quot;a&quot;) # name == &quot;a:0&quot; tf.get_variable(initializer=0, name=&quot;a&quot;) # name == &quot;a_1:0&quot; tf.Variable(0, name=&quot;a&quot;) # name == &quot;a_2:0&quot; b = tf.get_variable(initializer=0, name=&quot;b&quot;) # name == &quot;b:0&quot; c = tf.get_variable(name=&quot;c&quot;, shape=1) # name == &quot;c:0&quot; pprint(tf.trainable_variables()) init = tf.global_variables_initializer() with tf.Session() as sess: sess.run(init) print(b.eval()) print(c.eval()) name_scope and variable_scope 两个scope对使用tf.Variable创建的变量具有相同的效果，即范围将作为操作或变量名称的前缀添加。 tf.variable_scope就不一样了 with tf.variable_scope(&apos;var&apos;): with tf.name_scope(&quot;name&quot;): v1 = tf.get_variable(&quot;var1&quot;, [1], dtype=tf.float32) v2 = tf.Variable(1, name=&quot;var2&quot;, dtype=tf.float32) a = tf.add(v1, v2) print(v1.name) # var/var1:0 print(v2.name) # var/name/var2:0 print(a.name) # var/name/Add:0 scope reuse 共享变量 tf.variable_scope 和 tf.get_variable 搭配 with tf.variable_scope(&apos;bar&apos;): foo1 = tf.get_variable(name=&quot;a&quot;, shape=1) # name == &quot;bar/a:0&quot; foo2 = tf.get_variable(name=&quot;a&quot;, shape=1) # ValueError: Variable bar/a already exists with tf.variable_scope(&apos;foo&apos;, reuse=tf.AUTO_REUSE): foo1 = tf.get_variable(name=&quot;a&quot;, shape=1) # name == &quot;foo/a:0&quot; with tf.name_scope(&quot;bar&quot;): with tf.variable_scope(&quot;foo&quot;, reuse=True): v1 = tf.get_variable(&quot;a&quot;) assert foo1 == v1 pprint(tf.trainable_variables()) 占位符 它们通常用于在训练期间将训练数据传递给TensorFlow 实际上不执行任何计算 A = tf.placeholder(tf.float32, shape=(None, 3)) B = A + 5 with tf.Session() as sess: B_val_1 = B.eval(feed_dict={A: [[1, 2, 3]]}) B_val_2 = B.eval(feed_dict={A: [[4, 5, 6], [7, 8, 9]]}) print(B_val_1) print(B_val_2) [[6. 7. 8.]] [[ 9. 10. 11.] [12. 13. 14.]] dtype dtype 转换 b = tf.Variable(tf.random_uniform([5,10], 0, 2, dtype= tf.int32)) b_new = tf.cast(b, dtype=tf.float32) # tensor tf.convert_to_tensor() save load 默认情况下，保存器将以自己的名称保存并还原所有Variable，但如果需要更多控制，则可以指定要保存或还原的变量以及要使用的名称 saver = tf.train.Saver() &quot;&quot;&quot; 指定保存的变量 saver = tf.train.Saver({&quot;weights&quot;: theta}) &quot;&quot;&quot; with tf.Session() as sess: save_path = saver.save(sess, &quot;/tmp/my_model.ckpt&quot;) with tf.Session() as sess: saver.restore(sess, &quot;/tmp/my_model_final.ckpt&quot;) # 导入TensorFlow训练好的model saver = tf.train.import_meta_graph(&apos;mnist_dcgan-60000.meta&apos;) saver.restore(sess, tf.train.latest_checkpoint(&apos;&apos;)) graph = tf.get_default_graph() g = graph.get_tensor_by_name(&apos;generator/g/Tanh:0&apos;) noise = graph.get_tensor_by_name(&apos;noise:0&apos;) is_training = graph.get_tensor_by_name(&apos;is_training:0&apos;) n = np.random.uniform(-1.0, 1.0, [batch_size, z_dim]).astype(np.float32) gen_imgs = sess.run(g, feed_dict={noise: n, is_training: False}) tensor board 正在定期保存检查点 可视化训练进度 checkpoint tf.summary.histogram(&apos;D_X/true&apos;, self.D_X(x)) 一般用来显示训练过程中变量的分布情况 tf.summary.scalar(&apos;loss/cycle&apos;, cycle_loss) 一般在画loss,accuary时会用到这个函数 tf.summary.image(&apos;X/generated&apos;, utils.batch_convert2int(self.G(x))) # Merge all the summaries and write them out to the summaries_dir # 直接run(merged,feed_dict=**kwargs) 非常方便 # merged = tf.summary.merge_all() # graph = sess.graph or tf.get_default_graph() file_writer = tf.summary.FileWriter(checkpoints_dir, graph) mse_summary = tf.summary.scalar(&apos;MSE&apos;, mse) with tf.Session() as sess: for i in step: s = sess.run(mse_summary) file_writer.add_summary(s, i) # file_writer.flush() file_writer.close() 必须是完整路径 fuck 不能相对路径 Pycharm 有Copy Path tensorboard --logdir path/to/log-directory device &quot;/cpu:0&quot; for the CPU devices and &quot;/gpu:I&quot; for the GPU device log_device_placement=True 验证TensorFlow确实使用指定的设备,打log allow_soft_placement=True 如果您不确定该设备并希望TensorFlow选择现有和支持的设备 GPU比CPU快得多，因为它们有许多小内核。然而，就计算速度而言，将GPU用于所有类型的计算并不总是有利的。 与GPU相关的开销有时在计算上比GPU提供的并行计算的优势更昂贵。为了解决这个问题， TensorFlow提供了在特定设备上进行计算的条款。默认情况下，如果CPU和GPU都存在，TensorFlow优先考虑GPU。 config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=True) # 手动选择设备 with tf.device(&apos;/cpu:0&apos;): rand_t = tf.random_uniform([50,50], 0, 10, dtype=tf.float32, seed=0) a = tf.Variable(rand_t) b = tf.Variable(rand_t) c = tf.matmul(a,b) init = tf.global_variables_initializer() with tf.Session(config=config) as sess: .... optimizers learning_rate传入初始lr值，global_step用于逐步计算衰减指数，decay_steps用于决定衰减周期，decay_rate是每次衰减的倍率， staircase若为False则是标准的指数型衰减，True时则是阶梯式的衰减方法，目的是为了在一段时间内（往往是相同的epoch内）保持相同的learning rate 其实可以直接使用一些改变learning_rate的变化的AdamOptimizer之类的 decay every 100000 steps with a base of 0.96 # 衰减learning_rate global_step = tf.Variable(0, trainable=False) initial_learning_rate = 0.2 learning_rate = tf.train.exponential_decay(initial_learning_rate, global_step, decay_steps=100000, decay_rate=0.95, staircase=True) optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01) train_step = optimizer.minimize(loss) with tf.Session() as sess: ... sess.run(train_step, feed_dict = {X:X_data, Y:Y_data}) Gradient Clipping 直观作用就是让权重的更新限制在一个合适的范围 trainable_variables = tf.trainable_variables() # 获取到模型中所有需要训练的变量 grads, _ = tf.clip_by_global_norm(tf.gradients(self.cost, trainable_variables), MAX_GRAD_NORM) # 求导，并且进行截断 optimizer = tf.train.GradientDescentOptimizer(learning_rate = 1.0) self.train_op = optimizer.apply_gradients( zip(grads, trainable_variables) ) autoencode CAE Convolutional Autoencoders (CAE) transposed convolution layers tf.nn.conv2d_transpose 产生人工假象(artefacts) 使用tf.image.resize_nearest_neighbor 代替 ### Encoder conv1 = tf.layers.conv2d(X_noisy, filters[1], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_in x w_in x filters[1] maxpool1 = tf.layers.max_pooling2d(conv1, (p,p), (s,s), padding=&apos;same&apos;) # Output size h_l2 x w_l2 x filters[1] conv2 = tf.layers.conv2d(maxpool1, filters[2], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l2 x w_l2 x filters[2] maxpool2 = tf.layers.max_pooling2d(conv2,(p,p), (s,s), padding=&apos;same&apos;) # Output size h_l3 x w_l3 x filters[2] conv3 = tf.layers.conv2d(maxpool2,filters[3], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l3 x w_l3 x filters[3] encoded = tf.layers.max_pooling2d(conv3, (p,p), (s,s), padding=&apos;same&apos;) # Output size h_l3/s x w_l3/s x filters[3] Now 4x4x16 ### Decoder upsample1 = tf.image.resize_nearest_neighbor(encoded, (h_l3,w_l3)) # Output size h_l3 x w_l3 x filters[3] conv4 = tf.layers.conv2d(upsample1, filters[3], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l3 x w_l3 x filters[3] upsample2 = tf.image.resize_nearest_neighbor(conv4, (h_l2,w_l2)) # Output size h_l2 x w_l2 x filters[3] conv5 = tf.layers.conv2d(upsample2, filters[2], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l2 x w_l2 x filters[2] upsample3 = tf.image.resize_nearest_neighbor(conv5, (h_in,w_in)) # Output size h_in x w_in x filters[2] conv6 = tf.layers.conv2d(upsample3, filters[1], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_in x w_in x filters[1] logits = tf.layers.conv2d(conv6, 1, (k,k) , padding=&apos;same&apos;, activation=None) # Output size h_in x w_in x 1 decoded = tf.nn.sigmoid(logits, name=&apos;decoded&apos;) loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=X, logits=logits) cost = tf.reduce_mean(loss) opt = tf.train.AdamOptimizer(0.001).minimize(cost) &quot;&quot;&quot; 摘录来自: Antonio Gulli. “TensorFlow 1.x Deep Learning Cookbook。” Apple Books. &quot;&quot;&quot;">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="start">
+<meta property="og:url" content="/blog/2018/05/17/start">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="创建一个graph， TensorFlow 会话(Session)负责处理在诸如 CPU 和 GPU 之类的设备上的操作并运行它们，并且它保留所有变量值。 常量 a = tf.constant(5) b = 5 + a c = a + b with tf.Session() as sess: result = sess.run(c) print(result) 10 变量 训练过程中会不断优化 当值需要在会话中更新时，我们使用可变张量 x = tf.Variable(1, name=&quot;x&quot;) y = tf.Variable(2, name=&quot;y&quot;) f = (x + y) * a # 使用一个Variable初始化另一个Variable weights = tf.Variable(tf.random_normal([100,100],stddev=2)) weight2=tf.Variable(weights.initialized_value(), name=&apos;w2&apos;) global_variables_initializer必须运行在所有Variable声明之后 不然报错 fuck session 和 变量初始化不能搞在一起吗? # 初始化变量 init_var = tf.global_variables_initializer() with tf.Session() as sess: sess.run(init_var) &quot;&quot;&quot; 想要高效地评估f和c，在一次图形运行中评估f和c,所有节点值都在图运行之间删除，除了变量值, b会重复求值 单进程TensorFlow中,每个会话都有自己的每个变量副本 多个会话不共享任何状态，即使它们重复使用同一个图。 变量在其初始化程序运行时启动其生命周期，并且在会话关闭时结束。 &quot;&quot;&quot; con_, var_ = sess.run([f, c]) print(con_, var_) 15 10 assign 变量的再赋值 Difference between tf.assign and assignment operator (=) scope get_variable and Variable tf.Variable 必须有初始值 tf.Variable 始终创建一个新变量，已存在具有此类名称的变量，则可能会为变量名称添加后缀 tf.get_variable 从graph中获取具有这些参数的现有变量，如果它不存在，它将创建一个新变量,存在的话会报错 get_variable初始化相关 from pprint import pprint tf.Variable(0, name=&quot;a&quot;) # name == &quot;a:0&quot; tf.get_variable(initializer=0, name=&quot;a&quot;) # name == &quot;a_1:0&quot; tf.Variable(0, name=&quot;a&quot;) # name == &quot;a_2:0&quot; b = tf.get_variable(initializer=0, name=&quot;b&quot;) # name == &quot;b:0&quot; c = tf.get_variable(name=&quot;c&quot;, shape=1) # name == &quot;c:0&quot; pprint(tf.trainable_variables()) init = tf.global_variables_initializer() with tf.Session() as sess: sess.run(init) print(b.eval()) print(c.eval()) name_scope and variable_scope 两个scope对使用tf.Variable创建的变量具有相同的效果，即范围将作为操作或变量名称的前缀添加。 tf.variable_scope就不一样了 with tf.variable_scope(&apos;var&apos;): with tf.name_scope(&quot;name&quot;): v1 = tf.get_variable(&quot;var1&quot;, [1], dtype=tf.float32) v2 = tf.Variable(1, name=&quot;var2&quot;, dtype=tf.float32) a = tf.add(v1, v2) print(v1.name) # var/var1:0 print(v2.name) # var/name/var2:0 print(a.name) # var/name/Add:0 scope reuse 共享变量 tf.variable_scope 和 tf.get_variable 搭配 with tf.variable_scope(&apos;bar&apos;): foo1 = tf.get_variable(name=&quot;a&quot;, shape=1) # name == &quot;bar/a:0&quot; foo2 = tf.get_variable(name=&quot;a&quot;, shape=1) # ValueError: Variable bar/a already exists with tf.variable_scope(&apos;foo&apos;, reuse=tf.AUTO_REUSE): foo1 = tf.get_variable(name=&quot;a&quot;, shape=1) # name == &quot;foo/a:0&quot; with tf.name_scope(&quot;bar&quot;): with tf.variable_scope(&quot;foo&quot;, reuse=True): v1 = tf.get_variable(&quot;a&quot;) assert foo1 == v1 pprint(tf.trainable_variables()) 占位符 它们通常用于在训练期间将训练数据传递给TensorFlow 实际上不执行任何计算 A = tf.placeholder(tf.float32, shape=(None, 3)) B = A + 5 with tf.Session() as sess: B_val_1 = B.eval(feed_dict={A: [[1, 2, 3]]}) B_val_2 = B.eval(feed_dict={A: [[4, 5, 6], [7, 8, 9]]}) print(B_val_1) print(B_val_2) [[6. 7. 8.]] [[ 9. 10. 11.] [12. 13. 14.]] dtype dtype 转换 b = tf.Variable(tf.random_uniform([5,10], 0, 2, dtype= tf.int32)) b_new = tf.cast(b, dtype=tf.float32) # tensor tf.convert_to_tensor() save load 默认情况下，保存器将以自己的名称保存并还原所有Variable，但如果需要更多控制，则可以指定要保存或还原的变量以及要使用的名称 saver = tf.train.Saver() &quot;&quot;&quot; 指定保存的变量 saver = tf.train.Saver({&quot;weights&quot;: theta}) &quot;&quot;&quot; with tf.Session() as sess: save_path = saver.save(sess, &quot;/tmp/my_model.ckpt&quot;) with tf.Session() as sess: saver.restore(sess, &quot;/tmp/my_model_final.ckpt&quot;) # 导入TensorFlow训练好的model saver = tf.train.import_meta_graph(&apos;mnist_dcgan-60000.meta&apos;) saver.restore(sess, tf.train.latest_checkpoint(&apos;&apos;)) graph = tf.get_default_graph() g = graph.get_tensor_by_name(&apos;generator/g/Tanh:0&apos;) noise = graph.get_tensor_by_name(&apos;noise:0&apos;) is_training = graph.get_tensor_by_name(&apos;is_training:0&apos;) n = np.random.uniform(-1.0, 1.0, [batch_size, z_dim]).astype(np.float32) gen_imgs = sess.run(g, feed_dict={noise: n, is_training: False}) tensor board 正在定期保存检查点 可视化训练进度 checkpoint tf.summary.histogram(&apos;D_X/true&apos;, self.D_X(x)) 一般用来显示训练过程中变量的分布情况 tf.summary.scalar(&apos;loss/cycle&apos;, cycle_loss) 一般在画loss,accuary时会用到这个函数 tf.summary.image(&apos;X/generated&apos;, utils.batch_convert2int(self.G(x))) # Merge all the summaries and write them out to the summaries_dir # 直接run(merged,feed_dict=**kwargs) 非常方便 # merged = tf.summary.merge_all() # graph = sess.graph or tf.get_default_graph() file_writer = tf.summary.FileWriter(checkpoints_dir, graph) mse_summary = tf.summary.scalar(&apos;MSE&apos;, mse) with tf.Session() as sess: for i in step: s = sess.run(mse_summary) file_writer.add_summary(s, i) # file_writer.flush() file_writer.close() 必须是完整路径 fuck 不能相对路径 Pycharm 有Copy Path tensorboard --logdir path/to/log-directory device &quot;/cpu:0&quot; for the CPU devices and &quot;/gpu:I&quot; for the GPU device log_device_placement=True 验证TensorFlow确实使用指定的设备,打log allow_soft_placement=True 如果您不确定该设备并希望TensorFlow选择现有和支持的设备 GPU比CPU快得多，因为它们有许多小内核。然而，就计算速度而言，将GPU用于所有类型的计算并不总是有利的。 与GPU相关的开销有时在计算上比GPU提供的并行计算的优势更昂贵。为了解决这个问题， TensorFlow提供了在特定设备上进行计算的条款。默认情况下，如果CPU和GPU都存在，TensorFlow优先考虑GPU。 config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=True) # 手动选择设备 with tf.device(&apos;/cpu:0&apos;): rand_t = tf.random_uniform([50,50], 0, 10, dtype=tf.float32, seed=0) a = tf.Variable(rand_t) b = tf.Variable(rand_t) c = tf.matmul(a,b) init = tf.global_variables_initializer() with tf.Session(config=config) as sess: .... optimizers learning_rate传入初始lr值，global_step用于逐步计算衰减指数，decay_steps用于决定衰减周期，decay_rate是每次衰减的倍率， staircase若为False则是标准的指数型衰减，True时则是阶梯式的衰减方法，目的是为了在一段时间内（往往是相同的epoch内）保持相同的learning rate 其实可以直接使用一些改变learning_rate的变化的AdamOptimizer之类的 decay every 100000 steps with a base of 0.96 # 衰减learning_rate global_step = tf.Variable(0, trainable=False) initial_learning_rate = 0.2 learning_rate = tf.train.exponential_decay(initial_learning_rate, global_step, decay_steps=100000, decay_rate=0.95, staircase=True) optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01) train_step = optimizer.minimize(loss) with tf.Session() as sess: ... sess.run(train_step, feed_dict = {X:X_data, Y:Y_data}) Gradient Clipping 直观作用就是让权重的更新限制在一个合适的范围 trainable_variables = tf.trainable_variables() # 获取到模型中所有需要训练的变量 grads, _ = tf.clip_by_global_norm(tf.gradients(self.cost, trainable_variables), MAX_GRAD_NORM) # 求导，并且进行截断 optimizer = tf.train.GradientDescentOptimizer(learning_rate = 1.0) self.train_op = optimizer.apply_gradients( zip(grads, trainable_variables) ) autoencode CAE Convolutional Autoencoders (CAE) transposed convolution layers tf.nn.conv2d_transpose 产生人工假象(artefacts) 使用tf.image.resize_nearest_neighbor 代替 ### Encoder conv1 = tf.layers.conv2d(X_noisy, filters[1], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_in x w_in x filters[1] maxpool1 = tf.layers.max_pooling2d(conv1, (p,p), (s,s), padding=&apos;same&apos;) # Output size h_l2 x w_l2 x filters[1] conv2 = tf.layers.conv2d(maxpool1, filters[2], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l2 x w_l2 x filters[2] maxpool2 = tf.layers.max_pooling2d(conv2,(p,p), (s,s), padding=&apos;same&apos;) # Output size h_l3 x w_l3 x filters[2] conv3 = tf.layers.conv2d(maxpool2,filters[3], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l3 x w_l3 x filters[3] encoded = tf.layers.max_pooling2d(conv3, (p,p), (s,s), padding=&apos;same&apos;) # Output size h_l3/s x w_l3/s x filters[3] Now 4x4x16 ### Decoder upsample1 = tf.image.resize_nearest_neighbor(encoded, (h_l3,w_l3)) # Output size h_l3 x w_l3 x filters[3] conv4 = tf.layers.conv2d(upsample1, filters[3], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l3 x w_l3 x filters[3] upsample2 = tf.image.resize_nearest_neighbor(conv4, (h_l2,w_l2)) # Output size h_l2 x w_l2 x filters[3] conv5 = tf.layers.conv2d(upsample2, filters[2], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l2 x w_l2 x filters[2] upsample3 = tf.image.resize_nearest_neighbor(conv5, (h_in,w_in)) # Output size h_in x w_in x filters[2] conv6 = tf.layers.conv2d(upsample3, filters[1], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_in x w_in x filters[1] logits = tf.layers.conv2d(conv6, 1, (k,k) , padding=&apos;same&apos;, activation=None) # Output size h_in x w_in x 1 decoded = tf.nn.sigmoid(logits, name=&apos;decoded&apos;) loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=X, logits=logits) cost = tf.reduce_mean(loss) opt = tf.train.AdamOptimizer(0.001).minimize(cost) &quot;&quot;&quot; 摘录来自: Antonio Gulli. “TensorFlow 1.x Deep Learning Cookbook。” Apple Books. &quot;&quot;&quot;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNbRwgy1fwy6nxk2ztj311810ggme.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNbRwgy1fwyif8gih4j315g0vkgo5.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="start">
+<meta name="twitter:description" content="创建一个graph， TensorFlow 会话(Session)负责处理在诸如 CPU 和 GPU 之类的设备上的操作并运行它们，并且它保留所有变量值。 常量 a = tf.constant(5) b = 5 + a c = a + b with tf.Session() as sess: result = sess.run(c) print(result) 10 变量 训练过程中会不断优化 当值需要在会话中更新时，我们使用可变张量 x = tf.Variable(1, name=&quot;x&quot;) y = tf.Variable(2, name=&quot;y&quot;) f = (x + y) * a # 使用一个Variable初始化另一个Variable weights = tf.Variable(tf.random_normal([100,100],stddev=2)) weight2=tf.Variable(weights.initialized_value(), name=&apos;w2&apos;) global_variables_initializer必须运行在所有Variable声明之后 不然报错 fuck session 和 变量初始化不能搞在一起吗? # 初始化变量 init_var = tf.global_variables_initializer() with tf.Session() as sess: sess.run(init_var) &quot;&quot;&quot; 想要高效地评估f和c，在一次图形运行中评估f和c,所有节点值都在图运行之间删除，除了变量值, b会重复求值 单进程TensorFlow中,每个会话都有自己的每个变量副本 多个会话不共享任何状态，即使它们重复使用同一个图。 变量在其初始化程序运行时启动其生命周期，并且在会话关闭时结束。 &quot;&quot;&quot; con_, var_ = sess.run([f, c]) print(con_, var_) 15 10 assign 变量的再赋值 Difference between tf.assign and assignment operator (=) scope get_variable and Variable tf.Variable 必须有初始值 tf.Variable 始终创建一个新变量，已存在具有此类名称的变量，则可能会为变量名称添加后缀 tf.get_variable 从graph中获取具有这些参数的现有变量，如果它不存在，它将创建一个新变量,存在的话会报错 get_variable初始化相关 from pprint import pprint tf.Variable(0, name=&quot;a&quot;) # name == &quot;a:0&quot; tf.get_variable(initializer=0, name=&quot;a&quot;) # name == &quot;a_1:0&quot; tf.Variable(0, name=&quot;a&quot;) # name == &quot;a_2:0&quot; b = tf.get_variable(initializer=0, name=&quot;b&quot;) # name == &quot;b:0&quot; c = tf.get_variable(name=&quot;c&quot;, shape=1) # name == &quot;c:0&quot; pprint(tf.trainable_variables()) init = tf.global_variables_initializer() with tf.Session() as sess: sess.run(init) print(b.eval()) print(c.eval()) name_scope and variable_scope 两个scope对使用tf.Variable创建的变量具有相同的效果，即范围将作为操作或变量名称的前缀添加。 tf.variable_scope就不一样了 with tf.variable_scope(&apos;var&apos;): with tf.name_scope(&quot;name&quot;): v1 = tf.get_variable(&quot;var1&quot;, [1], dtype=tf.float32) v2 = tf.Variable(1, name=&quot;var2&quot;, dtype=tf.float32) a = tf.add(v1, v2) print(v1.name) # var/var1:0 print(v2.name) # var/name/var2:0 print(a.name) # var/name/Add:0 scope reuse 共享变量 tf.variable_scope 和 tf.get_variable 搭配 with tf.variable_scope(&apos;bar&apos;): foo1 = tf.get_variable(name=&quot;a&quot;, shape=1) # name == &quot;bar/a:0&quot; foo2 = tf.get_variable(name=&quot;a&quot;, shape=1) # ValueError: Variable bar/a already exists with tf.variable_scope(&apos;foo&apos;, reuse=tf.AUTO_REUSE): foo1 = tf.get_variable(name=&quot;a&quot;, shape=1) # name == &quot;foo/a:0&quot; with tf.name_scope(&quot;bar&quot;): with tf.variable_scope(&quot;foo&quot;, reuse=True): v1 = tf.get_variable(&quot;a&quot;) assert foo1 == v1 pprint(tf.trainable_variables()) 占位符 它们通常用于在训练期间将训练数据传递给TensorFlow 实际上不执行任何计算 A = tf.placeholder(tf.float32, shape=(None, 3)) B = A + 5 with tf.Session() as sess: B_val_1 = B.eval(feed_dict={A: [[1, 2, 3]]}) B_val_2 = B.eval(feed_dict={A: [[4, 5, 6], [7, 8, 9]]}) print(B_val_1) print(B_val_2) [[6. 7. 8.]] [[ 9. 10. 11.] [12. 13. 14.]] dtype dtype 转换 b = tf.Variable(tf.random_uniform([5,10], 0, 2, dtype= tf.int32)) b_new = tf.cast(b, dtype=tf.float32) # tensor tf.convert_to_tensor() save load 默认情况下，保存器将以自己的名称保存并还原所有Variable，但如果需要更多控制，则可以指定要保存或还原的变量以及要使用的名称 saver = tf.train.Saver() &quot;&quot;&quot; 指定保存的变量 saver = tf.train.Saver({&quot;weights&quot;: theta}) &quot;&quot;&quot; with tf.Session() as sess: save_path = saver.save(sess, &quot;/tmp/my_model.ckpt&quot;) with tf.Session() as sess: saver.restore(sess, &quot;/tmp/my_model_final.ckpt&quot;) # 导入TensorFlow训练好的model saver = tf.train.import_meta_graph(&apos;mnist_dcgan-60000.meta&apos;) saver.restore(sess, tf.train.latest_checkpoint(&apos;&apos;)) graph = tf.get_default_graph() g = graph.get_tensor_by_name(&apos;generator/g/Tanh:0&apos;) noise = graph.get_tensor_by_name(&apos;noise:0&apos;) is_training = graph.get_tensor_by_name(&apos;is_training:0&apos;) n = np.random.uniform(-1.0, 1.0, [batch_size, z_dim]).astype(np.float32) gen_imgs = sess.run(g, feed_dict={noise: n, is_training: False}) tensor board 正在定期保存检查点 可视化训练进度 checkpoint tf.summary.histogram(&apos;D_X/true&apos;, self.D_X(x)) 一般用来显示训练过程中变量的分布情况 tf.summary.scalar(&apos;loss/cycle&apos;, cycle_loss) 一般在画loss,accuary时会用到这个函数 tf.summary.image(&apos;X/generated&apos;, utils.batch_convert2int(self.G(x))) # Merge all the summaries and write them out to the summaries_dir # 直接run(merged,feed_dict=**kwargs) 非常方便 # merged = tf.summary.merge_all() # graph = sess.graph or tf.get_default_graph() file_writer = tf.summary.FileWriter(checkpoints_dir, graph) mse_summary = tf.summary.scalar(&apos;MSE&apos;, mse) with tf.Session() as sess: for i in step: s = sess.run(mse_summary) file_writer.add_summary(s, i) # file_writer.flush() file_writer.close() 必须是完整路径 fuck 不能相对路径 Pycharm 有Copy Path tensorboard --logdir path/to/log-directory device &quot;/cpu:0&quot; for the CPU devices and &quot;/gpu:I&quot; for the GPU device log_device_placement=True 验证TensorFlow确实使用指定的设备,打log allow_soft_placement=True 如果您不确定该设备并希望TensorFlow选择现有和支持的设备 GPU比CPU快得多，因为它们有许多小内核。然而，就计算速度而言，将GPU用于所有类型的计算并不总是有利的。 与GPU相关的开销有时在计算上比GPU提供的并行计算的优势更昂贵。为了解决这个问题， TensorFlow提供了在特定设备上进行计算的条款。默认情况下，如果CPU和GPU都存在，TensorFlow优先考虑GPU。 config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=True) # 手动选择设备 with tf.device(&apos;/cpu:0&apos;): rand_t = tf.random_uniform([50,50], 0, 10, dtype=tf.float32, seed=0) a = tf.Variable(rand_t) b = tf.Variable(rand_t) c = tf.matmul(a,b) init = tf.global_variables_initializer() with tf.Session(config=config) as sess: .... optimizers learning_rate传入初始lr值，global_step用于逐步计算衰减指数，decay_steps用于决定衰减周期，decay_rate是每次衰减的倍率， staircase若为False则是标准的指数型衰减，True时则是阶梯式的衰减方法，目的是为了在一段时间内（往往是相同的epoch内）保持相同的learning rate 其实可以直接使用一些改变learning_rate的变化的AdamOptimizer之类的 decay every 100000 steps with a base of 0.96 # 衰减learning_rate global_step = tf.Variable(0, trainable=False) initial_learning_rate = 0.2 learning_rate = tf.train.exponential_decay(initial_learning_rate, global_step, decay_steps=100000, decay_rate=0.95, staircase=True) optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01) train_step = optimizer.minimize(loss) with tf.Session() as sess: ... sess.run(train_step, feed_dict = {X:X_data, Y:Y_data}) Gradient Clipping 直观作用就是让权重的更新限制在一个合适的范围 trainable_variables = tf.trainable_variables() # 获取到模型中所有需要训练的变量 grads, _ = tf.clip_by_global_norm(tf.gradients(self.cost, trainable_variables), MAX_GRAD_NORM) # 求导，并且进行截断 optimizer = tf.train.GradientDescentOptimizer(learning_rate = 1.0) self.train_op = optimizer.apply_gradients( zip(grads, trainable_variables) ) autoencode CAE Convolutional Autoencoders (CAE) transposed convolution layers tf.nn.conv2d_transpose 产生人工假象(artefacts) 使用tf.image.resize_nearest_neighbor 代替 ### Encoder conv1 = tf.layers.conv2d(X_noisy, filters[1], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_in x w_in x filters[1] maxpool1 = tf.layers.max_pooling2d(conv1, (p,p), (s,s), padding=&apos;same&apos;) # Output size h_l2 x w_l2 x filters[1] conv2 = tf.layers.conv2d(maxpool1, filters[2], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l2 x w_l2 x filters[2] maxpool2 = tf.layers.max_pooling2d(conv2,(p,p), (s,s), padding=&apos;same&apos;) # Output size h_l3 x w_l3 x filters[2] conv3 = tf.layers.conv2d(maxpool2,filters[3], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l3 x w_l3 x filters[3] encoded = tf.layers.max_pooling2d(conv3, (p,p), (s,s), padding=&apos;same&apos;) # Output size h_l3/s x w_l3/s x filters[3] Now 4x4x16 ### Decoder upsample1 = tf.image.resize_nearest_neighbor(encoded, (h_l3,w_l3)) # Output size h_l3 x w_l3 x filters[3] conv4 = tf.layers.conv2d(upsample1, filters[3], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l3 x w_l3 x filters[3] upsample2 = tf.image.resize_nearest_neighbor(conv4, (h_l2,w_l2)) # Output size h_l2 x w_l2 x filters[3] conv5 = tf.layers.conv2d(upsample2, filters[2], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_l2 x w_l2 x filters[2] upsample3 = tf.image.resize_nearest_neighbor(conv5, (h_in,w_in)) # Output size h_in x w_in x filters[2] conv6 = tf.layers.conv2d(upsample3, filters[1], (k,k), padding=&apos;same&apos;, activation=activation_fn) # Output size h_in x w_in x filters[1] logits = tf.layers.conv2d(conv6, 1, (k,k) , padding=&apos;same&apos;, activation=None) # Output size h_in x w_in x 1 decoded = tf.nn.sigmoid(logits, name=&apos;decoded&apos;) loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=X, logits=logits) cost = tf.reduce_mean(loss) opt = tf.train.AdamOptimizer(0.001).minimize(cost) &quot;&quot;&quot; 摘录来自: Antonio Gulli. “TensorFlow 1.x Deep Learning Cookbook。” Apple Books. &quot;&quot;&quot;">
+<meta name="twitter:image" content="https://ws2.sinaimg.cn/large/006tNbRwgy1fwy6nxk2ztj311810ggme.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>start | Notes</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-120397256-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-book">
+          <a href="/book/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            库
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            <!--<iframe scrolling="no" frameborder="0" src="https://coinpot.co/mine/bitcoincash/?ref=CD1A3EFFFAF0&mode=widget" style="display:none;"></iframe>-->
+
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/blog/2018/05/17/start">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+          
+          
+            start
+          
+        </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-17T00:00:00+08:00">
+                2018-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/ml" itemprop="url" rel="index">
+                    <span itemprop="name">ml</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/blog/2018/05/17/start" class="leancloud_visitors" data-flag-title="start">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+  <li>创建一个graph，</li>
+  <li>TensorFlow 会话(Session)负责处理在诸如 CPU 和 GPU 之类的设备上的操作并运行它们，并且它保留所有变量值。</li>
+</ul>
+
+<p><img src="https://ws2.sinaimg.cn/large/006tNbRwgy1fwy6nxk2ztj311810ggme.jpg" style="zoom:20%" /></p>
+
+<h1 id="常量">常量</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">a</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="mi">10</span>
+</code></pre></td></tr></tbody></table></div></div>
+<h1 id="变量">变量</h1>
+<p>训练过程中会不断优化 当值需要在会话中更新时，我们使用可变张量</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8</pre></td><td class="code"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"x"</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"y"</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span>
+
+<span class="c"># 使用一个Variable初始化另一个Variable</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_normal</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span><span class="n">stddev</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">weight2</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">initialized_value</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">'w2'</span><span class="p">)</span>
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><code class="highlighter-rouge">global_variables_initializer</code>必须运行在所有<code class="highlighter-rouge">Variable</code>声明之后 不然报错 <del>fuck session 和 变量初始化不能搞在一起吗?</del></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 初始化变量</span>
+<span class="n">init_var</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">init_var</span><span class="p">)</span>
+    <span class="s">"""
+    想要高效地评估f和c，在一次图形运行中评估f和c,所有节点值都在图运行之间删除，除了变量值, b会重复求值
+    单进程TensorFlow中,每个会话都有自己的每个变量副本 多个会话不共享任何状态，即使它们重复使用同一个图。
+    变量在其初始化程序运行时启动其生命周期，并且在会话关闭时结束。
+    """</span>
+    <span class="n">con_</span><span class="p">,</span> <span class="n">var_</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">])</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">con_</span><span class="p">,</span> <span class="n">var_</span><span class="p">)</span>
+
+<span class="mi">15</span> <span class="mi">10</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="assign">assign</h2>
+<p>变量的再赋值</p>
+<ul>
+  <li><a href="https://stackoverflow.com/questions/45779307/difference-between-tf-assign-and-assignment-operator">Difference between tf.assign and assignment operator (=)</a></li>
+</ul>
+
+<h1 id="scope">scope</h1>
+
+<h2 id="get_variable-and-variable">get_variable and Variable</h2>
+<ul>
+  <li><code class="highlighter-rouge">tf.Variable</code> 必须有初始值</li>
+  <li><code class="highlighter-rouge">tf.Variable</code> 始终创建一个新变量，已存在具有此类名称的变量，则可能会为变量名称添加后缀</li>
+  <li><code class="highlighter-rouge">tf.get_variable</code> 从graph中获取具有这些参数的现有变量，如果它不存在，它将创建一个新变量,存在的话会报错</li>
+</ul>
+
+<p><a href="/blog/2018/09/29/base-model#xavier-and-he-initialization">get_variable初始化相关</a></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14</pre></td><td class="code"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+
+<span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">)</span>  <span class="c"># name == "a:0"</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">)</span>  <span class="c"># name == "a_1:0"</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">)</span>  <span class="c"># name == "a_2:0"</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"b"</span><span class="p">)</span>  <span class="c"># name == "b:0"</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"c"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># name == "c:0"</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">())</span>
+<span class="n">init</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">init</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="nb">eval</span><span class="p">())</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="name_scope-and-variable_scope">name_scope and variable_scope</h2>
+<ul>
+  <li>两个scope对使用<code class="highlighter-rouge">tf.Variable</code>创建的变量具有相同的效果，即范围将作为操作或变量名称的前缀添加。</li>
+  <li><code class="highlighter-rouge">tf.variable_scope</code>就不一样了</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10</pre></td><td class="code"><pre class="highlight"><code><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">variable_scope</span><span class="p">(</span><span class="s">'var'</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s">"name"</span><span class="p">):</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">"var1"</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"var2"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">v1</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c"># var/var1:0</span>
+<span class="k">print</span><span class="p">(</span><span class="n">v2</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c"># var/name/var2:0</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c"># var/name/Add:0</span>
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>scope reuse 共享变量 <code class="highlighter-rouge">tf.variable_scope</code> 和 <code class="highlighter-rouge">tf.get_variable</code> 搭配</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13</pre></td><td class="code"><pre class="highlight"><code><span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">variable_scope</span><span class="p">(</span><span class="s">'bar'</span><span class="p">):</span>
+    <span class="n">foo1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># name == "bar/a:0"</span>
+    <span class="n">foo2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># ValueError: Variable bar/a already exists</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">variable_scope</span><span class="p">(</span><span class="s">'foo'</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">AUTO_REUSE</span><span class="p">):</span>
+    <span class="n">foo1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"a"</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># name == "foo/a:0"</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">name_scope</span><span class="p">(</span><span class="s">"bar"</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">variable_scope</span><span class="p">(</span><span class="s">"foo"</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s">"a"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">foo1</span> <span class="o">==</span> <span class="n">v1</span>
+
+<span class="n">pprint</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">())</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="占位符">占位符</h1>
+<p>它们通常用于在训练期间将训练数据传递给TensorFlow 实际上不执行任何计算</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="n">B_val_1</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="nb">eval</span><span class="p">(</span><span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">A</span><span class="p">:</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]})</span>
+    <span class="n">B_val_2</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="nb">eval</span><span class="p">(</span><span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">A</span><span class="p">:</span> <span class="p">[[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]]})</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">B_val_1</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">B_val_2</span><span class="p">)</span>
+
+<span class="p">[[</span><span class="mf">6.</span> <span class="mf">7.</span> <span class="mf">8.</span><span class="p">]]</span>
+<span class="p">[[</span> <span class="mf">9.</span> <span class="mf">10.</span> <span class="mf">11.</span><span class="p">]</span>
+ <span class="p">[</span><span class="mf">12.</span> <span class="mf">13.</span> <span class="mf">14.</span><span class="p">]]</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="dtype">dtype</h1>
+<p>dtype 转换</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code><span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_uniform</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
+<span class="n">b_new</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="c"># tensor</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="save-load">save load</h1>
+<p>默认情况下，保存器将以自己的名称保存并还原所有<code class="highlighter-rouge">Variable</code>，但如果需要更多控制，则可以指定要保存或还原的变量以及要使用的名称</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24</pre></td><td class="code"><pre class="highlight"><code><span class="n">saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">Saver</span><span class="p">()</span>
+<span class="s">"""
+指定保存的变量
+saver = tf.train.Saver({"weights": theta})
+"""</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+     <span class="n">save_path</span> <span class="o">=</span> <span class="n">saver</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="s">"/tmp/my_model.ckpt"</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+     <span class="n">saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="s">"/tmp/my_model_final.ckpt"</span><span class="p">)</span>
+
+
+<span class="c"># 导入TensorFlow训练好的model</span>
+<span class="n">saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">import_meta_graph</span><span class="p">(</span><span class="s">'mnist_dcgan-60000.meta'</span><span class="p">)</span>
+<span class="n">saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">latest_checkpoint</span><span class="p">(</span><span class="s">''</span><span class="p">))</span>
+
+<span class="n">graph</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">get_default_graph</span><span class="p">()</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'generator/g/Tanh:0'</span><span class="p">)</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'noise:0'</span><span class="p">)</span>
+<span class="n">is_training</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'is_training:0'</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">[</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">z_dim</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">gen_imgs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">noise</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span> <span class="n">is_training</span><span class="p">:</span> <span class="bp">False</span><span class="p">})</span>
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="tensor-board">tensor board</h1>
+<p>正在定期保存检查点 可视化训练进度 checkpoint</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code><span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="s">'D_X/true'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">D_X</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="err">一般用来显示训练过程中变量的分布情况</span>
+
+<span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">scalar</span><span class="p">(</span><span class="s">'loss/cycle'</span><span class="p">,</span> <span class="n">cycle_loss</span><span class="p">)</span>
+<span class="err">一般在画</span><span class="n">loss</span><span class="p">,</span><span class="n">accuary</span><span class="err">时会用到这个函数</span>
+
+<span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s">'X/generated'</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">batch_convert2int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code><span class="c"># Merge all the summaries and write them out to the summaries_dir</span>
+<span class="c"># 直接run(merged,feed_dict=**kwargs) 非常方便</span>
+<span class="c"># merged = tf.summary.merge_all()</span>
+
+<span class="c"># graph = sess.graph or tf.get_default_graph()</span>
+<span class="n">file_writer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">FileWriter</span><span class="p">(</span><span class="n">checkpoints_dir</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span>
+
+<span class="n">mse_summary</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">scalar</span><span class="p">(</span><span class="s">'MSE'</span><span class="p">,</span> <span class="n">mse</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">step</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">mse_summary</span><span class="p">)</span>
+        <span class="n">file_writer</span><span class="o">.</span><span class="n">add_summary</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="c"># file_writer.flush()</span>
+
+<span class="n">file_writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>必须是完整路径 <del>fuck 不能相对路径</del>   Pycharm 有Copy Path</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>tensorboard <span class="nt">--logdir</span> path/to/log-directory
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="device">device</h1>
+<p><code class="highlighter-rouge">"/cpu:0"</code> for the CPU devices and <code class="highlighter-rouge">"/gpu:I"</code> for the <script type="math/tex">i^{th}</script> GPU device</p>
+
+<ul>
+  <li><code class="highlighter-rouge">log_device_placement=True</code> 验证TensorFlow确实使用指定的设备,打log</li>
+  <li><code class="highlighter-rouge">allow_soft_placement=True</code> 如果您不确定该设备并希望TensorFlow选择现有和支持的设备</li>
+</ul>
+
+<p>GPU比CPU快得多，因为它们有许多小内核。然而，就计算速度而言，将GPU用于所有类型的计算并不总是有利的。
+与GPU相关的开销有时在计算上比GPU提供的并行计算的优势更昂贵。为了解决这个问题，
+TensorFlow提供了在特定设备上进行计算的条款。默认情况下，如果CPU和GPU都存在，TensorFlow优先考虑GPU。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code><span class="n">config</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">ConfigProto</span><span class="p">(</span><span class="n">allow_soft_placement</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">log_device_placement</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># 手动选择设备</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s">'/cpu:0'</span><span class="p">):</span>
+    <span class="n">rand_t</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random_uniform</span><span class="p">([</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">rand_t</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">rand_t</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">init</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="o">....</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="optimizers">optimizers</h1>
+<p>learning_rate传入初始lr值，global_step用于逐步计算衰减指数，decay_steps用于决定衰减周期，decay_rate是每次衰减的倍率，
+staircase若为False则是标准的指数型衰减，True时则是阶梯式的衰减方法，目的是为了在一段时间内（往往是相同的epoch内）保持相同的learning rate</p>
+
+<p>其实可以直接使用一些改变learning_rate的变化的AdamOptimizer之类的</p>
+
+<p>decay every 100000 steps with a base of 0.96</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code><span class="c"># 衰减learning_rate</span>
+<span class="n">global_step</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">initial_learning_rate</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">exponential_decay</span><span class="p">(</span><span class="n">initial_learning_rate</span><span class="p">,</span> <span class="n">global_step</span><span class="p">,</span> <span class="n">decay_steps</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">decay_rate</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">staircase</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+<p><img src="https://ws3.sinaimg.cn/large/006tNbRwgy1fwyif8gih4j315g0vkgo5.jpg" alt="" /></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code><span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">train_step</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_step</span><span class="p">,</span> <span class="n">feed_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">X</span><span class="p">:</span><span class="n">X_data</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span><span class="n">Y_data</span><span class="p">})</span>
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="gradient-clipping">Gradient Clipping</h2>
+<p>直观作用就是让权重的更新限制在一个合适的范围</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code><span class="n">trainable_variables</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">()</span> <span class="c"># 获取到模型中所有需要训练的变量</span>
+<span class="n">grads</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">clip_by_global_norm</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">gradients</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="p">,</span> <span class="n">trainable_variables</span><span class="p">),</span> <span class="n">MAX_GRAD_NORM</span><span class="p">)</span> <span class="c"># 求导，并且进行截断</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">GradientDescentOptimizer</span><span class="p">(</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">train_op</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span>
+    <span class="nb">zip</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">trainable_variables</span><span class="p">)</span>
+<span class="p">)</span>
+
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="autoencode">autoencode</h1>
+
+<h2 id="cae">CAE</h2>
+<p>Convolutional Autoencoders (CAE)</p>
+
+<p>transposed convolution layers tf.nn.conv2d_transpose 产生人工假象(artefacts) 使用tf.image.resize_nearest_neighbor 代替</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42</pre></td><td class="code"><pre class="highlight"><code><span class="c">### Encoder</span>
+<span class="n">conv1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">X_noisy</span><span class="p">,</span> <span class="n">filters</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">activation_fn</span><span class="p">)</span>
+<span class="c"># Output size h_in x w_in x filters[1]</span>
+<span class="n">maxpool1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">max_pooling2d</span><span class="p">(</span><span class="n">conv1</span><span class="p">,</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">),</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">s</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">)</span>
+<span class="c"># Output size h_l2 x w_l2 x filters[1]</span>
+<span class="n">conv2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">maxpool1</span><span class="p">,</span> <span class="n">filters</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">activation_fn</span><span class="p">)</span>
+<span class="c"># Output size h_l2 x w_l2 x filters[2]</span>
+<span class="n">maxpool2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">max_pooling2d</span><span class="p">(</span><span class="n">conv2</span><span class="p">,(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">),</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">s</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">)</span>
+<span class="c"># Output size h_l3 x w_l3 x filters[2]</span>
+<span class="n">conv3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">maxpool2</span><span class="p">,</span><span class="n">filters</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">activation_fn</span><span class="p">)</span>
+<span class="c"># Output size h_l3 x w_l3 x filters[3]</span>
+<span class="n">encoded</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">max_pooling2d</span><span class="p">(</span><span class="n">conv3</span><span class="p">,</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">),</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">s</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">)</span>
+<span class="c"># Output size h_l3/s x w_l3/s x filters[3] Now 4x4x16</span>
+
+
+<span class="c">### Decoder</span>
+<span class="n">upsample1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize_nearest_neighbor</span><span class="p">(</span><span class="n">encoded</span><span class="p">,</span> <span class="p">(</span><span class="n">h_l3</span><span class="p">,</span><span class="n">w_l3</span><span class="p">))</span>
+<span class="c"># Output size h_l3 x w_l3 x filters[3]</span>
+<span class="n">conv4</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">upsample1</span><span class="p">,</span> <span class="n">filters</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">activation_fn</span><span class="p">)</span>
+<span class="c"># Output size h_l3 x w_l3 x filters[3]</span>
+<span class="n">upsample2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize_nearest_neighbor</span><span class="p">(</span><span class="n">conv4</span><span class="p">,</span> <span class="p">(</span><span class="n">h_l2</span><span class="p">,</span><span class="n">w_l2</span><span class="p">))</span>
+<span class="c"># Output size h_l2 x w_l2 x filters[3]</span>
+<span class="n">conv5</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">upsample2</span><span class="p">,</span> <span class="n">filters</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">activation_fn</span><span class="p">)</span>
+<span class="c"># Output size h_l2 x w_l2 x filters[2]</span>
+<span class="n">upsample3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize_nearest_neighbor</span><span class="p">(</span><span class="n">conv5</span><span class="p">,</span> <span class="p">(</span><span class="n">h_in</span><span class="p">,</span><span class="n">w_in</span><span class="p">))</span>
+<span class="c"># Output size h_in x w_in x filters[2]</span>
+<span class="n">conv6</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">upsample3</span><span class="p">,</span> <span class="n">filters</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">),</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">activation_fn</span><span class="p">)</span>
+<span class="c"># Output size h_in x w_in x filters[1]</span>
+
+<span class="n">logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">conv6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">'same'</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+<span class="c"># Output size h_in x w_in x 1</span>
+<span class="n">decoded</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'decoded'</span><span class="p">)</span>
+
+
+<span class="n">loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid_cross_entropy_with_logits</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">)</span>
+<span class="n">cost</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">AdamOptimizer</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
+
+<span class="s">"""
+摘录来自: Antonio Gulli. “TensorFlow 1.x Deep Learning Cookbook。” Apple Books.
+"""</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      wyx
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="/blog/2018/05/17/start" title="start">/blog/2018/05/17/start</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/tensorflow" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2018/05/18/NN" rel="next" title="NN基础">
+                <i class="fa fa-chevron-left"></i> NN基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2018/05/17/keras-start" rel="prev" title="keras start">
+                keras start <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="wyx" />
+          <p class="site-author-name" itemprop="name">wyx</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://github.com/631068264" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              
+              
+              <span class="links-of-author-item">
+                <a href="https://stackoverflow.com/users/5360312/wyx" target="_blank" title="StackOverflow">
+                  
+                    <i class="fa fa-fw fa-stack-overflow"></i>
+                  
+                  StackOverflow
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#常量"> <span class="nav-number">1</span> <span class="nav-text">常量</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#变量"> <span class="nav-number">2</span> <span class="nav-text">变量</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#assign"> <span class="nav-number">2.1</span> <span class="nav-text">assign</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#scope"> <span class="nav-number">3</span> <span class="nav-text">scope</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#get_variable-and-variable"> <span class="nav-number">3.1</span> <span class="nav-text">get_variable and Variable</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#name_scope-and-variable_scope"> <span class="nav-number">3.2</span> <span class="nav-text">name_scope and variable_scope</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#占位符"> <span class="nav-number">4</span> <span class="nav-text">占位符</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#dtype"> <span class="nav-number">5</span> <span class="nav-text">dtype</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#save-load"> <span class="nav-number">6</span> <span class="nav-text">save load</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#tensor-board"> <span class="nav-number">7</span> <span class="nav-text">tensor board</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#device"> <span class="nav-number">8</span> <span class="nav-text">device</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#optimizers"> <span class="nav-number">9</span> <span class="nav-text">optimizers</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#gradient-clipping"> <span class="nav-number">9.1</span> <span class="nav-text">Gradient Clipping</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#autoencode"> <span class="nav-number">10</span> <span class="nav-text">autoencode</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#cae"> <span class="nav-number">10.1</span> <span class="nav-text">CAE</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2018 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wyx</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var labels = ['gitalk','2018-05-17']
+</script>
+
+<script type="text/javascript">
+    labels.push('ml');
+</script>
+
+
+<script type="text/javascript">
+    labels.push('tensorflow');
+</script>
+
+
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: 'dd688ffd2be8512fc659',
+        clientSecret: '483255bda7b80acb108df487ac91a0be78710b0d',
+        repo: '631068264.github.io',
+        owner: '631068264',
+        admin: ['631068264'],
+        id: 'start',
+        title: 'start',
+        labels: labels,
+        perPage: 50,
+        distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("MQfAJm2nTUDaT5bEuS8i4Ygm-gzGzoHsz", "m4tqv3N9AepVgTk0YfSNe9kz");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  <!--custom css in _sass/_custom/custom.scss -->
+
+<script type="text/javascript">
+    // 黑幕提示语
+    $('span.heimu').attr('title', '你知道得太多了');
+</script>
+
+<script type="text/javascript">
+    // 多图显示 gp-列数
+    $('span[class^="gp-"]').each(function () {
+        var div_mulp = $(this);
+        if (div_mulp && div_mulp.attr('class')) {
+            var column_number = parseInt(div_mulp.attr('class').split('-')[1]);
+            var image = div_mulp.find('img');
+            if (image.size() > 0) {
+                div_mulp.removeClass()
+                    .addClass('post-gallery')
+                    .attr('itemscope', '')
+                    .attr('itemtype', 'http://schema.org/ImageGallery');
+
+                image.each(function (index) {
+                    var modulo = index % column_number;
+
+                    if (modulo === 0) {
+                        content = $('<div class="post-gallery-row"></div>')
+                    }
+                    var image_src = $(this).attr('src');
+                    content.append('<a class="post-gallery-img fancybox"\n' +
+                        '                 href="' + image_src + '" rel="gallery_"\n' +
+                        '                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">\n' +
+                        '                <img src="' + image_src + '" itemprop="contentUrl"/>\n' +
+                        '              </a>');
+
+                    if (modulo === column_number - 1) {
+                        div_mulp.append(content)
+                    }
+                });
+
+                var photo_size_modulo = image.size() % column_number;
+                if (photo_size_modulo > 0) {
+                    div_mulp.append(content);
+                }
+                image.remove();
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>
+
