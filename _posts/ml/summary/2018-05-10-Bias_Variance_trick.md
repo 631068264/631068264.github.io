@@ -13,9 +13,10 @@ tags:
 
     代表我们使用不同训练集时模型表现的差异
     如果模型具有较大的方差，训练集只要有少许变化，模型会有很大的改变。复杂的模型一般具有更大的方差
+    （方差小 模型泛化能力强）test set 和 train set 的差多少
 - 偏差 bias
 
-    代表实际模型与理想模型的差别
+    代表实际模型与理想模型的差别 (偏差小 模型拟合能力强) 在train set的错误率
 
 <span class='gp-2'>
     <img src='https://ws1.sinaimg.cn/large/006tNbRwgy1fvlsmh6znpj30x80pcdgh.jpg' />
