@@ -269,40 +269,8 @@ term_length = FOREACH unique_terms GENERATE word, string_udf.num_chars(word) as 
 ![](https://ws3.sinaimg.cn/large/006tKfTcgy1g0l0nnadogj32080r41kx.jpg)
 
 ## Storm
-![](https://ws4.sinaimg.cn/large/006tKfTcgy1g0l1wd0pygj31og0dok3c.jpg)
-![](https://ws2.sinaimg.cn/large/006tKfTcgy1g0l1wr0ns8j31mg08in4f.jpg)
 
-- [streamparse](https://github.com/Parsely/streamparse)
-
-### 基本组件
-在Storm上实际上运行的是Topology
-
-#### stream
-无限Tuple序列
-![](https://ws3.sinaimg.cn/large/006tKfTcgy1g0l25gbhzjj31ye0a47ee.jpg)
-
-#### spouts
-Tuple序列源头
-![](https://ws3.sinaimg.cn/large/006tKfTcgy1g0l2789t0gj31y60iek5o.jpg)
-
-#### bolts
-处理Tuples ,创建stream。
-![](https://ws1.sinaimg.cn/large/006tKfTcgy1g0l2955g4dj31yk0ouqkk.jpg)
-
-#### Topology
-spouts和bolts组成的网络抽象成Topology，组件之间沟通
-![](https://ws2.sinaimg.cn/large/006tKfTcgy1g0l3bj04hgj30ly0eoaax.jpg)
-
-#### Stream Groups
-告知Topology如何在两个组件之间进行Tuple传输。
-![](https://ws3.sinaimg.cn/large/006tKfTcgy1g0l2l4brccj31ze0kmtr7.jpg)
-
-
-### 架构
-![](https://ws1.sinaimg.cn/large/006tKfTcgy1g0l2slgdavj31xy0kah7e.jpg)
-
-Zookeeper作为分布式协调组件，负责Nimbus和多个supervisor之间的协调工作。
-![](https://ws2.sinaimg.cn/large/006tKfTcgy1g0l2zth5awj31y00oydve.jpg)
+[Storm](/blog/2019/10/20/storm)
 
 ## Spark Streaming
 将stream拆分成小量批处理, 做不到**毫秒级别**，**storm** 可以
