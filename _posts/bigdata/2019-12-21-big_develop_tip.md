@@ -399,3 +399,11 @@ sudo -u hdfs hadoop fs -chmod 755 /user/root
 
 export HADOOP_USER_NAME=root
 ```
+
+- [stop spark job](https://community.cloudera.com/t5/Support-Questions/What-is-the-correct-way-to-start-stop-spark-streaming-jobs/td-p/30183)
+
+```
+yarn application -list
+
+yarn application -kill application_id
+```
