@@ -19,7 +19,22 @@ tags:
 - [ambari install](https://cwiki.apache.org/confluence/display/AMBARI/Installation+Guide+for+Ambari+2.7.5)
 - [ambari install2](https://docs.cloudera.com/HDPDocuments/Ambari-2.7.4.0/bk_ambari-installation/content/name_your_cluster.html)
 
+- [集群1](https://zhuanlan.zhihu.com/p/44270177)
+- [集群2](https://www.cnblogs.com/zlslch/p/6629251.html)
+
+- [dfs.namenode.http-bind-host](https://community.cloudera.com/t5/Support-Questions/Ambari-Namenode-UI-unable-to-acess-from-outside-of-cluster/m-p/112734/highlight/true#M75553)
+
 [hive mysql-connector-java.jar 404 not found ](https://community.cloudera.com/t5/Community-Articles/Hive-start-failed-because-of-ambari-error-mysql-connector/ta-p/247743)
+
+
+### add new hosts 一直都是preparing
+
+`tail -f /var/log/ambari-server/ambari-server.log`
+
+
+[Error executing bootstrap Cannot create /var/run/ambari-server/bootstrap](https://community.cloudera.com/t5/Support-Questions/Ambari-Status-quot-Preparing-quot-in-confirmation-of-hosts/m-p/184097/highlight/true#M146247)
+
+
 
 ## pom scope
 
@@ -406,4 +421,59 @@ export HADOOP_USER_NAME=root
 yarn application -list
 
 yarn application -kill application_id
+```
+
+# Phoenix
+
+## migrate hbase to phoenix
+ 
+`./sqlline.py node1:2181`
+
+`./psql.py node1:2181 -m "loh"."traffic"`
+
+- [namespace mapping](https://phoenix.apache.org/namspace_mapping.html)
+- [语法](https://phoenix.apache.org/language/)
+- [functions](https://phoenix.apache.org/language/functions.html)
+- [hbase namespace](https://blog.csdn.net/opensure/article/details/46470969)
+
+配置`phoenix.schema.isNamespaceMappingEnabled=true`在`hbase-site.xml`自动映射
+
+```sql
+create 'loh:traffic',"src","dest","time","info"
+
+create schema "loh";
+
+view只读 VARCHAR ,schema table_name family_name , column 大小写一致 才能映射
+create view "loh"."traffic"(
+            "id" VARCHAR PRIMARY KEY,
+            "src"."srcip" VARCHAR,
+            "src"."srcmac" VARCHAR,
+            ...
+            "info"."downsize" VARCHAR
+            );
+```
+- [关于 phoenix 的 引号](https://stackoverflow.com/questions/59465253/phoenix-select-view-undefined-column)
+
+命令行中字符串用单引号，表，列用双引号区分大小写(默认是大写)
+
+```sql
+select * from "traffic" where TO_NUMBER("downsize") > 0;
+select * from "traffic" where "guid"='6773891525274486511'
+```
+
+
+## `Error: Operation timed out. (state=TIM01,code=6000)`
+
+phoenix.query.timeoutMs
+
+
+## 开启Phoenix Query Server
+
+- [phoenix server](http://phoenix.apache.org/server.html)
+- [jdbc url](https://phoenix.apache.org/faq.html#What_is_the_Phoenix_JDBC_URL_syntax)
+
+[HBase2.0中的Benchmark工具](https://www.cnblogs.com/felixzh/p/10246335.html)
+[读写测试](https://blog.csdn.net/qq_24651739/article/details/81188053)
+```
+hbase pe --oneCon=true --valueSize=100 --rows=1000000 --autoFlush=true --presplit=1 sequentialWrite 100
 ```
