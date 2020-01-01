@@ -477,3 +477,67 @@ phoenix.query.timeoutMs
 ```
 hbase pe --oneCon=true --valueSize=100 --rows=1000000 --autoFlush=true --presplit=1 sequentialWrite 100
 ```
+
+# 性能测试对比clickhouse
+
+
+数据导入导出
+
+```
+
+clickhouse client --port xxx --password="xxxxx" -d database --query="INSERT INTO table FORMAT CSVWithNames" < data.csv
+
+clickhouse client --port xxx --password="xxxxx" -d database --query="SELECT * FROM table  FORMAT CSVWithNames" > data.csv
+
+```
+
+
+# hadoop
+
+## 复制文件到hadoop报错
+
+`java.io.IOException: Failed to replace a bad datanode on the existing
+pipeline due to no more good datanodes being available to try.`
+
+- [写入出错](https://www.cnblogs.com/codeOfLife/p/5940613.html)
+
+> hdfs-site
+- dfs.client.block.write.replace-datanode-on-failure.enable true
+- dfs.client.block.write.replace-datanode-on-failure.policy NEVER
+
+## 导入csv到hbase
+
+- [Import CSV data into HBase using importtsv](https://community.cloudera.com/t5/Community-Articles/Import-CSV-data-into-HBase-using-importtsv/ta-p/244842)
+
+```
+hadoop fs -copyFromLocal hbase.csv /tmp
+hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=',' -Dimporttsv.columns="HBASE_ROW_KEY,TIME:date,INFO:guid,TIME:time,TIME:end_time,SRC:srcip,SRC:src_ip_range_id,SRC:srcport,SRC:srcmac,SRC:srccountry,DEST:destip,INFO:host,DEST:dest_ip_range_id,DEST:destport,DEST:destmac,DEST:destcountry,INFO:sensorid,INFO:proto,INFO:appproto,INFO:status,INFO:upsize,INFO:downsize,INFO:detail" TRAFFIC /tmp/hbase-data.csv
+```
+
+- [大文件读取](https://itbilu.com/linux/man/Nkz2hoeNm.html)
+
+```
+split -C 100M large_file.txt stxt
+cat stxt* > new_file.txt
+```
+
+## 清理 hadoop
+
+- [hadoop 命令](https://segmentfault.com/a/1190000002672666#item-1-4)
+
+```
+hadoop fs
+
+hdfs dfs -rm -skipTrash /path_to_directory
+hdfs dfs -expunge
+```
+
+## yarn log
+
+```
+yarn logs -applicationId <application ID>
+```
+
+## YARN Registry DNS Start failed
+
+YARN `hadoop.registry.dns.bind-port` default value = 53
