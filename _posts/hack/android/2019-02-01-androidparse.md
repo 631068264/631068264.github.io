@@ -50,25 +50,25 @@ readelf -h xx.so
 - -H --help              Display this information
 - -v --version           Display the version number of readelf
 
-![](https://ws1.sinaimg.cn/large/006tNc79gy1fztjvqtzqej316y0dm0x4.jpg)
+![](https://tva1.sinaimg.cn/large/006tNc79gy1fztjvqtzqej316y0dm0x4.jpg)
 
 - Seation Header
-![](https://ws3.sinaimg.cn/large/006tNc79gy1fztjxxinrcj318e0k441k.jpg)
+![](https://tva3.sinaimg.cn/large/006tNc79gy1fztjxxinrcj318e0k441k.jpg)
 
 Seation Header一般都是多个用一个List来保存
 
 - Program Headers
-![](https://ws2.sinaimg.cn/large/006tNc79gy1fztk06dm8xj31380u07a6.jpg)
+![](https://tva2.sinaimg.cn/large/006tNc79gy1fztk06dm8xj31380u07a6.jpg)
 
 
 # Android manifest
 ## R id
-![](https://ws2.sinaimg.cn/large/006tNc79gy1fzqwl7f94tj31du0u0kct.jpg)
+![](https://tva2.sinaimg.cn/large/006tNc79gy1fzqwl7f94tj31du0u0kct.jpg)
 
 ## aapt
 将Android打包成resource.arsc 从文本xml -> 二进制xml
-![](https://ws4.sinaimg.cn/large/006tNc79gy1fzqxi7p2y0j31kq0q078s.jpg)
-![](https://ws4.sinaimg.cn/large/006tNc79gy1fzqxqpq5i6j31pk0mmnb3.jpg)
+![](https://tva4.sinaimg.cn/large/006tNc79gy1fzqxi7p2y0j31kq0q078s.jpg)
+![](https://tva4.sinaimg.cn/large/006tNc79gy1fzqxqpq5i6j31pk0mmnb3.jpg)
 
 在`[sdk home]/build-tools`
 ```
@@ -77,11 +77,11 @@ aapt l -a <apk> > xx.xml
 
 
 ## apk 构建过程
-![](https://ws2.sinaimg.cn/large/006tNc79gy1fzqxvc7vzsj31800s2agi.jpg)
+![](https://tva2.sinaimg.cn/large/006tNc79gy1fzqxvc7vzsj31800s2agi.jpg)
 
 
 # Resource.arsc
-![](https://ws2.sinaimg.cn/large/006tNc79gy1fzqyr6wl9aj31610u04gt.jpg)
+![](https://tva2.sinaimg.cn/large/006tNc79gy1fzqyr6wl9aj31610u04gt.jpg)
 
 # dex
 在`[sdk home]/build-tools`

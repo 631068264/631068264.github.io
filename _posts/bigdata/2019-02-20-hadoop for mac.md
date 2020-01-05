@@ -182,7 +182,7 @@ export OPENSSL_INCLUDE_DIR="${OPENSSL_ROOT_DIR}/include"
 
 #### check native
 经过好久终于可以了，配置好上面的话会更快。时间主要花在下载maven上面，老是ssl error
-![](https://ws4.sinaimg.cn/large/006tKfTcgy1g0hst1jktnj30vj0u0diq.jpg)
+![](https://tva4.sinaimg.cn/large/006tKfTcgy1g0hst1jktnj30vj0u0diq.jpg)
 
 复制native libraries到
 ```
@@ -225,16 +225,16 @@ export HADOOP_CONF_DIR=/usr/local/Cellar/hadoop/3.1.1/libexec/etc/hadoop
 - Embedded mode (Derby) 内嵌模式 (实验)
 
 > 默认此模式下，Metastore使用Derby数据库，数据库和Metastore服务都嵌入在主HiveServer进程中。当您启动HiveServer进程时，两者都是为您启动的。此模式需要最少的配置工作量，但它一次只能支持一个活动用户，并且未经过生产使用认证。
-![](https://ws1.sinaimg.cn/large/006tKfTcgy1g0g6b2hg8fj309p03bwed.jpg)
+![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0g6b2hg8fj309p03bwed.jpg)
 
 - Local mode 本地元存储
 > 在本地模式下，Hive Metastore服务在与主HiveServer进程相同的进程中运行，但Metastore数据库在单独的进程中运行，并且可以位于单独的主机上。嵌入式Metastore服务通过JDBC与Metastore数据库通信。
-![](https://ws1.sinaimg.cn/large/006tKfTcgy1g0g6bb3u9nj309t06ajrd.jpg)  
+![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0g6bb3u9nj309t06ajrd.jpg)
 
 - Remote mode  远程元存储(推荐)
 
 > 通过**Thrift**连接clinet和远程metastore服务`hive.metastore.uris`,metastore服务通过jdbc连接db'javax.jdo.option.ConnectionURL'  远程元存储需要单独起metastore服务，然后每个客户端都在配置文件里配置连接到该metastore服务。远程元存储的metastore服务和hive运行在不同的进程里。单独的主机上运行HiveServer进程可提供更好的可用性和可伸缩性。
-![](https://ws1.sinaimg.cn/large/006tKfTcgy1g0g6engvt5j30970ar74b.jpg)
+![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0g6engvt5j30970ar74b.jpg)
 
 metastore 支持常用的数据库
 - Derby
@@ -369,7 +369,7 @@ schematool -dbType mysql -initSchema
 hive
 hive> show tables;
 ```
-![](https://ws1.sinaimg.cn/large/006tKfTcgy1g0ghzk78a6j31ch0u0gqo.jpg)
+![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0ghzk78a6j31ch0u0gqo.jpg)
 
 ## ERROR
 

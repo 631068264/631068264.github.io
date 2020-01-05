@@ -8,7 +8,7 @@ tags:
     - ml优化
 ---
 # Bias-Variance Tradeoff
-![](https://ws1.sinaimg.cn/large/006tNbRwly1fvlsl4yrwej31kw0aojt0.jpg)
+![](https://tva1.sinaimg.cn/large/006tNbRwly1fvlsl4yrwej31kw0aojt0.jpg)
 - 方差  varinace
 
     代表我们使用不同训练集时模型表现的差异
@@ -19,8 +19,8 @@ tags:
     代表实际模型与理想模型的差别 (偏差小 模型拟合能力强) 在train set的错误率
 
 <span class='gp-2'>
-    <img src='https://ws1.sinaimg.cn/large/006tNbRwgy1fvlsmh6znpj30x80pcdgh.jpg' />
-    <img src='https://ws2.sinaimg.cn/large/006tNbRwgy1fvlsmabzqtj30su0kw74v.jpg' />
+    <img src='https://tva1.sinaimg.cn/large/006tNbRwgy1fvlsmh6znpj30x80pcdgh.jpg' />
+    <img src='https://tva2.sinaimg.cn/large/006tNbRwgy1fvlsmabzqtj30su0kw74v.jpg' />
 </span>
 
 # 过拟合
@@ -68,7 +68,7 @@ Leave-One-Out是将N个数据分成N分，那么改进措施是将N个数据分�
 
 ### example
 cross_val_score K-fold cross-validation
-![](https://ws1.sinaimg.cn/large/006tNbRwgy1fvlwae5a39j31kw0twdkj.jpg)
+![](https://tva1.sinaimg.cn/large/006tNbRwgy1fvlwae5a39j31kw0twdkj.jpg)
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -95,16 +95,16 @@ $$x'=\frac{x-\mu}\sigma$$
 - 训练线性模型
 
 例如
-![](https://ws3.sinaimg.cn/large/006tNbRwgy1fvep9slkq7j31bi0esdi0.jpg)
+![](https://tva3.sinaimg.cn/large/006tNbRwgy1fvep9slkq7j31bi0esdi0.jpg)
 
 模型太复杂容易带来过拟合
-![](https://ws4.sinaimg.cn/large/006tNbRwgy1fvep83x6wpj30ik0cymxk.jpg)
+![](https://tva4.sinaimg.cn/large/006tNbRwgy1fvep83x6wpj30ik0cymxk.jpg)
 非线性变换可能会带来的一些问题：**时间复杂度和空间复杂度的增加**，尽可能使用简单的模型，而不是模型越复杂越好
 
 # Loss
 ## 对数损失
-![](https://ws3.sinaimg.cn/large/006tNbRwgy1fw6yz3xo0sj313m11otbn.jpg)
+![](https://tva3.sinaimg.cn/large/006tNbRwgy1fw6yz3xo0sj313m11otbn.jpg)
 ## 回归 mse rmse
-![](https://ws3.sinaimg.cn/large/006tNbRwgy1fw6yztvrdgj312u0pggmq.jpg)
-![](https://ws1.sinaimg.cn/large/006tNbRwgy1fw6z057ku4j314m0tgmzk.jpg)
-![](https://ws3.sinaimg.cn/large/006tNbRwgy1fw6z0oqh57j311s0kmq4r.jpg)
+![](https://tva3.sinaimg.cn/large/006tNbRwgy1fw6yztvrdgj312u0pggmq.jpg)
+![](https://tva1.sinaimg.cn/large/006tNbRwgy1fw6z057ku4j314m0tgmzk.jpg)
+![](https://tva3.sinaimg.cn/large/006tNbRwgy1fw6z0oqh57j311s0kmq4r.jpg)

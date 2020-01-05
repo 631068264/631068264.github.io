@@ -75,8 +75,8 @@ mysql> SELECT
 一般的聚合函数可以作为窗口函数
 
 <span class='gp-2'>
-    <img src='https://ws3.sinaimg.cn/large/006tNc79ly1g20tqixrt3j316c0kojso.jpg' />
-    <img src='https://ws2.sinaimg.cn/large/006tNc79ly1g20tr48ybwj30ug0u00uj.jpg' />
+    <img src='https://tva3.sinaimg.cn/large/006tNc79ly1g20tqixrt3j316c0kojso.jpg' />
+    <img src='https://tva2.sinaimg.cn/large/006tNc79ly1g20tr48ybwj30ug0u00uj.jpg' />
 </span>
 
 非聚合窗口函数

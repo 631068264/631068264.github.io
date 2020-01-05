@@ -32,7 +32,7 @@ tags:
 在**状态 State**的基础上加入Token概念，每个状态以不同的概率产生一组**可观察的Token** => 生成概率（Emission Probability）
 
 HMM里面State是不可见的，只能观察Token
-![](https://ws1.sinaimg.cn/large/006tKfTcly1g14yrxso51j31gk0u0wua.jpg)
+![](https://tva1.sinaimg.cn/large/006tKfTcly1g14yrxso51j31gk0u0wua.jpg)
 同一个Token序列有不同State路径 argmaxP(S|T)
 
 - token 反推state 选概率大

@@ -6,7 +6,7 @@ categories:
     - mysql
 ---
 
-![](https://ws1.sinaimg.cn/large/006tKfTcgy1g1hcjank7ij310o0m8dhy.jpg)
+![](https://tva1.sinaimg.cn/large/006tKfTcgy1g1hcjank7ij310o0m8dhy.jpg)
 
 # DDL
 Data Definition Language 数据定义语言

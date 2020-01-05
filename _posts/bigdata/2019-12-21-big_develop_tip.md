@@ -541,3 +541,86 @@ yarn logs -applicationId <application ID>
 ## YARN Registry DNS Start failed
 
 YARN `hadoop.registry.dns.bind-port` default value = 53
+
+## find the failed log in mapreduce.Job
+
+```
+2019-12-31 06:02:10,611 INFO  [main] mapreduce.JobSubmitter: Submitting tokens for job: job_1577781650355_0001
+2019-12-31 06:02:10,611 INFO  [main] mapreduce.JobSubmitter: Executing with tokens: []
+2019-12-31 06:02:10,982 INFO  [main] conf.Configuration: found resource resource-types.xml at file:/etc/hadoop/3.1.4.0-315/0/resource-types.xml
+2019-12-31 06:02:11,532 INFO  [main] impl.YarnClientImpl: Submitted application application_1577781650355_0001
+2019-12-31 06:02:11,668 INFO  [main] mapreduce.Job: The url to track the job: http://node1:8088/proxy/application_1577781650355_0001/
+2019-12-31 06:02:11,670 INFO  [main] mapreduce.Job: Running job: job_1577781650355_0001
+2019-12-31 06:02:34,983 INFO  [main] mapreduce.Job: Job job_1577781650355_0001 running in uber mode : false
+2019-12-31 06:02:34,985 INFO  [main] mapreduce.Job:  map 0% reduce 0%
+2019-12-31 06:02:47,134 INFO  [main] mapreduce.Job:  map 4% reduce 0%
+2019-12-31 06:02:50,161 INFO  [main] mapreduce.Job:  map 7% reduce 0%
+2019-12-31 06:02:53,184 INFO  [main] mapreduce.Job:  map 10% reduce 0%
+2019-12-31 06:02:56,212 INFO  [main] mapreduce.Job:  map 14% reduce 0%
+2019-12-31 06:02:59,247 INFO  [main] mapreduce.Job:  map 17% reduce 0%
+2019-12-31 06:03:02,275 INFO  [main] mapreduce.Job:  map 20% reduce 0%
+2019-12-31 06:03:05,296 INFO  [main] mapreduce.Job:  map 24% reduce 0%
+2019-12-31 06:03:08,323 INFO  [main] mapreduce.Job:  map 27% reduce 0%
+2019-12-31 06:03:11,349 INFO  [main] mapreduce.Job:  map 29% reduce 0%
+2019-12-31 06:03:14,370 INFO  [main] mapreduce.Job:  map 33% reduce 0%
+2019-12-31 06:03:18,402 INFO  [main] mapreduce.Job:  map 35% reduce 0%
+2019-12-31 06:03:21,427 INFO  [main] mapreduce.Job:  map 39% reduce 0%
+2019-12-31 06:03:24,455 INFO  [main] mapreduce.Job:  map 42% reduce 0%
+2019-12-31 06:03:27,480 INFO  [main] mapreduce.Job:  map 45% reduce 0%
+2019-12-31 06:03:30,502 INFO  [main] mapreduce.Job:  map 48% reduce 0%
+2019-12-31 06:03:30,542 INFO  [main] mapreduce.Job: Task Id : attempt_1577781650355_0001_m_000000_0, Status : FAILED
+2019-12-31 06:03:32,651 INFO  [main] mapreduce.Job:  map 50% reduce 0%
+2019-12-31 06:04:25,000 INFO  [main] mapreduce.Job: Task Id : attempt_1577781650355_0001_m_000000_1, Status : FAILED
+2019-12-31 06:05:18,339 INFO  [main] mapreduce.Job: Task Id : attempt_1577781650355_0001_m_000000_2, Status : FAILED
+2019-12-31 06:05:31,481 INFO  [main] mapreduce.Job:  map 52% reduce 0%
+2019-12-31 06:05:34,495 INFO  [main] mapreduce.Job:  map 54% reduce 0%
+2019-12-31 06:05:37,515 INFO  [main] mapreduce.Job:  map 56% reduce 0%
+2019-12-31 06:05:40,559 INFO  [main] mapreduce.Job:  map 57% reduce 0%
+2019-12-31 06:05:43,580 INFO  [main] mapreduce.Job:  map 58% reduce 0%
+2019-12-31 06:05:46,626 INFO  [main] mapreduce.Job:  map 59% reduce 0%
+2019-12-31 06:05:49,657 INFO  [main] mapreduce.Job:  map 60% reduce 0%
+2019-12-31 06:05:52,703 INFO  [main] mapreduce.Job:  map 62% reduce 0%
+2019-12-31 06:05:55,732 INFO  [main] mapreduce.Job:  map 63% reduce 0%
+2019-12-31 06:05:58,763 INFO  [main] mapreduce.Job:  map 65% reduce 0%
+2019-12-31 06:06:01,783 INFO  [main] mapreduce.Job:  map 67% reduce 0%
+2019-12-31 06:06:04,804 INFO  [main] mapreduce.Job:  map 68% reduce 0%
+2019-12-31 06:06:07,827 INFO  [main] mapreduce.Job:  map 70% reduce 0%
+2019-12-31 06:06:10,843 INFO  [main] mapreduce.Job:  map 71% reduce 0%
+2019-12-31 06:06:13,861 INFO  [main] mapreduce.Job:  map 73% reduce 0%
+2019-12-31 06:06:16,892 INFO  [main] mapreduce.Job:  map 74% reduce 0%
+2019-12-31 06:06:25,977 INFO  [main] mapreduce.Job:  map 76% reduce 0%
+2019-12-31 06:06:28,994 INFO  [main] mapreduce.Job:  map 77% reduce 0%
+2019-12-31 06:06:32,027 INFO  [main] mapreduce.Job:  map 78% reduce 0%
+2019-12-31 06:06:35,045 INFO  [main] mapreduce.Job:  map 79% reduce 0%
+2019-12-31 06:06:38,071 INFO  [main] mapreduce.Job:  map 81% reduce 0%
+2019-12-31 06:06:41,088 INFO  [main] mapreduce.Job:  map 82% reduce 0%
+2019-12-31 06:06:44,112 INFO  [main] mapreduce.Job:  map 84% reduce 0%
+2019-12-31 06:06:47,130 INFO  [main] mapreduce.Job:  map 86% reduce 0%
+2019-12-31 06:06:50,147 INFO  [main] mapreduce.Job:  map 87% reduce 0%
+2019-12-31 06:06:53,181 INFO  [main] mapreduce.Job:  map 89% reduce 0%
+2019-12-31 06:06:56,201 INFO  [main] mapreduce.Job:  map 91% reduce 0%
+2019-12-31 06:06:59,215 INFO  [main] mapreduce.Job:  map 93% reduce 0%
+2019-12-31 06:07:02,230 INFO  [main] mapreduce.Job:  map 95% reduce 0%
+2019-12-31 06:07:05,246 INFO  [main] mapreduce.Job:  map 97% reduce 0%
+2019-12-31 06:07:08,267 INFO  [main] mapreduce.Job:  map 98% reduce 0%
+2019-12-31 06:07:11,296 INFO  [main] mapreduce.Job:  map 100% reduce 0%
+2019-12-31 06:07:11,306 INFO  [main] mapreduce.Job: Job job_1577781650355_0001 completed successfully
+2019-12-31 06:07:11,565 INFO  [main] mapreduce.Job: Counters: 35
+```
+
+- [How to find the failed log in mapreduce.Job](https://stackoverflow.com/questions/59543408/how-to-find-the-failed-log-in-mapreduce-job/59544530#59544530)
+
+> The url to track the job:
+> http://node1:8088/proxy/application_1577781650355_0001/
+
+根据log找对应的task和**attempt_***
+
+<span class='gp-3'>
+    <img src='https://tva1.sinaimg.cn/large/006tNbRwgy1gai1l3tx92j31bz0j23z5.jpg' />
+    <img src='https://tva1.sinaimg.cn/large/006tNbRwgy1gai1mzw5icj31hb0fcq3v.jpg' />
+    <img src='https://tva1.sinaimg.cn/large/006tNbRwgy1gai1prnyk6j315y0glmxy.jpg' />
+</span>
+
+
+
+

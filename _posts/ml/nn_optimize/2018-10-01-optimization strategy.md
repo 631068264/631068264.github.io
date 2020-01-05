@@ -108,7 +108,7 @@ dev/test set全部来自dev/test set，**保证了验证集最接近实际应用
 反映了variance；training-dev error与dev error的差值反映了data mismatch problem，即样本分布不一致。
 
 总结一下human-level error、training error、training-dev error、dev error以及test error之间的差值关系和反映的问题：
-![](https://ws1.sinaimg.cn/large/006tNc79gy1fvt2kxt89hj31j60s2gmz.jpg)
+![](https://tva1.sinaimg.cn/large/006tNc79gy1fvt2kxt89hj31j60s2gmz.jpg)
 
 # 处理数据不匹配问题（Addressing data mismatch）
 您的训练集来自和开发测试集不同的分布，如果错误分析显示你有一个数据不匹配的问题该怎么办。

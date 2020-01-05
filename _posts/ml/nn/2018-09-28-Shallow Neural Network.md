@@ -9,7 +9,7 @@ tags:
 ---
 # 结构
 
-![](https://ws1.sinaimg.cn/large/006tNc79gy1fvpdg9tgdqj31kw0xgthl.jpg)
+![](https://tva1.sinaimg.cn/large/006tNc79gy1fvpdg9tgdqj31kw0xgthl.jpg)
 结构上，从左到右，可以分成三层：输入层（Input layer），隐藏层（Hidden layer）和输出层（Output layer）。
 输入层和输出层，顾名思义，对应着训练样本的输入和输出，很好理解。隐藏层是抽象的非线性的中间层，这也是其被命名为隐藏层的原因。
 
@@ -18,8 +18,8 @@ tags:
 # 计算
 正向传播
 <span class='gp-2'>
-    <img src='https://ws3.sinaimg.cn/large/006tNc79gy1fvpdklb2kwj30j80e074z.jpg' />
-    <img src='https://ws2.sinaimg.cn/large/006tNc79gy1fvpdjs9q95j31kw0kudmz.jpg' />
+    <img src='https://tva3.sinaimg.cn/large/006tNc79gy1fvpdklb2kwj30j80e074z.jpg' />
+    <img src='https://tva2.sinaimg.cn/large/006tNc79gy1fvpdjs9q95j31kw0kudmz.jpg' />
 </span>
 
 # 激活函数 Activation functions
@@ -87,16 +87,16 @@ ReLU激活函数在z大于零时梯度始终为1；在z小于零时梯度始终�
 
 
 ## 图像对比
-![](https://ws3.sinaimg.cn/large/006tNc79gy1fvpf636um5j31bs142wg5.jpg)
+![](https://tva3.sinaimg.cn/large/006tNc79gy1fvpf636um5j31bs142wg5.jpg)
 
 <span class='gp-3'>
-    <img src='https://ws1.sinaimg.cn/large/006tNc79ly1fvplnu6vd2j31kw0w7tew.jpg' />
-    <img src='https://ws4.sinaimg.cn/large/006tNc79gy1fvpfd1g5lfj314u0u4jsh.jpg' />
-    <img src='https://ws2.sinaimg.cn/large/006tNc79gy1fvpfdsst3vj311g0pejs9.jpg' />
+    <img src='https://tva1.sinaimg.cn/large/006tNc79ly1fvplnu6vd2j31kw0w7tew.jpg' />
+    <img src='https://tva4.sinaimg.cn/large/006tNc79gy1fvpfd1g5lfj314u0u4jsh.jpg' />
+    <img src='https://tva2.sinaimg.cn/large/006tNc79gy1fvpfdsst3vj311g0pejs9.jpg' />
 <span>
 
 ## 激活函数导数
-![](https://ws1.sinaimg.cn/large/006tNc79ly1fvplqz1ne1j31d212mdh0.jpg)
+![](https://tva1.sinaimg.cn/large/006tNc79ly1fvplqz1ne1j31d212mdh0.jpg)
 
 # 权重初始化
 

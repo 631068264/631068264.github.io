@@ -21,8 +21,8 @@ Swarm模式有一个内部DNS组件，可以自动为swarm中的每个服务分�
 
 
 <span class='gp-2'>
-    <img src='https://ws2.sinaimg.cn/large/006tNc79ly1g2ydpbd34rj30m80fc0tj.jpg' />
-    <img src='https://ws4.sinaimg.cn/large/006tNc79ly1g2ydq6mkb4j30o40h8wf8.jpg' />
+    <img src='https://tva2.sinaimg.cn/large/006tNc79ly1g2ydpbd34rj30m80fc0tj.jpg' />
+    <img src='https://tva4.sinaimg.cn/large/006tNc79ly1g2ydq6mkb4j30o40h8wf8.jpg' />
 </span>
 
 
