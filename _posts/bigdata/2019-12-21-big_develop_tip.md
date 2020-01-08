@@ -521,7 +521,7 @@ split -C 100M large_file.txt stxt
 cat stxt* > new_file.txt
 ```
 
-## 清理 hadoop
+## 清理 hadoop文件
 
 - [hadoop 命令](https://segmentfault.com/a/1190000002672666#item-1-4)
 
@@ -621,6 +621,63 @@ YARN `hadoop.registry.dns.bind-port` default value = 53
     <img src='https://tva1.sinaimg.cn/large/006tNbRwgy1gai1prnyk6j315y0glmxy.jpg' />
 </span>
 
+# hadoop namenode -format
+
+格式化后重启遇到各种问题
+
+##  Failed to add storage directory [DISK]file:/tmp/hadoop-hadoop/dfs/data/
+
+-[Hadoop 数据节点DataNode异常](https://blog.csdn.net/gis_101/article/details/52679914)
+
+```
+WARN org.apache.hadoop.hdfs.server.common.Storage: Failed to add storage directory [DISK]file:/tmp/hadoop-hadoop/dfs/data/
+java.io.IOException: Incompatible clusterIDs in /tmp/hadoop-hadoop/dfs/data: namenode clusterID = CID-1ac4e49a-ff06-4a34-bfa2-4e9d7248855b; datanode clusterID = CID-3ae02e74-742f-4915-92e7-0625fa8afcc5
+at org.apache.hadoop.hdfs.server.datanode.DataStorage.doTransition(DataStorage.java:775)
+at org.apache.hadoop.hdfs.server.datanode.DataStorage.loadStorageDirectory(DataStorage.java:300)
+at org.apache.hadoop.hdfs.server.datanode.DataStorage.loadDataStorage(DataStorage.java:416)
+at org.apache.hadoop.hdfs.server.datanode.DataStorage.addStorageLocations(DataStorage.java:395)
+at org.apache.hadoop.hdfs.server.datanode.DataStorage.recoverTransitionRead(DataStorage.java:573)
+at org.apache.hadoop.hdfs.server.datanode.DataNode.initStorage(DataNode.java:1362)
+at org.apache.hadoop.hdfs.server.datanode.DataNode.initBlockPool(DataNode.java:1327)
+at org.apache.hadoop.hdfs.server.datanode.BPOfferService.verifyAndSetNamespaceInfo(BPOfferService.java:317)
+at org.apache.hadoop.hdfs.server.datanode.BPServiceActor.connectToNNAndHandshake(BPServiceActor.java:223)
+at org.apache.hadoop.hdfs.server.datanode.BPServiceActor.run(BPServiceActor.java:802)
+at java.lang.Thread.run(Thread.java:745)
+2016-09-26 16:38:56,124 FATAL org.apache.hadoop.hdfs.server.datanode.DataNode: Initialization failed for Block pool (Datanode Uuid unassigned) service to s0/192.168.48.134:8020. Exiting.
+
+```
+
+**namenode和datanode的clusterID不一致**,删掉各个DataNode节点`/tmp/hadoop-hadoop/dfs/data/current`重启hadoop
+
+## /hadoop/hdfs/namenode/current/VERSION (Permission denied)
+
+- [Permission denied error during NameNode start](https://community.cloudera.com/t5/Support-Questions/Permission-denied-error-during-NameNode-start/td-p/132827)
+
+```
+WARN namenode.FSNamesystem (FSNamesystem.java:loadFromDisk(683)) - Encountered exception loading fsimage java.io.FileNotFoundException: /hadoop/hdfs/namenode/current/VERSION (Permission denied)
+```
+
+```
+chown -R hdfs:hdfs /hadoop/hdfs/namenode
+```
+
+## log 目录
+
+- `/var/log`
+- `/var/log/hadoop/hdfs/hadoop-hdfs-namenode-<hostname>.log`
+
+## YARN Timeline Service can not start due to HBase
+
+```
+2018-12-08 12:59:18,852 INFO  [main] client.RpcRetryingCallerImpl: Call exception, tries=6, retries=6, started=4859 ms ago, cancelled=false, msg=Call to examples.foodscience-01.de/163.49.39.115:17020 failed on connection exception: org.apache.hbase.thirdparty.io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: examples.foodscience-01.de/163.49.39.115:17020, details=row 'prod.timelineservice.entity' on table 'hbase:meta' at region=hbase:meta,,1.1588230740, hostname=examples.foodscience-01.de,17020,1543619998977, seqNum=-1
+```
+
+```
+NoNode for /atsv2-hbase-secure/master, details=row 'prod.timelineservice.entity' on table 'hbase:meta' at null
+```
 
 
-
+```
+hbase zkcli
+rmr 和hbase有关的  重启
+```
