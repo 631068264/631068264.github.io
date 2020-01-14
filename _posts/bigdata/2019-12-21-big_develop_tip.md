@@ -681,3 +681,171 @@ NoNode for /atsv2-hbase-secure/master, details=row 'prod.timelineservice.entity'
 hbase zkcli
 rmr 和hbase有关的  重启
 ```
+
+# Kylin
+
+- [kylin-3.0.0在集群hadoop 3.1.1部署问题汇总](https://www.jianshu.com/p/ef383f6b91cc)
+
+
+## install kylin on ambari
+
+- [ambari-kylin-service](https://github.com/cas-packone/ambari-kylin-service/)
+
+## Failed to create /kylin. Please make sure the user has right to access /kylin
+
+```
+KYLIN_HOME is set to /opt/kylin/latest
+WARNING: log4j.properties is not found. HADOOP_CONF_DIR may be incomplete.
+ERROR: JAVA_HOME /usr/jdk64/default does not exist.
+Failed to create /kylin. Please make sure the user has right to access /kylin
+```
+
+- [Failed to create /kylin](https://stackoverflow.com/questions/50618154/i-get-error-failed-to-create-kylin-please-make-sure-the-user-has-right-to-acc)
+- [JAVA _Home is not set in Hadoop](https://stackoverflow.com/questions/20628093/java-home-is-not-set-in-hadoop/29387495)
+
+
+`kylin.env.hdfs-working-dir` in `$KYLIN_HOME/conf/kylin.properties`
+
+```
+cd $KYLIN_HOME/bin
+vim check-env.sh
+```
+
+```
+hadoop ${hadoop_conf_param} fs -mkdir -p $WORKING_DIR
+hadoop ${hadoop_conf_param} fs -mkdir -p $WORKING_DIR/spark-history
+```
+替换成
+```
+hadoop  fs -mkdir -p $WORKING_DIR
+hadoop  fs -mkdir -p $WORKING_DIR/spark-history
+```
+
+## Exception in thread "main" java.lang.IllegalArgumentException: Failed to find metadata store by url: kylin_metadata@hbase
+
+```
+Exception in thread "main" java.lang.IllegalArgumentException: Failed to find metadata store by url: kylin_metadata@hbase
+	at org.apache.kylin.common.persistence.ResourceStore.createResourceStore(ResourceStore.java:89)
+	at org.apache.kylin.common.persistence.ResourceStore.getStore(ResourceStore.java:101)
+	at org.apache.kylin.rest.service.AclTableMigrationTool.checkIfNeedMigrate(AclTableMigrationTool.java:94)
+	at org.apache.kylin.tool.AclTableMigrationCLI.main(AclTableMigrationCLI.java:41)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at org.apache.kylin.common.persistence.ResourceStore.createResourceStore(ResourceStore.java:83)
+	... 3 more
+Caused by: java.lang.NoSuchMethodError: org.apache.curator.framework.api.CreateBuilder.creatingParentsIfNeeded()Lorg/apache/curator/framework/api/ProtectACLCreateModePathAndBytesable;
+	at org.apache.kylin.storage.hbase.util.ZookeeperDistributedLock.lock(ZookeeperDistributedLock.java:145)
+	at org.apache.kylin.storage.hbase.util.ZookeeperDistributedLock.lock(ZookeeperDistributedLock.java:166)
+	at org.apache.kylin.storage.hbase.HBaseConnection.createHTableIfNeeded(HBaseConnection.java:305)
+	at org.apache.kylin.storage.hbase.HBaseResourceStore.createHTableIfNeeded(HBaseResourceStore.java:110)
+	at org.apache.kylin.storage.hbase.HBaseResourceStore.<init>(HBaseResourceStore.java:91)
+	... 8 more
+```
+
+kylin 版本问题
+
+## Something wrong with Hive CLI or Beeline, please execute Hive CLI or Beeline CLI in terminal to find the root cause.
+
+```
+vim bin/find-hive-dependency.sh
+
+替换
+hive_env=`hive ${hive_conf_properties} -e set 2>&1 | grep 'env:CLASSPATH'`
+```
+```
+hive -e set >/tmp/hive_env.txt 2>&1
+hive_env=`grep 'env:CLASSPATH' /tmp/hive_env.txt`
+hive_env=`echo ${hive_env#*env:CLASSPATH}`
+hive_env="env:CLASSPATH"${hive_env}
+```
+
+## Couldn't find hive executable jar. Please check if hive executable jar exists in HIVE_LIB folder.
+
+因为find-hive-dependency.sh缺了设置`hive_exec_path`
+
+```
+hive_exec_path=
+
+加入
+
+if [ -n "$HCAT_HOME" ]
+then
+    verbose "HCAT_HOME is set to: $HCAT_HOME, use it to locate hive configurations."
+    hive_exec_path=$HCAT_HOME
+fi
+```
+
+## HIVE_LIB not found, please check hive installation or export HIVE_LIB='YOUR_LOCAL_HIVE_LIB'.
+
+配置HIVE_LIB
+
+## spark not found, set SPARK_HOME, or run bin/download-spark.sh
+
+```
+export HIVE_CONF=/usr/hdp/current/hive-client/conf
+export HCAT_HOME=/usr/hdp/current/hive-webhcat
+export HIVE_LIB=/usr/hdp/current/hive-client/lib
+export SPARK_HOME=/usr/hdp/current/spark2-client
+```
+
+## UI 访问不了
+
+log `$KYLIN_HOME/logs`目录的kylin.log和kylin.out
+
+```
+2020-01-13 06:04:16,747 ERROR [localhost-startStop-1] context.ContextLoader:350 : Context initialization failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping': Invocation of init method failed; nested exception is java.lang.NoClassDefFoundError: org/apache/commons/configuration/ConfigurationException
+        at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1628)
+        at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+        at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+        at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+        at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+        at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+        at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+        at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:761)
+        at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:867)
+        at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543)
+        at org.springframework.web.context.ContextLoader.configureAndRefreshWebApplicationContext(ContextLoader.java:443)
+        at org.springframework.web.context.ContextLoader.initWebApplicationContext(ContextLoader.java:325)
+        at org.springframework.web.context.ContextLoaderListener.contextInitialized(ContextLoaderListener.java:107)
+        at org.apache.catalina.core.StandardContext.listenerStart(StandardContext.java:4792)
+        at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:5256)
+        at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:150)
+        at org.apache.catalina.core.ContainerBase.addChildInternal(ContainerBase.java:754)
+        at org.apache.catalina.core.ContainerBase.addChild(ContainerBase.java:730)
+        at org.apache.catalina.core.StandardHost.addChild(StandardHost.java:734)
+        at org.apache.catalina.startup.HostConfig.deployWAR(HostConfig.java:985)
+        at org.apache.catalina.startup.HostConfig$DeployWar.run(HostConfig.java:1857)
+        at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+        at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+        at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.NoClassDefFoundError: org/apache/commons/configuration/ConfigurationException
+        at java.lang.Class.getDeclaredMethods0(Native Method)
+        at java.lang.Class.privateGetDeclaredMethods(Class.java:2701)
+        at java.lang.Class.getDeclaredMethods(Class.java:1975)
+        at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:613)
+        at org.springframework.util.ReflectionUtils.doWithMethods(ReflectionUtils.java:524)
+        at org.springframework.core.MethodIntrospector.selectMethods(MethodIntrospector.java:68)
+        at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.detectHandlerMethods(AbstractHandlerMethodMapping.java:230)
+        at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.initHandlerMethods(AbstractHandlerMethodMapping.java:214)
+        at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.afterPropertiesSet(AbstractHandlerMethodMapping.java:184)
+        at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping.afterPropertiesSet(RequestMappingHandlerMapping.java:127)
+        at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687)
+        at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624)
+        ... 25 more
+Caused by: java.lang.ClassNotFoundException: org.apache.commons.configuration.ConfigurationException
+        at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1309)
+        at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1137)
+        ... 37 more
+```
+
+```
+
+cp /usr/hdp/share/hst/hst-common/lib/commons-configuration-1.10.jar $KYLIN_HOME/tomcat/lib
+
+````
