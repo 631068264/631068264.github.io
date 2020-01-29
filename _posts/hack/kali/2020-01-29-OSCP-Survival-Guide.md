@@ -1,3 +1,13 @@
+---
+layout:     post
+rewards: false
+title:      OSCP-Survival-Guide
+categories:
+    - hack
+tags:
+    - kali
+---
+
 # OSCP-Survival-Guide
 Kali Linux Offensive Security Certified Professional Playbook
  
