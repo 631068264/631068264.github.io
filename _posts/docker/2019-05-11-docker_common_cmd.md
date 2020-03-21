@@ -18,6 +18,10 @@ docker build -t runoob/ubuntu:v1 .
 
 # manage
 
+虚悬镜像
+`docker rmi $(docker images -q -f dangling=true)`
+
+
 所有的容器 ID
 `docker ps -aq`
 
@@ -56,3 +60,15 @@ docker info
 # 交互
 
 `docker exec -it <container-name> bash`
+
+
+# docker volume
+
+`docker-compose stop && docker-compose rm -f`
+`docker stop $(docker ps -aq) && docker container prune`
+
+```
+docker volume ls
+docker volume rm <VOLUME NAME>
+
+```
