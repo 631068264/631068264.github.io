@@ -849,3 +849,12 @@ Caused by: java.lang.ClassNotFoundException: org.apache.commons.configuration.Co
 cp /usr/hdp/share/hst/hst-common/lib/commons-configuration-1.10.jar $KYLIN_HOME/tomcat/lib
 
 ````
+
+
+# spark 批处理
+
+- [Continuous trigger not found in Structured Streaming](https://stackoverflow.com/questions/50952042/continuous-trigger-not-found-in-structured-streaming)
+
+kafka offset 要latest
+
+![](https://tva1.sinaimg.cn/large/00831rSTgy1gd7p3l07efj31ma0j4abh.jpg)
