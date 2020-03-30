@@ -120,4 +120,23 @@ CREATE GRAPH Book_rating (*)
 jdbc功能简陋，性能确实比ne4j好
 
 
+```
+CREATE QUERY test_demo(/* Parameters here */) FOR GRAPH traffic { 
+  /* Write query logic here */ 
+	STRING d = datetime_format(now(),"％Y-％m-％d％");
+  PRINT d; 
+}
 
+
+CREATE QUERY GetAppProto(STRING traffic_date) FOR GRAPH traffic RETURNS (GroupByAccum<STRING ip,STRING date,STRING app_proto ,SumAccum<INT>num>){
+
+	GroupByAccum<STRING ip,STRING date,STRING app_proto ,SumAccum<INT>num > @@DstAccum;
+	machine = {MACHINE.*};
+	results = SELECT p
+	          FROM machine-(TRAFFIC:l)->:p
+	          WHERE l.traffic_date == traffic_date
+	          ACCUM
+	            @@DstAccum += (p.ip,l.traffic_date,l.app_proto->1);
+  RETURN @@DstAccum;
+}
+```
