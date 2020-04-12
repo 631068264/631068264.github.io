@@ -109,10 +109,14 @@ Example
 
 - `/Index/Type/_search` 返回所有记录
     - took 操作的耗时（单位为毫秒）
+        - Communication time between the coordinating node and data nodes
+        - Time the request spends in the search thread pool, queued for execution
+        - Actual execution time
     - timed_out字段表示是否超时
     - hits字段表示命中的记录
     - max_score：最高的匹配程度，本例是1.0。
 
+## body search
 
 ```json
 {
@@ -153,7 +157,73 @@ offset 0 limit x
 }
 ```
 
-# support
+
+**title**= and **content**= and **status** contains the exact word and **publish_date** field contains a date from 1 Jan 2015
+
+```
+{
+  "query": { 
+    "bool": { 
+      "must": [
+        { "match": { "title":   "Search"        }},
+        { "match": { "content": "Elasticsearch" }}
+      ],
+      "filter": [ 
+        { "term":  { "status": "published" }},
+        { "range": { "publish_date": { "gte": "2015-01-01" }}}
+      ]
+    }
+  }
+}
+```
+
+### bool
+
+- [bool](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html)
+
+## q Lucene query string syntax
 
 - [Apache Lucene](https://lucene.apache.org/core/2_9_4/queryparsersyntax.html)
+
+```
+q=destip:10.125.2.254 and destport:53
+
+te?t
+
+test*
+
+
+mod_date:[20020101 TO 20030101]
+title:{Aida TO Carmen}
+包含范围的查询由方括号表示。排他范围查询由大括号表示
+
+
+"jakarta apache" jakarta => "jakarta apache" OR jakarta
+```
+
+```
+search for documents that contain "jakarta apache" and "Apache Lucene"
+"jakarta apache" [AND,&&] "Apache Lucene"
+```
+
+```
+search for documents that must contain "jakarta" and may contain "lucene"
++jakarta lucene
+
+To search for a title that contains both the word "return" and the phrase "pink panther" use the query
+title:(+return +"pink panther")
+```
+
+```
+search for documents that contain "jakarta apache" but not "Apache Lucene"
+"jakarta apache" [NOT,-] "Apache Lucene"
+```
+
+```
+(jakarta OR apache) AND website
+```
+
+# support
+
 - [spark support](https://www.elastic.co/guide/en/elasticsearch/hadoop/current/spark.html#spark)
+
