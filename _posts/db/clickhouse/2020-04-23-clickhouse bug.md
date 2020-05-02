@@ -21,12 +21,10 @@ CREATE MATERIALIZED VIEW kafka_xx_consumer TO xx
 table xx 通过消费kafka插入数据
 
 
-# 问题
+# 问题一
 
 发现前端没有数据展示，查看表只有前几天的数据
 
-
-# 排查
 
 
 ## 初步
@@ -66,7 +64,7 @@ table xx 通过消费kafka插入数据
     
     > 原因找到了clickhouse消费速度跟不上生产速度，差距还越拉越大
 
-# 解决
+## 解决
 
 - 加大消费力
 
@@ -78,3 +76,50 @@ table xx 通过消费kafka插入数据
     https://clickhouse.tech/docs/en/engines/table_engines/integrations/kafka/#description
     
     ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ge43l3jlebj31cs06ajrp.jpg)
+
+
+# engine 改变
+
+- [How to change PARTITION in clickhouse](https://stackoverflow.com/questions/61452077/how-to-change-partition-in-clickhouse)
+
+```
+CREATE TABLE traffic2 (
+	`date` Date,
+	。。。
+) ENGINE = MergeTree()
+PARTITION BY date
+ORDER BY (end_time);
+
+detach table kafka_traffic_consumer;
+
+insert into traffic2 select * from traffic;
+
+drop table traffic;
+
+rename table traffic2 to traffic;
+
+attach table kafka_traffic_consumer;
+```
+
+# 问题二
+
+数据库没有缺数据查不出来
+
+## 背景
+
+配置文件
+
+```
+/etc/clickhouse-server/config.xml
+/etc/clickhouse-server/users.xml
+```
+
+因为数据量比较大在**users.xml**设置了几个user，然后里面设置了**max_rows_to_read**  `<max_rows_to_read>20000000</max_rows_to_read>`
+
+- clickhouse查询会使用**多线程**，没有使用**PARTITION key**，会有多个线程一起查，到了**max_rows_to_read**就停止了。
+
+    这样会导致一种境况，可能每次查询到的**结果都有些不一样**
+
+- 使用了**PARTITION key**可以限制查询分区，**按月分区**
+    
+    如果分区里面的数量太大，也可能查询不了，应该再细分分区**按日**，减少分区数据量，但是**这样会使磁盘空间变大，提高按日的性能。**
