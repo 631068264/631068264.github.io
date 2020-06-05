@@ -1,5 +1,5 @@
 ---
-layout:     post
+layout: post
 rewards: false
 title:  port 开放
 categories:
