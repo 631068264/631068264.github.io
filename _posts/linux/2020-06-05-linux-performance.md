@@ -1,4 +1,11 @@
+---
+layout: post
+rewards: false
+title:  Linux 性能
+categories:
+    - Linux
 
+---
 
 
 
