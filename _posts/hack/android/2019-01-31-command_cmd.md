@@ -14,6 +14,10 @@ tags:
 
 ```shell
 adb devices -l
+
+adb -s emulator-5556 shell
+
+adb root
 ```
 
 - 获取当前包名和入口类名
