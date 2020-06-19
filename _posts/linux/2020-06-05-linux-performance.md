@@ -69,6 +69,85 @@ load average: 0.00, 0.01, 0.05
 
 
 
+# 机器参数
+
+## CPU核数
+
+- 总核数 = 物理CPU个数 X 每颗物理CPU的核数
+- 总逻辑CPU数 = 总核数  X 超线程数
+
+
+
+```shell
+物理CPU个数
+cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l
+
+每个物理CPU中core的个数(即核数)
+cat /proc/cpuinfo| grep "cpu cores"| uniq
+
+逻辑CPU的个数
+cat /proc/cpuinfo| grep "processor"| wc -l
+```
+
+## 内存 
+
+```shell
+free -h
+```
+
+
+
+##  磁盘
+
+```shell
+查看逻辑磁盘大小
+
+fdisk -l |grep Disk
+
+查看分区情况
+
+df -h
+
+目录大小
+du -sh /var/lib/*
+```
+
+
+
+测速
+
+- 顺序读写指文件指针只能从头移动到尾。
+
+- 随机读写指文件指针可以根据需要，随意移动
+
+
+
+
+
+/dev/null 伪设备，回收站，不会产生写IO
+/dev/zero 伪设备，会产生空字符流，它不会产生读IO
+
+
+
+```shell
+随机4k写入 300 kB/s
+
+dd if=/dev/zero of=test bs=4k count=1k oflag=sync
+
+随机4k读取 500 MB/s
+
+dd if=test bs=4k count=1k of=/dev/null
+
+顺序写入  200 MB/s 即可
+dd if=/dev/zero of=test bs=256M count=50 oflag=sync
+
+dd if=/root/test of=test oflag=sync
+
+
+```
+
+
+
 ## RAID
 
 将多个较小的磁盘整合成为一个较大的磁盘设备； 而这个较大的磁盘功能可不止是**储存**而已，他还具有**数据保护**的功能呢
