@@ -14,6 +14,7 @@ tags:
 
 ```shell
 adb devices -l
+adb kill-server && adb server
 
 adb -s emulator-5556 shell
 
@@ -87,4 +88,9 @@ adb shell rm -rf sdcard/tmp.mp4
 
 ```
 adb logcat -s tag
+
+pidcat cn.soulapp.android -l D
 ```
+
+
+
