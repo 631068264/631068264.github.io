@@ -8,7 +8,7 @@ categories:
 
 # 背景
 
-```
+```sql
 CREATE TABLE kafka_xx (
 	...
 ) ENGINE = Kafka SETTINGS kafka_broker_list = 'localhost:9092', kafka_topic_list = 'xx', kafka_group_name = 'group1', kafka_format = 'JSONEachRow', kafka_max_block_size = 100;
@@ -32,6 +32,7 @@ table xx 通过消费kafka插入数据
 初步看log,认为是数据是没有，或者程序哪里有bug
 
 - 看后台log
+
 - clickhouse log
 
     `/var/log/clickhouse-server/clickhouse-server.log` log路径
@@ -46,13 +47,19 @@ table xx 通过消费kafka插入数据
     
 - 使用kafka命令
 
-    ssl
+    查看 consumer-groups list
+    
+    ```shell
+    bin/kafka-consumer-groups.sh  --list --bootstrap-server localhost:9092 --command-config config/client_security.properties
     ```
+    
+    ssl   消费某个topic
+    ```shell
     bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic xx --consumer.config config/client_security.properties
     ```
     发现有数据可以消费，从数据带有的时间戳是**今天的**，那**clickhouse消费了啥**
     
-    ```
+    ```shell
     bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group group1 --command-config config/client_security.properties
     ```
     

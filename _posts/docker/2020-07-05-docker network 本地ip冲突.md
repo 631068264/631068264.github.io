@@ -37,6 +37,30 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' con
 
 
 
+#  docker重新分配网桥Ip
+
+- stop and clear docker container  `docker stop $(docker ps -aq)   docker rm $(docker ps -aq)`
+
+- `docker network ls`  ``docker network prune`  clear  network
+
+- `/etc/docker/daemon.json`
+
+  ```json
+  {
+    "default-address-pools" : [
+      {
+        "base" : "192.168.0.0/16",
+        "size" : 24
+      }
+    ]
+  }
+  
+  ```
+
+  配置ip地址池  从**192.168.0.0 B段** 分出C段提供给docker网络
+
+- `systemctl restart docker`
+
+- restart other container
 
 
-https://blog.csdn.net/Oliverlyn/article/details/96437364

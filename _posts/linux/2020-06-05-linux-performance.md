@@ -23,10 +23,15 @@ eth2: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 9000
 ```
 
 - RX==receive，**接收**，从开启到现在接收封包的情况，是下行流量。
-
 - TX==Transmit，**发送**，从开启到现在发送封包的情况，是上行流量。
 
 
+
+```shell
+watch -n 1 -d ifconfig eth1
+```
+
+- -n或-interval来指定间隔的时间
 
 # top load average
 
