@@ -37,6 +37,22 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' con
 
 
 
+
+
+# 现象原理
+
+和默认网桥**相同网段的机器** A访问不了宿主机B的服务，ping不通，grpc也连不上，不同网段可以访问。
+
+
+
+因为docker的桥接模式修改宿主机上的路由表，A其实可以访问到B，但是得不到B的应答。
+
+A的应答会根据**docker0**接口的网关，发送到对应ip的docker容器，而不会到B。
+
+可以使用 在宿主机上面 **traceroute B的ip**
+
+
+
 #  docker重新分配网桥Ip
 
 - stop and clear docker container  `docker stop $(docker ps -aq)   docker rm $(docker ps -aq)`
