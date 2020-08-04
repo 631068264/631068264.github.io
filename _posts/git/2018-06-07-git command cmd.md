@@ -7,7 +7,7 @@ categories:
 ---
 
 # 删除远程分支
-```
+```shell
 git push origin --delete <branchName>
 
 git show <tag-name>
@@ -15,11 +15,13 @@ git tag                            # see tag lists
 git push origin <tag-name>         # push a single tag
 git push --tags                    # push all local tags
 git push origin --delete tag <tagname>
+
+git branch | grep -v "master" | xargs git branch -D # GIT本地删除除master以外所有分支
 ```
 
 [如何在 Git 里撤销(几乎)任何操作](http://blog.jobbole.com/87700/)
 
-```
+```shell
 新增
 git remote add origin <address>
 

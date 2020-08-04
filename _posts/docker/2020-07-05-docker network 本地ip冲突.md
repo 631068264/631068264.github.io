@@ -37,6 +37,14 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' con
 
 
 
+# 宿主机网络
+
+在使用 Docker 时，要注意平台之间实现的差异性，如 Docker For Mac 的实现和标准 Docker 规范有区别，Docker For Mac 的 Docker Daemon 是运行于虚拟机 (xhyve) 中的，而不是像 Linux 上那样作为进程运行于宿主机，因此 Docker For Mac 没有 docker0 网桥，不能实现 host 网络模式，host 模式会使 Container 复用 Daemon 的网络栈 (在 xhyve 虚拟机中)，而不是与 Host 主机网络栈
+
+
+
+
+
 
 
 # 现象原理

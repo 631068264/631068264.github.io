@@ -30,5 +30,7 @@ description: 资料库 收藏夹 力量之源
 - [regex](https://regex101.com/)
 - [编码](http://web.chacuo.net/charseturlencode)
 - [Git](https://github.com/k88hudson/git-flight-rules/blob/master/README_zh-CN.md)
-- [Linux 速查](https://github.com/jaywcjlove/linux-command)
 - [RGB颜色值与十六进制颜色码](http://www.sioe.cn/yingyong/yanse-rgb-16/)
+- [shell cmd](https://explainshell.com/)
+- [crontab](https://crontab.guru/)
+
