@@ -57,3 +57,35 @@ ZAB（ZooKeeper Atomic Broadcast 原子广播）
 集群中已经存在一个Leader服务器在负责进行消息广播，那么新加人的服务器就会自觉地进人数据恢复模式：
 找到Leader所在的服务器，并与其进行数据同步，然后一起参与到消息广播流程中去。
 
+
+
+# example
+
+ssl zk client
+
+```shell
+export CLIENT_JVMFLAGS="
+-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty
+-Dzookeeper.client.secure=true
+-Dzookeeper.ssl.keyStore.location=path.keystore.jks
+-Dzookeeper.ssl.keyStore.password=xxxx
+-Dzookeeper.ssl.trustStore.location=path.truststore.jks
+-Dzookeeper.ssl.trustStore.password=xxxxxx
+
+./bin/zkCli.sh -server localhost:2281
+```
+
+
+
+op
+
+```shell
+create /path "data"
+get /path
+set /path "data"
+ls /path
+rmr /path
+```
+
+
+
