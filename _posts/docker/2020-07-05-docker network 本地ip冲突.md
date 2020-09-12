@@ -88,3 +88,36 @@ A的应答会根据**docker0**接口的网关，发送到对应ip的docker容器
 - restart other container
 
 
+
+# 解决方案
+
+
+
+不使用 bridge 网络模式，改用 host 或 none，这样不会创建额外的网卡。
+
+```dockerfile
+version: '3'
+
+services:
+  xxxx:
+    image: xxx
+    command: xxxx
+    network_mode: host
+    privileged: true
+    restart: on-failure
+```
+
+
+
+
+
+将 docker0 的网段指定到 127.1.1.5/30 或类似不会和用户网络冲突的地址。
+编辑 **/etc/docker/daemon.json**：
+
+```json
+{
+ "bip": "127.1.1.5/30"
+}
+```
+
+然后 systemctl restart docker
