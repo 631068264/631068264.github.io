@@ -76,7 +76,7 @@ optional_source \ n
 ```
 
 Example
-```
+```json
 {"index":{"_id":"971"}}
 {"account_number":971,"balance":22772,"firstname":"Gabrielle","lastname":"Reilly","age":32,"gender":"F","address":"964 Tudor Terrace","employer":"Blanet","email":"gabriellereilly@blanet.com","city":"Falmouth","state":"AL"}
 ```
@@ -157,7 +157,6 @@ offset 0 limit x
 }
 ```
 
-
 **title**= and **content**= and **status** contains the exact word and **publish_date** field contains a date from 1 Jan 2015
 
 ```
@@ -227,3 +226,103 @@ search for documents that contain "jakarta apache" but not "Apache Lucene"
 
 - [spark support](https://www.elastic.co/guide/en/elasticsearch/hadoop/current/spark.html#spark)
 
+
+
+
+
+```json
+input {
+    stdin {
+    }
+    jdbc {
+      # mysql相关jdbc配置
+      jdbc_connection_string => "jdbc:mysql://127.0.0.1:3306/loh"
+      jdbc_user => "root"
+      jdbc_password => "wuyuxi08"
+
+      # jdbc连接mysql驱动的文件目录，可去官网下载:https://dev.mysql.com/downloads/connector/j/
+      jdbc_driver_library => "/Users/wyx/project/docker-elk/logstash/mysql-connector-java-8.0.21.jar"
+      # the name of the driver class for mysql
+      jdbc_driver_class => "com.mysql.jdbc.Driver"
+      jdbc_paging_enabled => "true"
+      #jdbc_page_size => "50000"
+      use_column_value => true
+
+      # mysql文件, 也可以直接写SQL语句在此处，如下：
+      # statement => "SELECT * from Table_test;"
+      # statement_filepath => "C:/setup/logstash-7.0.1/config/myconfig/jdbc.sql"
+      # statement => "SELECT * FROM table WHERE id >= :sql_last_value"
+      statement => "SELECT * FROM suricata_rule;"
+
+      # 这里类似crontab,可以定制定时操作，比如每10分钟执行一次同步(分 时 天 月 年)
+      # schedule => "*/5 * * * *"
+      # type => "jdbc"
+
+      # 是否记录上次执行结果, 如果为真,将会把上次执行到的 tracking_column 字段的值记录下来,保存到 last_run_metadata_path 指定的文件中
+      record_last_run => "true"
+
+      # 是否需要记录某个column 的值,如果record_last_run为真,可以自定义我们需要 track 的 column 名称，此时该参数就要为 true. 否则默认 track 的是 timestamp 的值.
+      use_column_value => "true"
+
+      # 如果 use_column_value 为真,需配置此参数. track 的数据库 column 名,该 column 必须是递增的. 一般是mysql主键
+      tracking_column => "id"
+
+      last_run_metadata_path => "/Users/wyx/project/docker-elk/logstash/mysqlconf/last_id"
+
+      # 是否清除 last_run_metadata_path 的记录,如果为真那么每次都相当于从头开始查询所有的数据库记录
+      clean_run => "false"
+
+      # 是否将 字段(column) 名称转小写
+      lowercase_column_names => "false"
+
+      columns_charset => {
+        "message"=> "UTF-8"
+        "name"=> "UTF-8"
+      }
+    }
+}
+
+# 此处我不做过滤处理,如果需要，也可参考elk安装那篇
+filter {}
+
+output {
+    # 输出到elasticsearch的配置
+    # 注意这里对type判断，若加载多个配置文件，要有这个判断才不会互相影响
+    
+     elasticsearch {
+      hosts => ["127.0.0.1:9200"]
+      index => "suricata_rule"
+
+          # 将"_id"的值设为mysql的autoid字段
+          # 注意这里的id，如果多个表输出到同一个index，它们的id有重复的，则这里的 document_id 要修改成不重复的，否则会覆盖数据
+       document_id => "%{id}"
+       template_overwrite => true
+    }
+    
+    # 这里输出调试，正式运行时可以注释掉
+    stdout {
+        codec => json_lines
+    }
+}
+```
+
+
+
+
+
+# search
+
+
+
+```json
+{
+  "query": {
+    "multi_match" : {
+      "query":    "guide", 
+      "fields": [ "title", "summary" ] 
+    }
+  }
+}
+```
+
+title or  summary  contains kw
