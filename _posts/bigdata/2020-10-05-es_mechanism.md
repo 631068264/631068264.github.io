@@ -1,7 +1,7 @@
 ---
 layout:     post
 rewards: false
-title:  es知识1
+title:  es机制内部原理
 categories:
     - big data
 tags:
