@@ -3,7 +3,7 @@ layout:     post
 rewards: false
 title:  es机制内部原理
 categories:
-    - big data
+    - es
 tags:
     - big data
 ---

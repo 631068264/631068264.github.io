@@ -3,7 +3,7 @@ layout:     post
 rewards: false
 title:  elasticsearch
 categories:
-    - big data
+    - es
 tags:
     - big data
 ---
