@@ -109,7 +109,7 @@ tags:
 
 
 
-# 分片机制
+# 分片机制 写入原理
 
 [ES内部分片处理机制](https://my.oschina.net/LucasZhu/blog/1542850)
 
@@ -138,6 +138,19 @@ refresh后才数据会被搜索到
 ## flush
 
 ![image-20201004232216254](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjdpr3557sj31pu0u01as.jpg)
+
+## 总结
+### 插入
+
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjx1ldd79kj30w00hyq3o.jpg)
+
+**写入操作的延时**就等于latency = Latency(Primary Write) + Max(Replicas Write)。只要有副本在，写入延时最小也是两次单Shard的写入时延总和，写入效率会较低。
+
+Elasticsearch是先写内存，最后才写TransLog，一种可能的原因是Lucene的内存写入会有很复杂的逻辑，很容易失败，比如分词，字段长度超过限制等，比较重，为了避免TransLog中有大量无效记录，减少recover的复杂度和提高速度，所以就把写Lucene放在了最前面。二是写Lucene内存后，并不是可被搜索的，需要通过Refresh把内存的对象转成完整的Segment后，然后再次reopen后才能被搜索，一般这个时间设置为1秒钟，导致写入Elasticsearch的文档，最快要1秒钟才可被从搜索到
+
+### update
+
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjx1vgeal8j31400g7go8.jpg)
 
 
 
