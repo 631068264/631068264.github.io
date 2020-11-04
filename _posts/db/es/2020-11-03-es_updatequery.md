@@ -53,5 +53,10 @@ script.max_compilations_rate: xxx/5m
     }
   ```
 
-  
 
+
+解决方法
+
+- 调整`script.max_compilations_rate` 参数
+- 使用params参数来传递参数
+- stored script 预先存储script到es
