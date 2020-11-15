@@ -1,7 +1,7 @@
 ---
 layout:     post
 rewards: false
-title:  es stat
+title:  es 数据类型
 categories:
     - es
 tags:

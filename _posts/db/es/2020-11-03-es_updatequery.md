@@ -1,7 +1,7 @@
 ---
 layout:     post
 rewards: false
-title:  es stat
+title:  es 坑
 categories:
     - es
 tags:
@@ -60,3 +60,92 @@ script.max_compilations_rate: xxx/5m
 - 调整`script.max_compilations_rate` 参数
 - 使用params参数来传递参数
 - stored script 预先存储script到es
+
+
+
+# Painless script function return type
+
+
+
+```
+ctx._source.xx_time = Math.max(ctx._source.xx_time, params.xx_time)
+```
+
+传入的参数都是long类型，返回却是double
+
+> Even though Java provides several overloaded `Math.max()` methods for `long`, `float` and `double`, Painless only provides the one for `double`, probably because all other types (i.e. `long` and `float`) can be upcast to `double`.
+
+ [Painless Script Math.max change my data type](https://stackoverflow.com/questions/64690956/painless-script-math-max-change-my-data-type)
+
+
+
+# ES 强转类型
+
+[coerce](https://www.elastic.co/guide/en/elasticsearch/reference/current/coerce.html#coerce)
+
+> “5”，5.0 强转成 5   "false" -> false
+
+因为es这个特性mapping **设置了数据类型约等于没用**，脏数据进去了**照样可以保存，不报错**，**放进去后取出来还是原来脏数据**。go这种强类型的语言可以在测试时检查到异常，使用Python的话会是灾难。
+
+要阻止这个傻逼特性
+
+```console
+"index.mapping.coerce": false
+```
+
+[Boolean 类型也要留意](https://www.elastic.co/guide/en/elasticsearch/reference/current/boolean.html) 
+
+
+
+# must 和 should 同时使用 should 失效
+
+要想must 和 should同时有用，不能同级。should用bool包起来放在must下级
+
+
+
+**错误写法**
+
+```json
+{
+    "query":{
+        "bool":{
+            "must":[
+                {"term":{"a":"1"}}
+            ],
+            "should":[
+                {
+                    "match":{
+                        "content":"xxxx"
+                    }
+                }
+            ]
+        }
+    }
+}
+```
+
+**正确写法**
+
+```json
+{
+    "query":{
+        "bool":{
+            "must":[
+                {"term":{"a":"1"}}
+                {
+                    "bool":{
+                        "should":[
+                            {
+                                "match":{
+                                    "content":"xxxx"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
+```
+
