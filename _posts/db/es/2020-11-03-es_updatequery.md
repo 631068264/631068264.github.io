@@ -149,3 +149,163 @@ ctx._source.xx_time = Math.max(ctx._source.xx_time, params.xx_time)
 }
 ```
 
+#  go uint8 数组 存放es short数组 报错
+
+因为[go 里面byte是uint8的别名](https://golang.org/pkg/builtin/#byte)
+
+`json.Marshal`把`[]uint8`当成`[]byte`然后会编码成**base64 string**，导致es报错
+
+> failed to parse field [xxx] of type [short] in document with id 'xxx'. Preview of field's value: 'AQ=='
+
+**用其他数据类型替代**
+
+https://stackoverflow.com/questions/14177862/how-to-marshal-a-byte-uint8-array-as-json-array-in-go/14178407
+
+
+
+# es mapping 不能直接update
+
+```shell
+ES_URL="127.0.0.1:9200/"
+JSON_HEADER="Content-Type: application/json"
+
+function es_config() {
+    curl -X PUT $ES_URL$1 -H "$JSON_HEADER" -d "$2"
+}
+function es_del_index() {
+    curl -X DELETE $ES_URL$1
+}
+
+function es_reindx() {
+  	curl -X PUT $ES_URL_reindex -H "$JSON_HEADER" -d "$1"
+}
+es_config "xxx" '
+{
+  "mappings": {
+    "properties": {
+      "ip": { "type": "keyword"},
+      "delete_time": { "type": "long" }
+    }
+  }
+}'
+
+# add field
+es_config "xxx/_mapping" '
+{
+    "properties":{
+        "detection_engine":{
+            "type":"short"
+        },
+        "threat_tag":{
+            "type":"keyword"
+        }
+    }
+}
+'
+```
+
+修改index 属性
+
+```shell
+# 改reindex
+
+es_config "new_index" '
+{
+  "mappings": {
+    "properties": {
+      "priority": { "type": "keyword"}
+    }
+  }
+}'
+
+es_reindx '
+{
+  "source": {
+    "index": "old_index"
+  },
+  "dest": {
+    "index": "new_index"
+  }
+}
+'
+
+es_del_index "old_index"
+
+
+es_reindx '
+{
+  "source": {
+    "index": "old_index"
+  },
+  "dest": {
+    "index": "new_index"
+  }
+}
+'
+
+# 重建index
+es_config "old_index" '
+{
+  "mappings": {
+    "properties": {
+      "priority": { "type": "keyword"}
+    }
+  }
+}'
+
+es_reindx '
+{
+  "source": {
+    "index": "new_index"
+  },
+  "dest": {
+    "index": "old_index"
+  }
+}
+'
+
+es_del_index "new_index"
+
+```
+
+## 别名  alias
+
+能非常优雅的解决两个索引无缝切换的问题 [es alias doc](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/indices-add-alias.html)
+
+```
+PUT /my-index-000001/_alias/alias1
+```
+
+- 在一个运行中的es集群中无缝的切换一个索引到另一个索引上
+
+- 分组多个索引，比如按月创建的索引，我们可以通过别名构造出一个最近3个月的索引
+
+- 查询一个索引里面的部分数据构成一个类似数据库的视图（views）可以用filter
+
+  ```
+  PUT /users/_alias/user_12
+  {
+    "routing" : "12",
+    "filter" : {
+      "term" : {
+        "user_id" : 12
+      }
+    }
+  }
+  ```
+
+
+
+### 索引别名切换
+
+```
+POST /_aliases
+{
+    "actions": [
+        { "remove": { "index": "my_index_v1", "alias": "my_index" }},
+        { "add":    { "index": "my_index_v2", "alias": "my_index" }}
+    ]
+}
+```
+
+顺序执行的，先解除my_index_v1的别名，然后给my_index_v2添加新别名，my_index_v1和my_index_v2现在想通过索引别名来实现无缝切换

@@ -208,3 +208,105 @@ int right_bound(int[] nums, int target) {
 
 # 活动窗口
 
+```c
+void slidingWindow(string s, string t) {
+    unordered_map<char, int> need, window;
+    for (char c : t) need[c]++;
+
+    int left = 0, right = 0;
+    int valid = 0; 
+    while (right < s.size()) {
+        // c 是将移入窗口的字符
+        char c = s[right];
+        // 右移窗口
+        right++;
+        // 进行窗口内数据的一系列更新
+        ...
+
+        /*** debug 输出的位置 ***/
+        printf("window: [%d, %d)\n", left, right);
+        /********************/
+
+        // 判断左侧窗口是否要收缩
+        while (window needs shrink) {
+            // d 是将移出窗口的字符
+            char d = s[left];
+            // 左移窗口
+            left++;
+            // 进行窗口内数据的一系列更新
+            ...
+        }
+    }
+}
+```
+
+- 当移动 `right` 扩大窗口，即加入字符时，应该更新哪些数据？
+
+- 什么条件下，窗口应该暂停扩大，开始移动 `left` 缩小窗口？
+
+- 当移动 `left` 缩小窗口，即移出字符时，应该更新哪些数据？
+
+- 我们要的结果应该在扩大窗口时还是缩小窗口时进行更新？
+
+```python
+def lengthOfLongestSubstring(self, seq: str) -> int:
+  if not seq:
+    return 0
+  left = 0
+  res = 0
+  win = defaultdict(int)
+  for right in range(0, len(seq)):
+    s = seq[right]
+    win[s] += 1
+
+    while win[s] > 1:
+      d = seq[left]
+      left += 1
+      win[d] -= 1
+      res = max(res, right - left + 1)
+
+      return res
+```
+
+# 区间覆盖问题
+
+- **排序**。常见的排序方法就是按照区间起点排序，或者先按照起点升序排序，若起点相同，则按照终点降序排序。当然，如果你非要按照终点排序，无非对称操作，本质都是一样的。
+
+- **画图**。就是说不要偷懒，勤动手，两个区间的相对位置到底有几种可能，不同的相对位置我们的代码应该怎么去处理。
+
+![image-20201227132759028](https://tva1.sinaimg.cn/large/0081Kckwgy1gm2cmna2bwj317s0l4485.jpg)
+
+![image-20201227132902760](https://tva1.sinaimg.cn/large/0081Kckwgy1gm2cnp8vxoj31340ky79q.jpg)
+
+```python
+    def removeCoveredIntervals(self, intervals: List[List[int]]) -> int:
+        # Sort by start point.
+        # If two intervals share the same start point
+        # put the longer one to be the first.
+        intervals.sort(key=lambda x: (x[0], -x[1]))
+        count = 0
+
+        prev_end = 0
+        for _, end in intervals:
+            # if current interval is not covered
+            # by the previous one
+            if end > prev_end:
+                count += 1
+                prev_end = end
+
+        return count
+
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        if len(intervals) == 0:
+            return []
+
+        intervals.sort(key=lambda x: (x[0], -x[1]))
+        results = []
+        for left, right in intervals:
+            if not results or results[-1][1] < left:
+                results.append([left, right])
+            else:
+                results[-1][1] = max(results[-1][1], right)
+        return results
+```
+
