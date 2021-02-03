@@ -57,6 +57,70 @@ for 状态1 in 状态1的所有取值：
   `dp(n)` 的定义：输入一个目标金额 `n`，返回凑出目标金额 `n` 的最少硬币数量。
 
   
+  
+  ```python
+      def rob3(self, root: TreeNode) -> int:
+          """
+          二叉树数据
+          :param nums:
+          :return:
+          """
+          tree_res = {}
+          if not root:
+              return 0
+  
+          if not root.right and not root.left:
+              return root.val
+  
+          def _rob(node: TreeNode) -> int:
+              if not node:
+                  return 0
+              if node in tree_res:
+                  return tree_res[node]
+              #  选子
+              choice_son = _rob(node.right) + _rob(node.left)
+              # parent
+              choice_parent = node.val + (0 if node.right is None else _rob(node.right.left) + _rob(node.right.right)) + (
+                  0 if node.left is None else _rob(node.left.left) + _rob(node.left.right))
+  
+              res = max(choice_parent, choice_son)
+              tree_res[node] = res
+              return res
+  
+          return _rob(root)
+        
+        
+       def rob2(self, nums: List[int]) -> int:
+          """
+          环形数据
+          :param nums:
+          :return:
+          """
+  
+          if not nums:
+              return 0
+          size = len(nums)
+          if size == 1:
+              return nums[0]
+  
+          def _get_dp(nums: List[int]) -> int:
+              size = len(nums)
+              if size == 1:
+                  return nums[0]
+              dp = [0] * size
+              dp[0] = nums[0]
+              dp[1] = max(nums[0], nums[1])
+              for i in range(2, size):
+                  dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])
+  
+              return dp[size - 1]
+  
+          return max(_get_dp(nums[: - 1]), _get_dp(nums[1:]))
+  ```
+  
+  
+  
+  
 
 # 回溯算法
 
