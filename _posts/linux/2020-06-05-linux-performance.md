@@ -136,6 +136,32 @@ swap交换往往会带来磁盘IO的大量消耗，严重影响到系统正常�
 
 
 
+# tcp连接
+
+获取tcp状态数量
+
+```shell
+netstat -n| awk '/^tcp/ {++S[$NF]} END {for(a in S) print a,S[a]}'
+```
+
+![](https://tva1.sinaimg.cn/large/008eGmZEgy1goqkn3plpmj31hc0u041x.jpg)
+
+![](https://tva1.sinaimg.cn/large/008eGmZEgy1goqklzidoqj31860megmm.jpg)
+
+
+
+![](https://tva1.sinaimg.cn/large/008eGmZEgy1goqkm7dhh3j314s0mwt9y.jpg)
+
+- LISTENING 服务启动处于侦听状态
+- ESTABLISHED 建立连接。表示两台机器正在通信
+- CLOSE_WAIT **对方**主动关闭连接或者网络异常导致连接中断
+- TIME_WAIT  **我方**主动调用close()断开连接，收到对方确认后状态变为TIME_WAIT
+
+## 超时重传
+
+
+
+
 
 
 # 机器参数

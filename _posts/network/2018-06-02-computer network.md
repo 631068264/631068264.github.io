@@ -62,6 +62,26 @@ tags:
 四次挥手
 ![](https://tva3.sinaimg.cn/large/006tKfTcgy1g1kl4x2guzj314s0mwdh6.jpg)
 
+## 超时重传 重传策略
+
+![](https://tva1.sinaimg.cn/large/008eGmZEgy1goroim2gy8j31gu0u0n1a.jpg)
+
+![image-20210321180058626](https://tva1.sinaimg.cn/large/008eGmZEgy1gorokjnjivj31ic0u01ed.jpg)
+
+![](https://tva1.sinaimg.cn/large/008eGmZEgy1goromfchllj31j00u0wik.jpg)
+
+
+
+## 拥塞控制
+
+![image-20210321181947219](https://tva1.sinaimg.cn/large/008eGmZEgy1gorp445nsuj31ir0u0hdt.jpg)
+
+![image-20210321182411996](https://tva1.sinaimg.cn/large/008eGmZEgy1gorp8pd7l4j31g00u01kx.jpg)
+
+![image-20210321183018930](https://tva1.sinaimg.cn/large/008eGmZEgy1gorpf2lgayj31gn0u0ayx.jpg)
+
+
+
 ![](https://tva1.sinaimg.cn/large/006tKfTcgy1g1kl54huhaj31ca0eytab.jpg)
 
 # 应用层
