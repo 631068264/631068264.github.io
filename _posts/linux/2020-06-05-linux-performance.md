@@ -153,9 +153,29 @@ netstat -n| awk '/^tcp/ {++S[$NF]} END {for(a in S) print a,S[a]}'
 ![](https://tva1.sinaimg.cn/large/008eGmZEgy1goqkm7dhh3j314s0mwt9y.jpg)
 
 - LISTENING 服务启动处于侦听状态
+
 - ESTABLISHED 建立连接。表示两台机器正在通信
+
 - CLOSE_WAIT **对方**主动关闭连接或者网络异常导致连接中断
+
 - TIME_WAIT  **我方**主动调用close()断开连接，收到对方确认后状态变为TIME_WAIT
+
+  TIME_WAIT 是主动关闭链接时形成的，等待2MSL时间，约4分钟。主要是防止最后一个ACK丢失。  
+
+why 2MSL
+
+- 确保最后一个确认报文能够到达。如果没能到达，服务端就会重发FIN请求释放连接。等待一段时间没有收到重发就说明服务的已经CLOSE了。如果有重发，则客户端再发送一次LAST ack信号
+- 确保当前连接所产生的所有报文都从网络中消失，使得下一个新的连接不会出现旧的连接请求报文
+
+因为CLOSE_WAIT很多
+
+表示说要么是你的应用程序写的有问题，没有合适的关闭socket；要么是说，你的服务器CPU处理不过来（CPU太忙）或者你的应用程序一直睡眠到其它地方(锁，或者文件I/O等等)，你的应用程序获得不到合适的调度时间，造成你的程序没法真正的执行close操作。
+
+
+
+
+
+
 
 ## 超时重传
 
