@@ -148,6 +148,44 @@ netstat -n| awk '/^tcp/ {++S[$NF]} END {for(a in S) print a,S[a]}'
 
 ![](https://tva1.sinaimg.cn/large/008eGmZEgy1goqklzidoqj31860megmm.jpg)
 
+**我们看一下系统默认是如何控制连接建立超时时间的？**
+
+TCP三次握手的第一个SYN报文没有收到ACK，系统会自动对SYN报文进行重试，
+
+最大重试次数由系统参数`net.ipv4.tcp_syn_retries`控制，$$\mathrm{最大超时时间}=2^{x+1}-1\;(x是net.ipv4.tcp\_syn\_etries)$$，默认值为6。初始RTO为1s，如果一直收不到SYN ACK，依次等待1s、2s、4s、8s、16s、32s发起重传，最后一次重传等待64s后放弃，最终在127s后才会返回ETIMEOUT超时错误。
+
+建议根据整个公司的业务场景，调整系统参数进行兜底。该参数设为3，即最大15s左右可返回超时错误。   
+
+
+
+提到网络异常检测，大家可能首先想到的是**TCP Keepalive**。系统TCP Keepalive相关的三个参数为
+
+- net.ipv4.tcp_keepalive_time 7200s 如果7200s没有收到对端的数据，就开始发送TCP Keepalive报文
+
+- net.ipv4.tcp_keepalive_intvl 75s  如果75s内，没有收到响应，会继续重试
+- net.ipv4.tcp_keepalive_probes  9 直到重试9次都失败后，返回应用层错误信息
+
+为什么需要实现应用层的心跳检查呢？系统的TCP Keepalive满足不了需求吗？是的，系统的TCP Keepalive只能作为一个最基本的防御方案，而满足不了高稳定性、高可靠性场景的需求。原因有如下几点：
+
+- TCP Keepalive是扩展选项，不一定所有的设备都支持；
+- TCP Keepalive报文可能被设备特意过滤或屏蔽，如运营商设备；
+- TCP Keepalive无法检测应用层状态，如进程阻塞、死锁、TCP缓冲区满等情况；
+- TCP Keepalive容易与TCP重传控制冲突，从而导致失效。
+
+**实现应用层心跳需要考虑如下点**
+
+- 心跳间隔不能太小也不能太大。间隔太小心可能会对轻微抖动过于敏感，造成过度反应，反而会影响稳定性，同时也有一定的性能开销；间隔太大会导致异常检测延迟比较高。可以严格地定期发送心跳，也可以一段时间内没有收到对端数据才发起心跳。建议心跳间隔为5s~20s。
+- 设置连续失败阈值，避免瞬间抖动造成误判等。建议连续失败阈值为2~5。
+- 不要使用独立的TCP连接进行心跳检查，因为不同连接的网络路径、TCP缓冲区等都不同，无法真实反映业务通信连接的真实状态。
+
+**大量客户端可能会同时发起TCP重连及进行应用层请求**
+
+- 当网络异常恢复后，大量客户端可能会同时发起TCP重连及进行应用层请求，可能会造成服务端过载、网络带宽耗尽等问题，从而导致客户端连接与请求处理失败，进而客户端触发新的重试。如果没有退让与窗口抖动机制，该状况可能会一直持续下去，很难快速收敛。
+
+- 建议增加指数退让，如1s、2s、4s、8s...，同时必须限制最大退让时间（如64s），否则重试等待时间可能越来越大，同样导致无法快速收敛。同时，为了降低大量客户端同时建连并请求，也需要增加窗口抖动，窗口大小可以与退让等待时间保持一致，如: $$nextRetryWaitTime\;=\;backOffWaitTime\;+\;rand(0.0,\;1.0)\;\ast\;backOffWaitTime$$
+
+- 在进行网络异常测试或演练时，需要把网络异常时间变量考虑进来，因为不同的时长，给应用带来的影响可能会完全不同。
+
 
 
 ![](https://tva1.sinaimg.cn/large/008eGmZEgy1goqkm7dhh3j314s0mwt9y.jpg)
@@ -162,16 +200,111 @@ netstat -n| awk '/^tcp/ {++S[$NF]} END {for(a in S) print a,S[a]}'
 
   TIME_WAIT 是主动关闭链接时形成的，等待2MSL时间，约4分钟。主要是防止最后一个ACK丢失。  
 
-why 2MSL
+- TCP连接主动关闭方存在持续2MSL的TIME_WAIT状态；
+- TCP连接由是由四元组<本地地址，本地端口，远程地址，远程端口>来确定的
+
+**why 2MSL**
 
 - 确保最后一个确认报文能够到达。如果没能到达，服务端就会重发FIN请求释放连接。等待一段时间没有收到重发就说明服务的已经CLOSE了。如果有重发，则客户端再发送一次LAST ack信号
 - 确保当前连接所产生的所有报文都从网络中消失，使得下一个新的连接不会出现旧的连接请求报文
 
-因为CLOSE_WAIT很多
+**TIME_WAIT存在的意义主要有两点**：
+
+1. 维护连接状态，使TCP连接能够可靠地关闭。如果连接主动关闭端发送的最后一条ACK丢失，连接被动关闭端会重传FIN报文。因此，主动关闭方必须维持连接状态，以支持收到重传的FIN后再次发送ACK。如果没有TIME_WAIT，并且最后一个ACK丢失，那么此时被动关闭端还会处于LAST_ACK一段时间，并等待重传；如果此时主动关闭方又立即创建新TCP连接且恰好使用了相同的四元组，连接会创建失败，会被对端重置。
+2. 等待网络中所有此连接老的重复的、走失的报文消亡，避免此类报文对新的相同四元组的TCP连接造成干扰，因为这些报文的序号可能恰好落在新连接的接收窗口内。
+
+因为每个TCP报文最大存活时间为MSL，一个往返最大是2*MSL，所以TIME_WAIT需要等待2MSL。
+
+当进程关闭时，进程会发起连接的主动关闭，连接最后会进入TIME_WAIT状态。当新进程bind监听端口时，就会报错，因为有对应本地端口的连接还处于TIME_WAIT状态。
+
+实际上，**只有当新的TCP连接和老的TCP连接四元组完全一致，且老的迷走的报文序号落在新连接的接收窗口内时，才会造成干扰**。为了使用TIME_WAIT状态的端口，现在大部分系统的实现都做了相关改进与扩展：
+
+- 新连接SYN告知的初始序列号，要求一定要比TIME_WAIT状态老连接的序列号大，可以一定程度保证不会与老连接的报文序列号重叠。
+- 开启TCP timestamps扩展选项后，新连接的时间戳要求一定要比TIME_WAIT状态老连接的时间戳大，可以保证老连接的报文不会影响新连接。
+
+因此，在开启了TCP timestamps扩展选项的情况下（net.ipv4.tcp_timestamps = 1），可以放心的设置SO_REUSEADDR选项，**支持程序快速重启**。
+
+> 注意不要与**net.ipv4.tcp_tw_reuse**系统参数混淆，该参数仅在客户端调用**connect创建连接时才生效**，可以使用TIME_WAIT状态超过1秒的端口（防止最后一个ACK丢失）
+>
+> 而**SO_REUSEADDR是在bind端口时生效**，一般用于服务端监听时，可以使用本地非LISTEN状态的端口（另一个端口也必须设置SO_REUSEADDR），不仅仅是TIME_WAIT状态端口。
+
+**过多危害**
+
+- socket的TIME_WAIT状态结束之前，该socket所占用的本地端口号将一直无法释放。
+- 在高并发（每秒几万qps）并且采用短连接方式进行交互的系统中运行一段时间后，系统中就会存在大量的time_wait状态，如果time_wait状态把系统所有可用端口都占完了且尚未被系统回收时，就会出现无法向服务端创建新的socket连接的情况。此时系统几乎停转，任何链接都不能建立。
+- 大量的time_wait状态也会系统一定的fd，内存和cpu资源，当然这个量一般比较小，并不是主要危害
+
+**优化TIME_WAIT过多**
+
+
+- 调整系统内核参数
+
+  ```
+  net.ipv4.tcp_tw_reuse = 1 表示开启重用。允许将TIME-WAIT sockets重新用于新的TCP连接，默认为0，表示关闭；
+  net.ipv4.tcp_tw_recycle = 1 表示开启TCP连接中TIME-WAIT sockets的快速回收，默认为0，表示关闭。
+  ```
+
+  `sysctl -p`命令，来激活上面的设置永久生效
+
+- 短链接为长链接
+
+  - client到nginx的连接是长连接
+
+    ​	**默认情况下，nginx已经自动开启了对client连接的keep alive支持（同时client发送的HTTP请求要求keep alive）**。一般场景可以直接使用，但是对于一些比较特殊的场景，还是有必要调整个别参数（keepalive_timeout和keepalive_requests）。
+
+    ```
+    http {
+        keepalive_timeout  120s 120s;
+        keepalive_requests 10000;
+    }
+    ```
+
+    - keepalive_timeout: 第一个参数：设置keep-alive客户端连接在服务器端保持开启的超时值（默认75s）；值为0会禁用keep-alive客户端连接；
+    - 第二个参数：可选、在响应的header域中设置一个值“Keep-Alive: timeout=time”；通常可以不用设置；
+	  
+  - 保持和server的长连接
+  
+    为了让nginx和后端server（nginx称为upstream）之间保持长连接，典型设置如下：（默认nginx访问后端都是用的短连接(HTTP1.0)一个请求来了，Nginx 新开一个端口和后端建立连接，后端执行完毕后主动关闭该链接）
+  
+    upstream已经支持keep-alive的，所以我们可以开启Nginx proxy的keep-alive来减少tcp连接
+  
+    ```
+    upstream http_backend {
+     server 127.0.0.1:8080;
+    
+     keepalive 1000;//设置nginx到upstream服务器的空闲keepalive连接的最大数量
+    }
+    
+    server {
+     ...
+    
+    location /http/ {
+     proxy_pass http://http_backend;
+     proxy_http_version 1.1;//开启长链接
+     proxy_set_header Connection "";
+     ...
+     }
+    }
+    
+    ```
+
+
+
+**why CLOSE_WAIT很多**
 
 表示说要么是你的应用程序写的有问题，没有合适的关闭socket；要么是说，你的服务器CPU处理不过来（CPU太忙）或者你的应用程序一直睡眠到其它地方(锁，或者文件I/O等等)，你的应用程序获得不到合适的调度时间，造成你的程序没法真正的执行close操作。
 
+- **响应太慢或者超时设置过小：如果连接双方不和谐，一方不耐烦直接 timeout，另一方却还在忙于耗时逻辑，就会导致 close 被延后**。响应太慢是首要问题，不过换个角度看，也可能是 timeout 设置过小。
 
+
+
+
+
+
+
+每个应用、每个通信协议要有固定统一的监听端口，便于在公司内部形成共识，降低协作成本，提升运维效率。如对于一些网络ACL控制，规范统一的端口会给运维带来极大的便利。
+
+应用监听端口不能在net.ipv4.ip_local_port_range区间内，这个区间是操作系统用于本地端口号自动分配的（bind或connect时没有指定端口号）
 
 
 
