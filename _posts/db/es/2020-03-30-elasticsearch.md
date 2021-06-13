@@ -1,4 +1,5 @@
 ---
+
 layout:     post
 rewards: false
 title:  elasticsearch
@@ -35,6 +36,85 @@ tags:
 
 
 ![](https://tva1.sinaimg.cn/large/00831rSTgy1gdcy6c8agyj311m0istb9.jpg)
+
+# 倒排结构
+
+![](https://tva1.sinaimg.cn/large/008i3skNgy1grfap6dxa5j31hc0tpq4o.jpg)
+
+![](https://tva1.sinaimg.cn/large/008i3skNgy1grfawa0zrsj31q60u0n1l.jpg)
+
+尽量少的读磁盘，有必要把一些数据缓存到内存里。但是整个 **term dictionary** 本身又太大了，无法完整地放到内存里。于是就有了 **term index**
+
+>**term index** 有点像一本字典的大的章节表。比如：
+>
+>A 开头的 term ……………. Xxx 页
+>
+>C 开头的 term ……………. Xxx 页
+>
+>E 开头的 term ……………. Xxx 页
+
+
+
+**Trem index** 
+
+- term index 是一棵 **trie 树**（`字典树`）+ **内存存储**
+
+- 它不存储所有的单词，**只存储单词前缀**
+
+- 进一步节省内存，Lucene 还用了 FST（Finite State Transducers）对 Term Index 做进一步压缩
+- 为 `O(m)`，其中 `m` 为关键字的字符数量，定位**Term dictionary**对应 block 的 offset
+
+**Term dictionary**
+
+- 分 block 存储，同一个 block 上，词项共享(**同一个前缀,都是 Ab 开头的单词就可以把 Ab 省去),节约磁盘空间**
+- 其为**有序**的字典，正常情况，**二分查找**，查询效率 **O(logN)**
+- 定位到最终的 term
+
+**Posting list** 文档id
+
+- 分块差值编码，再对每块进行 bit 压缩存储
+
+  ```
+  [73, 300, 302, 332, 343, 372]
+  ```
+
+  增量编码
+
+  ```
+  [73, 227, 2, 30, 11, 29] # 数据只记录元素与元素之间的增量
+  ```
+
+  用了 FOR(Frame Of Reference) 编码进行压缩
+
+  ![](https://tva1.sinaimg.cn/large/008i3skNgy1grfc8eqp3ij30fp0cmdg6.jpg)
+
+  **快速求交集**
+
+  Roaring Bitmaps
+
+  Lucene Posting List 的每个 Segement 最多放 65536 个文档ID
+
+  **1个id**
+
+  - 使用 bitmap 表示 需要 65536 个 bit，65536/8 = 8192 bytes
+
+  - Integer 数组，只需要 2  = 2 bytes
+
+   文档数量不多的时候，使用 Integer 数组更加节省内存
+
+   当文档数量少于 8192/2=4096 时，用 Integer 数组，否则，用 bitmap。
+
+  ![image-20210612122424083](https://tva1.sinaimg.cn/large/008i3skNgy1grfd9wolyej316g0sidkv.jpg)
+
+  ![image-20210612122327223](https://tva1.sinaimg.cn/large/008i3skNgy1grfd8yq4kfj30zw0u0gr9.jpg)
+
+
+
+- **Frame Of Reference** 是压缩数据，减少磁盘占用空间，所以当我们从磁盘取数据时，也需要一个反向的过程，**即解压**，解压后才有我们文档ID数组，对数据进行处理，**求交集或者并集**，这时候数据是需要放到**内存**进行处理的，更强有力的压缩算法，同时还要有利于快速的求交并集，于是有了**Roaring Bitmaps 算法**。
+
+![](https://tva1.sinaimg.cn/large/008i3skNgy1grfd01nw5aj31vm0pajxk.jpg)
+
+> Mysql 是以 b-tree 排序的方式存储在磁盘上的。检索一个 term 需要**若干次随机 IO** 的磁盘操作。而 Lucene 在 term dictionary 的基础上添加了term index来加速检索，term index 以树的形式缓存在内存中。从 term index 查到对应的 term dictionary 的 block 位置之后，再去磁盘上找 term，大大减少了**磁盘的随机IO次数**。
 
 
 
