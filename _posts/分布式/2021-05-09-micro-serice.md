@@ -3,9 +3,9 @@ layout:     post
 rewards: false
 title:      微服务
 categories:
-    - 微服务
+    - 分布式
 tags:
-    - 微服务
+    - 分布式
 ---
 
 ![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgiqi44j30zk0k00tk.jpg)
