@@ -4,8 +4,6 @@ rewards: false
 title:      微服务
 categories:
     - 分布式
-tags:
-    - 分布式
 ---
 
 ![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgiqi44j30zk0k00tk.jpg)
@@ -74,6 +72,15 @@ tags:
 - 上移、下移
 
   两个相互依赖组件中的交互部分抽象出来形成一个新的组件，而新组件同时包含着原有两个组件的引用，这样就把循环依赖关系剥离出来并上升到一个更高层次的组件中，**通过在两个相互循环依赖的组件之间添加中间层，变循环依赖为间接依赖。**
+
+# 注册中心
+
+- zookeeper
+
+  通过
+
+
+
 
 
 # Backends for frontends 网关
