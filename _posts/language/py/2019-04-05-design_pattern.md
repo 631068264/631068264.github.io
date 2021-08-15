@@ -10,29 +10,39 @@ categories:
 
 23种设计模式，分为三类：创造性 (creational)，结构性(structural)和行为性(behavioral)。
 
+- creational
+
+  创建对象
+
+  Factory,Builder,Prototype,Singleton
+
+- structural
+
+  处理类与对象间的组合
+
+  Adapter,Decorator,Bridge,Facade,flyweight, model-view-controller (MVC), and proxy.
+
+- behavioral
+
+  类与对象交互中的职责分配
+
+  Chain of Responsibility,Command, Observer,State，Interpreter, Strategy, Mememto, Iterator, and Template
+
+  
+
 # creational
 
-creational 当不方便使用`__init__`创建对象时，提供更好的方法
+## Factory
 
-Factory,Builder,Prototype,Singleton
-
-# structural
-Adapter,Decorator,Bridge,Facade,flyweight, model-view-controller (MVC), and proxy.
-
-# behavioral
-Chain of Responsibility,Command, Observer,State，Interpreter, Strategy, Mememto, Iterator, and Template
-
-
-
-# Factory
 简化对象创建过程,将**创建对象的代码与使用它的代码分离**(client 端不知对象是怎样创建的)来降低维护应用程序的复杂性。
 
-## factory method
+###  factory method
 
 输入一些参数到一个单独函数得到想要的对象
 
-- **集中了对象(逻辑上相似的对象)创建**，使得跟踪对象变得更加容易，可以创建多个工厂方法，
+- **集中了对象(逻辑上相似的对象)创建**，使得跟踪对象变得更加容易，可以创建多个工厂方法，屏蔽产品的具体实现，调用者只关心产品的接口。
 - 优化应用性能和内存。工厂方法只有在绝对必要时才能通过创建新对象来提高性能和内存使用率。当我们使用直接类实例化创建对象时，每次创建新对象时都会分配额外的内存
+- 作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式。有一点需要注意的地方就是复杂对象适合使用工厂模式，而**简单对象，特别是只需要通过 new 就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度。**
 
 ```py
 
@@ -70,8 +80,12 @@ def connection_factory(filepath):
     return connector(filepath)
 ```
 
-## abstract factory
+### abstract factory
 抽象工厂是工厂方法的（逻辑）组
+
+是围绕一个超级工厂创建其他工厂。**该超级工厂又称为其他工厂的工厂**。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。
+
+接口是负责创建一个相关对象的工厂，不需要显式指定它们的类。每个生成的工厂都能按照工厂模式提供对象。
 
 - When use abstract factory not factory method
 > 从更简单的工厂方法开始，当工厂方法越来越多的时候
@@ -170,12 +184,16 @@ def main():
 ```
 
 
-# Builder
+## Builder
 
-我们想要创建一个由多个部分组成的对象，并且需要一步一步地完成组合。除非完全创建所有部件，否则该对象不完整。
+我们想要创建一个由多个部分组成的对象，并且需要一步一步地完成组合。使用于**一些基本部件不会变，而其组合经常变化的时候。**
 
 - factory diff
 > 构建器模式在**多个步骤**中创建对象,当工厂模式立即返回创建的对象时，在构建器模式中，客户端代码**显式要求**导向器在需要时返回最终对象
+>
+> 与工厂模式的区别是：**建造者模式更加关注与零件装配的顺序。**
+
+
 
 
 ```python
@@ -243,15 +261,26 @@ if __name__ == "__main__":
 
 ```
 
-# Prototype
+## Prototype
 
 在原有的对象基础上创建对象 copy出两个独立的副本
 
 `copy.deepcopy`
 
+适用：
 
-# Singleton
+- 资源优化场景
+- 类初始化需要消化非常多的资源
+- 性能和安全要求的场景
+- 一个对象多个修改者的场景
+
+
+## Singleton
 需要创建一个且只有一个对象时，它很有用。维护一个全局状态等
+
+**主要解决：**一个全局使用的类频繁地创建与销毁。
+
+**何时使用：**当您想控制实例数目，节省系统资源的时候。
 
 metaclass
 > A metaclass is the class of a class. A class defines how an instance of the class (i.e. an object) behaves while a metaclass defines how a class behaves. A class is an instance of a metaclass.
@@ -267,9 +296,26 @@ class SingletonType(type):
            return cls._instances[cls]
 ```
 
-# Adapter
+# 结构性 structural
+
+## Adapter
 
 解决接口不兼容,在不修改原有类代码的情况下实现新的功能
+
+- 适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
+- 继承或依赖
+
+优点
+
+- 可以让任何两个没有关联的类一起运行。 
+- 提高了类的复用。
+- 增加了类的透明度。 
+- 灵活性好
+
+缺点
+
+- 过多地使用适配器，因此如果不是很有必要，可以不使用适配器，而是直接对系统进行重构。 
+- 适配器不是在详细设计时添加的，而是解决正在服役的项目的问题。
 
 ```python
 class Adapter:
@@ -282,10 +328,13 @@ class Adapter:
         return str(self.obj)
 ```
 
-# Decorator
+## Decorator
+
 动态地给一个对象添加一些额外的职责
 
 对象添加新功能方式： 直接给对象所属的类添加方法，继承，组合，接口（Adapter适配器）
+
+装饰类和被装饰类可以独立发展，不会相互耦合，装饰模式是继承的一个替代模式，装饰模式可以动态扩展一个实现类的功能。
 
 ```python
 class foo(object):
@@ -313,11 +362,14 @@ v.f1()
 v.f2()
 ```
 
-# Bridge
+## Bridge
 
 多个对象共享实现
 
 将抽象部分与它的实现部分分离，使它们都可以独立地变化。
+
+- 实现接口
+
 ```python
 class ResourceContentFetcher(metaclass=abc.ABCMeta):
        """
@@ -332,7 +384,30 @@ class File(ResourceContentFetcher):
           xxx
 ```
 
-# Facade
+## Composite
+
+组合模式（Composite Pattern）
+
+是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。这种类型的设计模式属于结构型模式，它创建了对象组的树形结构。
+
+您想表示对象的部分-整体层次结构（树形结构）。 2、您希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。
+
+**优点：** 1、高层模块调用简单。 2、节点自由增加。
+
+**缺点：**在使用组合模式时，其叶子和树枝的声明都是实现类，而不是接口，违反了依赖倒置原则。
+
+**使用场景：**部分、整体场景，如树形菜单，文件、文件夹的管理。
+
+
+
+
+
+
+
+
+
+## Facade
+
 外观设计模式有助于我们隐藏系统的内部复杂性，并通过简化的界面仅向客户端公开必要的内容
 
 引入facade 将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可移植性。
@@ -357,7 +432,7 @@ class Facade:
 Facade().run()
 ```
 
-# Flyweight
+## Flyweight
 
 对象创建带来的性能和内存占用问题,实现对象复用从而改善资源使用,对象之间引入数据共享来最小化内存使用并提高性能的技术。
 
@@ -399,7 +474,7 @@ if __name__ == '__main__':
     print(id(c1), id(c2))
 ```
 
-# MVC
+## MVC
 
 关注点分离（SoC）原理。 SoC原则背后的想法是将应用程序拆分为不同的部分，其中每个部分都涉及一个单独的问题。
 
@@ -410,7 +485,7 @@ if __name__ == '__main__':
 
 不修改模型的情况下使用多个视图，为了实现模型与视图之间的分离，每个视图通常都需要自己的控制器。如果模型直接与特定视图通信，我们将无法使用多个视图
 
-# Proxy
+## Proxy
 
 代理 访问实际对象之前执行重要操作
 
@@ -493,7 +568,12 @@ print(t.resource)
 ```
 
 
-# Chain of Responsibility
+
+# behavioral
+
+类与对象交互中的职责分配
+
+## Chain of Responsibility
 
 使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。
 将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。
@@ -621,7 +701,7 @@ if __name__ == "__main__":
 
 ```
 
-# Command
+## Command
 
 把一个操作封装成一个对象。命令模式可以控制命令的执行时间和过程，在不同的时刻指定、排列和执行请求，复杂的命令还可以分组
 
@@ -663,7 +743,7 @@ if __name__ == "__main__":
         cmd.undo()
 ```
 
-# Observer
+## Observer
 
 一对多的依赖关系,当一个对象的状态发生改变时, 所有依赖于它的对象都得到通知并被自动更新。e.g 事件驱动
 
@@ -741,7 +821,7 @@ if __name__ == "__main__":
     print(df)
 ```
 
-# State
+## State
 
 面向对象编程（OOP）侧重于维护彼此交互的对象的状态。在解决许多问题时模拟状态转换的非常方便的工具被称为有限状态机
 
@@ -799,7 +879,7 @@ person.sleep()
 print person.is_sleeping                            # True
 ```
 
-# Interpreter
+## Interpreter
 
 给定一个语言，定义它的文法的一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子
 
@@ -810,13 +890,13 @@ print person.is_sleeping                            # True
 效率不是一个关键问题最高效的解释器通常不是通过直接解释语法分析树实现的, 而是首先将它们转换成另一种形式。例如，正则表达式通常被转换成状态机。但即使在这种情况下, 转换器仍可用解释器模式实现, 该模式仍是有用的。
 
 
-# Strategy
+## Strategy
 
 定义一系列的算法,把它们一个个**封装**起来, 并且根据某些条件使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。
 
 每当我们希望能够动态和透明地应用不同的算法时，策略就是可行的方法
 
-# Memento
+## Memento
 对象的内部状态快照
 
 - Memento，一个包含基本状态存储和检索功能的简单对象
@@ -825,7 +905,7 @@ print person.is_sleeping                            # True
 
 `pickle`
 
-# Template
+## Template
 
 该模式侧重于消除代码冗余。我们的想法是，我们应该能够在不改变其结构的情况下重新定义算法的某些部分。
 

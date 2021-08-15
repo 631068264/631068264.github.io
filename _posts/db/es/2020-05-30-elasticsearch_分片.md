@@ -1,4 +1,5 @@
 ---
+
 layout:     post
 rewards: false
 title:  elasticsearch 分片
@@ -32,15 +33,27 @@ tags:
 
 ![](https://tva1.sinaimg.cn/large/008i3skNgy1gr07590g3vj31mm0u0tgj.jpg)
 
-分片过多
+##  分片过多  增加节点 rebalance
 ![](https://tva1.sinaimg.cn/large/008i3skNgy1gr077j7kywj31jf0u0n1c.jpg)
 ![](https://tva1.sinaimg.cn/large/008i3skNgy1gr0783s295j32370u0jwa.jpg)
 
+增加一台服务器，此时shard是如何分配的呢
+
+Rebalance（再平衡），当集群中节点数量发生变化时，将会触发es集群的rebalance，即重新分配shard。Rebalance的原则就是尽量使shard在节点中分布均匀，**primary shard和replica shard不能分配到一个节点上的**，达到负载均衡的目的。
+
 ![image-20210530093202876](https://tva1.sinaimg.cn/large/008i3skNgy1gr078kp9zbj320o0u0to1.jpg)
 
-故障转移
+## 故障转移 集群容灾
 
 ![image-20210530093334113](https://tva1.sinaimg.cn/large/008i3skNgy1gr07a5z51nj31rk0u01kx.jpg)
+
+- primary shard 所在节点发生故障（**red, 因为部分主分片不可用**）
+
+- 当es集群中的master节点发生故障，重新选举master节点。
+- master行驶其分片分配的任务。
+- master会寻找node1节点上的P0分片的replica shard,  replica shard将被提升为primary shard。**这个升级过程是瞬间完成，集群的健康状态为yellow，因为不是每一个replica shard都是active的**。
+
+- R0 也会重新分配，集群变绿
 
 ![](https://tva1.sinaimg.cn/large/008i3skNgy1gr07b6pkmfj32010u0aei.jpg)
 

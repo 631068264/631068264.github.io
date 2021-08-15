@@ -1,4 +1,5 @@
 ---
+
 layout:     post
 rewards: false
 title:      微服务
@@ -6,23 +7,106 @@ categories:
     - 分布式
 ---
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgiqi44j30zk0k00tk.jpg)
+# 是否使用微服务
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgnj3kqj30zk0k0gms.jpg)
+- 组件\代码库升级，改造技术栈
+- 编辑-构建-运行-CI测试慢
+- 不同模块对资源需求(CPU密集型，内存密集型。。)不一样
+- 因为所有模块都在同一个进程中运行，规模庞大，应用程序缺乏故障隔离，容易整个崩溃
+- 可维护性、可扩展性和可测试性。
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgytvt9j30ug0u0gmk.jpg)
+# 扩展方式
 
-- 注册中心：注册并维护远程服务及服务提供者的地址，供服务消费者发现和调用，为保证可用性，通常基于分布式 kv 存储器来实现，比如 zookeeper、etcd 等；
-- 服务框架：用于实现微服务的 RPC 框架，包含服务接口描述及实现方案、向注册中心发布服务等功能，常见的 RPC 框架包括 Spring Cloud、Dubbo、gRPC、 Thrift、go-micro 等；
-- 服务网关：介于客户端与微服务之间的网关层，可以理解为「门卫」的角色，以确保服务提供者对客户端的透明，这一层可以进行反向路由、安全认证、灰度发布、日志监控等前置动作；
-- 服务监控：对服务消费者与提供者之间的调用情况进行监控和数据展示；
-- 服务追踪：记录对每个请求的微服务调用完整链路，以便进行问题定位和故障分析；
-- 服务治理：服务治理就是通过一系列的手段来保证在各种意外情况下，服务调用仍然能够正常进行，这些手段包括熔断、隔离、限流、降级、负载均衡等。
-- 基础设施：分布式消息队列、日志存储、数据库、缓存、文件服务器、搜索集群等，用以提供服务底层的基础数据服务，可以自建，也可以使用阿里云等公有云提供的服务。
+[可伸缩性的艺术](http://theartofscalability.com/)
 
+![image-20210802222315115](https://tva1.sinaimg.cn/large/008i3skNgy1gt2t6ryamnj31eq0u0n1j.jpg)
 
+- X 负载均衡+多实例 （每个副本都可能访问所有数据，缓存需要更多内存才能有效。这种方法的另一个问题是它没有解决增加开发和应用程序复杂性的问题。）
+
+- Z 每个服务器都运行相同的代码副本。于 X 轴缩放。最大的区别是每个服务器只负责数据的一个子集。系统的某些组件负责将每个请求路由到适当的服务器。
+
+  **好处**
+
+  - 每个服务器只处理数据的一个子集。
+  - 这提高了缓存利用率并减少了内存使用和 I/O 流量。
+  - 它还提高了事务可伸缩性，因为请求通常分布在多个服务器上。
+  - 此外，Z 轴缩放改进了故障隔离，因为故障只会使部分数据可访问。
+
+  **坏处**
+
+  - 一个缺点是增加了应用程序的复杂性。
+  - 我们需要实现一个分区方案，这可能很棘手，特别是如果我们需要重新分区数据。
+  - Z 轴缩放的另一个缺点是不能解决增加开发和应用程序复杂性的问题。为了解决这些问题，我们需要应用[Y 轴缩放](https://microservices.io/patterns/microservices.html)。
+
+  ![image-20210802222521824](https://tva1.sinaimg.cn/large/008i3skNgy1gt2t8xgt8rj31lf0u0jvq.jpg)
+
+-  Y 轴缩放将应用程序拆分为多个不同的服务。每个服务负责一个或多个密切相关的功能。有几种不同的方法可以将应用程序分解为服务。
+
+  ![image-20210802222443402](https://tva1.sinaimg.cn/large/008i3skNgy1gt2t8fju26j31h60u0dkm.jpg)
+
+可以先按y轴缩放，具体的某个服务再按x或者z轴缩放
+
+# 概念
+
+微服务架构
+
+![image-20210808110558796](https://tva1.sinaimg.cn/large/008i3skNgy1gt97bxcdicj31l10u077w.jpg)
+
+![image-20210808110617578](https://tva1.sinaimg.cn/large/008i3skNgy1gt97c7kkfsj31n20rmdl4.jpg)
 
 # 服务拆分
+
+通过定义业务能力映射到服务，可能随时间架构改变，好些服务不好拆要合并，服务成长要拆等
+
+![image-20210808111815511](https://tva1.sinaimg.cn/large/008i3skNgy1gt97ontvmdj310h0u0dkg.jpg)
+
+子域拆分
+
+子域和限界上下文
+
+![image-20210808112601572](https://tva1.sinaimg.cn/large/008i3skNgy1gt97wqygmsj321u0tigvf.jpg)
+
+![image-20210808112625079](https://tva1.sinaimg.cn/large/008i3skNgy1gt97x5qyc5j31ao0u0af2.jpg)
+
+
+
+## 拆分原则
+
+单一责任
+
+![image-20210808112910959](https://tva1.sinaimg.cn/large/008i3skNgy1gt9800vo64j324s0myq7x.jpg)
+
+闭包
+
+![image-20210808112944377](https://tva1.sinaimg.cn/large/008i3skNgy1gt980lyc47j32140t07ar.jpg)
+
+## 拆分障碍
+
+- 同步通信网络延迟等造成可用性降低
+
+  - 可以相关服务合并
+  - 异步消息队列
+
+- 服务间数据一致性
+
+  - 2pc
+  - 确保最终一致性
+
+- 上帝类
+
+  - 上帝类是整个程序的全局类
+
+    ![image-20210808123425398](https://tva1.sinaimg.cn/large/008i3skNgy1gt99vxwp7ij31xm0ge44q.jpg)
+
+		![image-20210808124404388](https://tva1.sinaimg.cn/large/008i3skNgy1gt9a5y1dirj320o0nkgu7.jpg)
+
+		![image-20210808124843404](https://tva1.sinaimg.cn/large/008i3skNgy1gt9aasnx3cj31820u00wy.jpg)
+		
+		**每个领域模型中的Order类表示同一个Order业务实体的不同方向**，(简化原始Order类)
+		
+		![image-20210808125540039](https://tva1.sinaimg.cn/large/008i3skNgy1gt9ai0hyz6j322w0ecn2z.jpg)
+
+## 服务拆分
 
 - 以业务模型切入：比如产品，用户，订单为一个模型来切入
 - 演进式拆分：刚开始不要划分太细，可以随着迭代过程来逐步优化
@@ -50,7 +134,7 @@ categories:
 
 
 
-# 依赖消除
+## 依赖消除
 
 ![img](https://tva1.sinaimg.cn/large/008i3skNgy1grcul8azm9j30ml09sgm1.jpg)
 
@@ -64,14 +148,113 @@ categories:
 **消除循环依赖的基本思路**
 
 - 定义服务上下游关系，下游服务可以直接依赖上游服务，反之则不可
+
 - 上游服务的变更对下游服务产生影响需要通过**异步**（消息队列，缓存等）的方式来实现，此时各个微服务之间不再是强一致性，而是基于**事件的最终一致性**
+
 - 服务之间要通过数据 Id（或类 Id，能够唯一代表数据且不变的属性）来进行关联，尽量不做过多的数据冗余
+
 - 一旦需要上游服务调用下游服务才能完成业务时，要考虑是否上游服务缺少业务概念
+
 - 为满足前端逻辑而导致的服务间交互逻辑要放到 BFF（Backend for frontend）中，而不是增加服务间的调用
 
 - 上移、下移
 
   两个相互依赖组件中的交互部分抽象出来形成一个新的组件，而新组件同时包含着原有两个组件的引用，这样就把循环依赖关系剥离出来并上升到一个更高层次的组件中，**通过在两个相互循环依赖的组件之间添加中间层，变循环依赖为间接依赖。**
+
+
+
+# 服务通信
+
+![image-20210808163800581](https://tva1.sinaimg.cn/large/008i3skNgy1gt9gxd5u2lj31s10u07b1.jpg)
+
+![image-20210808164015653](https://tva1.sinaimg.cn/large/008i3skNgy1gt9gzpcuu1j31xu0lygrh.jpg)
+
+![image-20210808164139637](https://tva1.sinaimg.cn/large/008i3skNgy1gt9h15nxnlj31vu0aimzg.jpg)
+
+![image-20210808212640221](https://tva1.sinaimg.cn/large/008i3skNgy1gt9p9pkoxaj318t0u0qac.jpg)
+
+异步通信要注意
+
+- 事务性消息
+- 消息只被消费一次
+
+
+
+
+
+## 断路器
+
+![image-20210808170422297](https://tva1.sinaimg.cn/large/008i3skNgy1gt9hos93qij31y20u012f.jpg)
+
+规定时间内多次失败，立即拒绝其他调用
+
+![image-20210808170716591](https://tva1.sinaimg.cn/large/008i3skNgy1gt9hrt94rej31d30u079r.jpg)
+
+防止故障扩散
+
+- 让OrderServiceProxy有正确处理无响应服务的能力
+- 如何从失败的无响应服务恢复
+
+具体操作
+
+- 请求超时设置
+
+- 限制客户端请求数量
+
+- 断路器模式
+
+  监控请求成功和失败数量，失败比例 > 阈值，就启动断路器，拒绝之后的请求，过一段时间，请求成功，解除断路器。
+
+多个服务组合，**根据数据重要情况**调整响应策略
+
+![image-20210808173248419](https://tva1.sinaimg.cn/large/008i3skNgy1gt9iidxjg4j31bv0u0dks.jpg)
+
+
+
+# 服务发现
+
+![image-20210808174350857](https://tva1.sinaimg.cn/large/008i3skNgy1gt9itv9z0vj31490u0795.jpg)
+
+- 服务端和客户端直接和服务注册表进行交互
+
+  - 服务端自注册，心跳报告到注册表
+
+  - 客户端查询注册表并缓存，通过负载均衡访问某个服务端
+
+- 缺点
+
+  - 开发者需要为不同语言准备服务发现框架
+  - 开发者需要自己设置管理注册表
+  
+  ![image-20210808175242444](https://tva1.sinaimg.cn/large/008i3skNgy1gt9j32q36ej31360u0aek.jpg)
+
+
+
+部署平台比较方便
+
+![image-20210808210919328](https://tva1.sinaimg.cn/large/008i3skNgy1gt9ornlugcj31ls0cw0x1.jpg)
+
+![image-20210808211118242](https://tva1.sinaimg.cn/large/008i3skNgy1gt9otq61kpj30v10u00x7.jpg)
+
+![image-20210808211846254](https://tva1.sinaimg.cn/large/008i3skNgy1gt9p1hqovfj31k00dwgor.jpg)
+
+# 基础架构
+
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgiqi44j30zk0k00tk.jpg)
+
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgnj3kqj30zk0k0gms.jpg)
+
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgytvt9j30ug0u0gmk.jpg)
+
+- 注册中心：注册并维护远程服务及服务提供者的地址，供服务消费者发现和调用，为保证可用性，通常基于分布式 kv 存储器来实现，比如 zookeeper、etcd 等；
+- 服务框架：用于实现微服务的 RPC 框架，包含服务接口描述及实现方案、向注册中心发布服务等功能，常见的 RPC 框架包括 Spring Cloud、Dubbo、gRPC、 Thrift、go-micro 等；
+- 服务网关：介于客户端与微服务之间的网关层，可以理解为「门卫」的角色，以确保服务提供者对客户端的透明，这一层可以进行反向路由、安全认证、灰度发布、日志监控等前置动作；
+- 服务监控：对服务消费者与提供者之间的调用情况进行监控和数据展示；
+- 服务追踪：记录对每个请求的微服务调用完整链路，以便进行问题定位和故障分析；
+- 服务治理：服务治理就是通过一系列的手段来保证在各种意外情况下，服务调用仍然能够正常进行，这些手段包括熔断、隔离、限流、降级、负载均衡等。
+- 基础设施：分布式消息队列、日志存储、数据库、缓存、文件服务器、搜索集群等，用以提供服务底层的基础数据服务，可以自建，也可以使用阿里云等公有云提供的服务。
+
+
 
 
 
@@ -205,3 +388,113 @@ categories:
 ![](https://tva1.sinaimg.cn/large/008i3skNgy1gqoxn8gjf0j30bp06p3yh.jpg)
 
 令牌桶的另外一个好处是可以方便的改变速度. 一旦需要提高速率,则按需提高放入桶中的令牌的速率. 一般会定时(比如100毫秒)往桶中增加一定数量的令牌, 有些变种算法则实时的计算应该增加的令牌的数量.
+
+# 调用链超时
+
+TP50、TP90、TP99 是工程性能指标，以网络请求耗时为例：
+
+- TP50：表示满足百分之五十的网络请求所需的最低耗时。
+- TP90：表示满足百分之九十的网络请求所需的最低耗时。
+- TP99：表示满足百分之九十九的网络请求所需的最低耗时。
+
+举个例子：有四次请求耗时分别为：
+
+10ms，1000ms，100ms，2ms
+
+那么我们可以这样计算TP99：4次请求中，99%的请求数为4*0.99，进位取整也就是4次，满足这全部4次请求的的最低耗时为1000ms，也就是TP99的答案是1000ms。
+
+
+
+**超时时间和重试次数的设置，需要考虑整个调用链中所有依赖服务的耗时、各个服务是否是核心服务等很多因素**
+
+## 带来副作用
+
+- 重复请求
+
+  有可能 Provider 执行完了，但是因为网络抖动 Consumer 认为超时了，这种情况下重试机制就会导致重复请求，从而带来脏数据问题，因此服务端必须考虑接口的幂等性。
+
+- 降低 Consumer 的负载能力
+
+  Provider确实存在性能问题，这样重试多次也是没法成功的，反而会使得 Consumer 的平均响应时间变长。如果 Consumer 是一个高 QPS 的服务，还有可能引起连锁反应造成雪崩。
+
+- 爆炸式的重试风暴
+
+  ![](https://tva1.sinaimg.cn/large/008i3skNgy1gt81x7in7wj30j1082747.jpg)
+
+最底层的服务 D 出现超时，这样上游服务都将发起重试。
+
+假设重试次数都设置的 3 次，那么 B 将面临正常情况下 3 倍的负载量，C 是 9 倍，D 是 27 倍，整个服务集群可能因此雪崩。
+
+## 合理设置
+
+- **设置调用方的超时时间**之前，先了解清楚依赖服务的 TP99 响应时间是多少(如果依赖服务性能波动大，也可以看 TP95)，调用方的超时时间可以在此**基础上加 50%**。
+
+- 如果 **RPC 框架支持多粒度的超时设置**，则：全局超时时间应该要略大于接口级别最长的耗时时间，每个接口的超时时间应该要略大于方法级别最长的耗时时间，每个方法的超时时间应该要略大于实际的方法执行时间。
+
+- **区分是可重试服务还是不可重试服务**，如果**接口没实现幂等则不允许设置重试次数**。注意：读接口是天然幂等的，写接口则可以使用业务单据 ID 或者在调用方生成唯一 ID 传递给服务端，通过此 ID 进行防重避免引入脏数据。
+- 如果 **RPC 框架支持服务端的超时设置**，同样基于前面3条规则依次进行设置，这样能避免客户端不设置的情况下配置是合理的，减少隐患。
+- 如果从业务角度来看，服务可用性**要求不用那么高**(比如偏内部的应用系统)，则**可以不用设置超时重试次数**，直接人工重试即可，这样能减少接口实现的复杂度，反而更利于后期维护。
+- **重试次数设置越大，服务可用性越高**，业务损失也能进一步降低，但是**性能隐患也会更大**，这个需要综合考虑设置成几次(一般是 2 次，最多 3 次)。
+- 如果调用方是高 QPS 服务，则必须**考虑服务方超时情况下的降级和熔断策略**。(比如超过 10% 的请求出错，则停止重试机制直接熔断，改成调用其他服务、异步 MQ 机制、或者使用调用方的缓存数据)
+
+# 从单体到微服务
+
+![image-20210808223259396](https://tva1.sinaimg.cn/large/008i3skNgy1gt9r6q5kb5j31260u0tdy.jpg)
+
+- 新功能用微服务
+
+  ![image-20210808224318245](https://tva1.sinaimg.cn/large/008i3skNgy1gt9rhg7qhzj30u00wgaei.jpg)
+
+- 隔离表现层和后端
+
+- 提取功能到服务，分解单体
+
+# 分布式事务架构
+
+## 结构
+
+![image-20210815141125330](https://tva1.sinaimg.cn/large/008i3skNgy1gthg101a5xj60zv0u0gqd02.jpg)
+
+![image-20210815141339182](https://tva1.sinaimg.cn/large/008i3skNgy1gthg3b8gqxj61ag0satdt02.jpg)
+
+
+
+## 处理类型
+
+协同式
+
+​	决策和执行顺序逻辑分布在每个部分，通过异步事件沟通
+
+​	![image-20210815120907980](https://tva1.sinaimg.cn/large/008i3skNgy1gthchsgyrrj61dl0u079j02.jpg)![image-20210815120947467](https://tva1.sinaimg.cn/large/008i3skNgy1gthcifmf9aj61ea09k76802.jpg)
+
+
+编排式
+
+​	把决策和执行顺序逻辑集中到编排器，由编排器通知操作方
+
+![image-20210815122511085](https://tva1.sinaimg.cn/large/008i3skNgy1gthcyg259bj61hc09wjtr02.jpg)
+
+![image-20210815122553919](https://tva1.sinaimg.cn/large/008i3skNgy1gthcz6o2abj61g205wt9t02.jpg)
+
+![image-20210815123953232](https://tva1.sinaimg.cn/large/008i3skNgy1gthddsmvh2j61fw0hgq7l02.jpg)
+
+![image-20210815124724913](https://tva1.sinaimg.cn/large/008i3skNgy1gthdll5lpvj61e80rwdlj02.jpg)
+
+![image-20210815125046257](https://tva1.sinaimg.cn/large/008i3skNgy1gthdp2xrdvj61fm0e4tco02.jpg)
+
+## 解决隔离问题
+
+![image-20210815140548448](https://tva1.sinaimg.cn/large/008i3skNgy1gthfv5nt8zj61de0u0dnp02.jpg)
+
+![image-20210815140816270](https://tva1.sinaimg.cn/large/008i3skNgy1gthfxpvsddj615g0u0jwr02.jpg)
+
+### 解决隔离的方法
+
+![image-20210815141022545](https://tva1.sinaimg.cn/large/008i3skNgy1gthfzwzeg4j61fi0la0xs02.jpg)
+
+#### 语义锁
+
+![image-20210815142316791](https://tva1.sinaimg.cn/large/008i3skNgy1gthgdc3y1lj61eu0a4act02.jpg)
+
+![image-20210815142523422](https://tva1.sinaimg.cn/large/008i3skNgy1gthgfjhkofj61eu0m0tfo02.jpg)
+
