@@ -111,3 +111,86 @@ rmr /path
 
 
 
+# session
+
+## 概述
+
+在ZooKeeper中，客户端和服务端建立连接后，会话随之建立，生成一个全局唯一的会话ID(Session ID)。服务器和客户端之间维持的是一个长连接，在SESSION_TIMEOUT时间内，服务器会确定客户端是否正常连接(**客户端会定时向服务器发送heart_beat**，服务器重置下次SESSION_TIMEOUT时间)。因此，在正常情况下，Session一直有效。
+
+
+
+在出现网络或其它问题情况下（例如客户端所连接的那台ZK机器挂了，或是其它原因的网络闪断），客户端与当前连接的那台服务器之间连接断了，这个时候客户端会主动在地址列表中选择新的地址进行连接。
+
+## 过程
+
+客户端需要提供一个服务端地址列表，根据地址开始创建zookeeper对象，这个时候客户端的状态则变更为**CONNECTION**，按照顺序的方式获取IP来尝试建立网络连接，直到成功连接上服务器，这个时候客户端的状态就可以变更为**CONNECTED**。
+
+
+
+###  go client state
+
+```go
+const (
+    // 暂未使用
+    StateUnknown           State = -1
+    // 与zk server之间的连接断开(也包含初始状态)，此时zk client会不断重连
+    StateDisconnected      State = 0
+    // 与zk server建立连接之前的暂时状态，表示即将connect zk server
+    StateConnecting        State = 1
+    // 暂未使用
+    StateAuthFailed        State = 4
+    // 暂未使用
+    StateConnectedReadOnly State = 5
+    // 暂未使用
+    StateSaslAuthenticated State = 6
+    // 在和zk server重新建立TCP连接之后，握手阶段发现session超时
+    StateExpired           State = -112
+    // 在和zk server成功建立TCP连接之后的状态
+    StateConnected  = State(100)
+    // 和zk server成功建立TCP连接，并且成功握手(即成功创建session)
+    StateHasSession = State(101)
+)
+```
+
+
+
+状态顺序
+
+```shell
+2020/11/03 23:24:11 zk event:EventSession StateConnecting
+2020/11/03 23:24:11 zk event:EventSession StateConnected
+2020/11/03 23:24:11 zk event:EventSession StateHasSession
+
+```
+
+
+
+仅当state等于StateHasSession时，客户端才是可用的。
+
+
+
+## 会话激活
+
+- 当客户端向服务端发送请求的时候，包括读写请求，都会主动触发一次会话激活
+
+- 如果客户端在sessionTimeOut / 3时间范围内尚未和服务器之间进行通信，即没有发送任何请求，就会主动发起一个PING请求，去触发服务端的会话激活操作
+
+
+
+## 关于时间
+
+
+
+**ExpiractionTime**是指最近一次可能过期的时间点，每一个会话的**ExpiractionTime**的计算方式如下:
+
+**ExpiractionTime = CurrentTime + SessionTimeout**
+
+但是不要忘记了，Zookeeper的Leader服务器在运行期间会定期检查是否超时，这个定期的时间间隔为**ExpiractionInterval**，单位是秒，默认情况下是tickTime的值，即2000毫秒进行一次检查，完整的**ExpiractionTime**的计算方式如下:
+
+```text
+`ExpirationTime_= CurrentTime+ SessionTimeout;`
+
+`ExpirationTime=  (ExpirationTime_/ Expirationlnterval+ 1) x Expirationlnterval;`
+```
+
+在ZK服务器端对会话超时时间是有限制的，主要是minSessionTimeout和maxSessionTimeout这两个参数设置的。**Session超时时间限制**，如果客户端设置的超时时间不在这个范围，那么会被强制设置为最大或最小时间。 默认的Session超时时间是在2 * tickTime ~ 20 * tickTime。

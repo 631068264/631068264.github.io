@@ -3,7 +3,7 @@ layout:     post
 rewards: false
 title:      微服务
 categories:
-    - 分布式
+    - 系统架构
 ---
 
 # 是否使用微服务

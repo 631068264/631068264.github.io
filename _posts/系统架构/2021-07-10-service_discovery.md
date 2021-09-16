@@ -3,7 +3,7 @@ layout:     post
 rewards: false
 title: 服务发现 etcd Consul
 categories:
-    - 分布式
+    - 系统架构
 ---
 
 介绍

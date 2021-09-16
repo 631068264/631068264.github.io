@@ -3,7 +3,7 @@ layout:     post
 rewards: false
 title: Service Mesh
 categories:
-    - 分布式
+    - 系统架构
 ---
 
 https://levelup.gitconnected.com/deciphering-the-difference-between-a-service-mesh-and-api-gateway-c57e4abec302
