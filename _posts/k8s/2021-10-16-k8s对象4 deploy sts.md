@@ -249,7 +249,19 @@ StatefulSets 最为重要的功能就是稳定，稳定意味着 Pod 调度或�
 
 - 稳定的网络 ID
 
-在 StatefulSet 中的每个 Pod 根据 StatefulSet 的名称和 Pod 的序号派生出它的主机名。组合主机名的格式为名称(序号)。上例将会创建三个名称分别为 web-0、web-1、web-2 的 Pod。StatefulSet 可以使用 headless 服务 控制它的 Pod 的网络域。管理域的这个服务的格式为：服务名称(命名空间).svc.cluster.local，其中 cluster.local 是集群域。一旦每个 Pod 创建成功，就会得到一个匹配的 DNS 子域，格式为：名称(所属服务的 DNS 域名)，其中所属服务由 StatefulSet 的 serviceName 域来设定。
+  StatefulSet 中的每个 Pod 根据 StatefulSet 的名称和 Pod 的序号派生出它的主机名。 组合主机名的格式为`$(StatefulSet 名称)-$(序号)`。 上例将会创建三个名称分别为 `web-0、web-1、web-2` 的 Pod。 
+
+  
+
+  StatefulSet 可以使用 [无头服务](https://kubernetes.io/zh/docs/concepts/services-networking/service/#headless-services) 控制它的 Pod 的网络域。管理域的这个服务的格式为： `$(服务名称).$(命名空间).svc.cluster.local`，其中 `cluster.local` 是集群域。
+
+  
+
+   一旦每个 Pod 创建成功，就会得到一个匹配的 **DNS 子域**，格式为： `$(pod 名称).$(所属服务的 DNS 域名)`，其中所属服务由 StatefulSet 的 `serviceName` 域来设定。
+
+  
+
+​       **集群内部pod之间通过service匹配到的DNS子域互相访问**
 
 - 稳定的存储
 
