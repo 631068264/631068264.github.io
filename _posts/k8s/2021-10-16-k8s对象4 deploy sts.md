@@ -10,7 +10,8 @@ categories:
 
 Deployment 为 Pod 和 ReplicaSet 提供了一个声明式定义的方法，用来替代以前的 RC 来方便的管理应用。而定义方式分为，命令式(RS)和声明式(Deployment)两种，前者侧重于考虑如何实现，而后者侧重于定义想要什么。
 
-- 应用场景
+应用场景
+
 - 定义 Deployment 来创建 Pod 和 RS
     - 滚动升级和回滚应用
     - 扩容和缩容
@@ -59,14 +60,18 @@ nginx-deployment   3         3         3            3           18s
 
 #上述输出字段含义解释
 NAME: 列出了集群中Deployments的名称
-DESIRED: 显示应用程序的期望状态的所需副本数
+DESIRED: 显示应用程序的期望状态的所需副本数  .spec.replicas
 CURRENT: 显示当前正在运行的副本数
 UP-TO-DATE: 显示已更新以实现期望状态的副本数
 AVAILABLE: 显示应用程序可供用户使用的副本数
 AGE: 显示应用程序运行的时间量
 
-# 查看Deployment展开状态
+# 查看Deployment上线状态
 $ kubectl rollout status deployment/nginx-deployment
+
+Waiting for rollout to finish: 2 out of 3 new replicas have been updated...
+deployment "nginx-deployment" successfully rolled out
+
 
 # 检查RC的状态
 $ kubectl describe rs
@@ -81,28 +86,41 @@ nginx-deployment-75675f5897-kzszj   1/1     Running  app=nginx,pod-template-hash
 nginx-deployment-75675f5897-qqcnn   1/1     Running  app=nginx,pod-template-hash=3123191453
 ```
 
+Deployment 控制器将 `pod-template-hash` 标签添加到 Deployment 所创建或收留的 每个 ReplicaSet ,**可确保 Deployment 的子 ReplicaSets 不重叠。**
+
 ## 更新
+
+**更新策略**
+
+`.spec.strategy` 策略指定用于用新 Pods 替换旧 Pods 的策略。 `.spec.strategy.type` 可以是 “Recreate” 或 “RollingUpdate”。“RollingUpdate” 是默认值。
+
+- 如果 `.spec.strategy.type==Recreate`，在创建新 Pods 之前，所有现有的 Pods 会被杀死。
+-  `.spec.strategy.type==RollingUpdate`时，采取 滚动更新的方式更新 Pods。你可以指定 `maxUnavailable` 和 `maxSurge` 来控制滚动更新 过程。
+  - `.spec.strategy.rollingUpdate.maxUnavailable` 是一个可选字段，用来指定 更新过程中不可用的 Pod 的个数上限。该值可以是绝对数字（例如，5），也可以是 所需 Pods 的百分比（例如，10%）。百分比值会转换成绝对数并去除小数部分。**默认值为 25%。**
+  - `.spec.strategy.rollingUpdate.maxSurge` 是一个可选字段，用来指定可以创建的超出 期望 Pod 个数的 Pod 数量。此值可以是绝对数（例如，5）或所需 Pods 的百分比（例如，10%）。**此字段的默认值为 25%。**
 
 让我们更新 nginx 的 Pods，使用 nginx:1.9.1 镜像来代替之前的旧镜像。
 
-```
+```bash
 # 更新nginx服务
 $ kubectl set image deployment/nginx-deployment nginx=nginx:1.9.1
 deployment/nginx-deployment image updated
+# 查看上线状态
+$ kubectl rollout status deployment/nginx-deployment
 ```
 
 当然，我们也可以使用 edit 命令来编辑 Deployment 配置文件，达到同样的效果。
 
-```
+```bash
 # 编辑Deployment文件
 $ kubectl edit deployment/nginx-deployment
 deployment/nginx-deployment edited
 ```
 
-使用 rollout 命令来，查看其展开的状态。
+使用 rollout 命令来，查看其上线状态。
 
-```
-# 查看展开状态
+```bash
+# 查看上线状态
 $ kubectl rollout status deployment/nginx-deployment
 Waiting for rollout to finish: 2 out of 3 new replicas have been updated...
 deployment/nginx-deployment successfully rolled out
@@ -121,18 +139,70 @@ nginx-deployment-1564180365-nacti   1/1       Running   0          14s
 nginx-deployment-1564180365-z9gth   1/1       Running   0          14s
 ```
 
-- Deployment 可确保在更新时仅关闭一定数量的 Pods，默认情况下，它确保至少 75% 所需 Pods 是运行的，即有 25% 的最大不可用。Deployment 还确保仅创建一定数量的 Pods 高于期望的 Pods 数，默认情况下，它可确保最多增加 25% 期望 Pods 数。出现上述情况的时候，多是在进行扩容、缩容、滚动升级和回滚应用时出现。
-- 可以看到，当第一次创建 Deployment 的时候，它创建了一个 ReplicaSet 并将其直接扩展至 3 个副本。更新 Deployment 时，它创建了一个新的 ReplicaSet ，并将其扩展为 1，然后将旧 ReplicaSet 缩小到 2，以便至少有 2 个 Pod 可用，并且最多创建 4 个 Pod。然后，它继续向上和向下扩展新的和旧的 ReplicaSet ，具有相同的滚动更新策略。最后，将有 3 个可用的副本在新的 ReplicaSet 中，旧 ReplicaSet 将缩小到 0。
+- Deployment 可确保在更新时仅关闭一定数量的 Pods，
 
-```shell
+  默认情况下，**它确保至少 75% 所需 Pods 是运行的，即有 25% 的最大不可用。**
+
+- Deployment 还确保仅创建一定数量的 Pods 高于期望的 Pods 数，
+
+  默认情况下，它可确保最多增加 25% 期望 Pods 数。出现上述情况的时候，多是在进行扩容、缩容、滚动升级和回滚应用时出现。
+
+```bash
 # 获取Deployment的更多信息
 $ kubectl describe deployments
+
+Name:                   nginx-deployment
+Namespace:              default
+CreationTimestamp:      Thu, 30 Nov 2017 10:56:25 +0000
+Labels:                 app=nginx
+Annotations:            deployment.kubernetes.io/revision=2
+Selector:               app=nginx
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx
+   Containers:
+    nginx:
+      Image:        nginx:1.16.1
+      Port:         80/TCP
+      Environment:  <none>
+      Mounts:       <none>
+    Volumes:        <none>
+  Conditions:
+    Type           Status  Reason
+    ----           ------  ------
+    Available      True    MinimumReplicasAvailable
+    Progressing    True    NewReplicaSetAvailable
+  OldReplicaSets:  <none>
+  NewReplicaSet:   nginx-deployment-1564180365 (3/3 replicas created)
+  Events:
+    Type    Reason             Age   From                   Message
+    ----    ------             ----  ----                   -------
+    Normal  ScalingReplicaSet  2m    deployment-controller  Scaled up replica set nginx-deployment-2035384211 to 3
+    Normal  ScalingReplicaSet  24s   deployment-controller  Scaled up replica set nginx-deployment-1564180365 to 1
+    Normal  ScalingReplicaSet  22s   deployment-controller  Scaled down replica set nginx-deployment-2035384211 to 2
+    Normal  ScalingReplicaSet  22s   deployment-controller  Scaled up replica set nginx-deployment-1564180365 to 2
+    Normal  ScalingReplicaSet  19s   deployment-controller  Scaled down replica set nginx-deployment-2035384211 to 1
+    Normal  ScalingReplicaSet  19s   deployment-controller  Scaled up replica set nginx-deployment-1564180365 to 3
+    Normal  ScalingReplicaSet  14s   deployment-controller  Scaled down replica set nginx-deployment-2035384211 to 0
 ```
+
+**更新过程**
+
+可以看到，当第一次创建 Deployment 的时候，它创建了一个 ReplicaSet 并将其直接扩展至 3 个副本。
+
+更新 Deployment 时，它创建了一个新的 ReplicaSet ，并将其扩展为 1，然后将旧 ReplicaSet 缩小到 2，以便至少有 2 个 Pod 可用，并且最多创建 4 个 Pod。然后，它继续向上和向下扩展新的和旧的 ReplicaSet ，具有相同的滚动更新策略。最后，将有 3 个可用的副本在新的 ReplicaSet 中，旧 ReplicaSet 将缩小到 0。
 
 ## 回滚
 
-- 当 Deployment 不稳定或遇到故障的的时候，例如循环崩溃，这时可能就需要回滚 Deployment 了。在默认情况下，所有 Deployment 历史记录都保留在系统中，以便可以随时回滚。当然，可以通过修改历史记录限制来更改该限制。当回滚到较早的修改版时，只有 Deployment Pod 模板部分会回滚。这是因为当 Deployment Pod 模板(.spec.template)发生更改时，才会创建新修改版本。例如，如果更新模板的标签或容器镜像，其他更新，如扩展 Deployment。
-- 假设在更新 Deployment 时犯了一个拼写错误，将镜像名称命名为 nginx:1.91 而不是 nginx:1.9.1，这样我们更新 Pod 的时候就会出现错误。
+- 当 Deployment 不稳定或遇到故障的的时候，例如循环崩溃，这时可能就需要回滚 Deployment 了。在默认情况下，所有 Deployment 历史记录都保留在系统中，以便可以随时回滚。当然，可以通过修改历史记录限制来更改该限制。
+- Deployment 被触发上线时，系统就会创建 Deployment 的新的修订版本。 这意味着**仅当 Deployment 的 Pod 模板（`.spec.template`）发生更改时，才会创建新修订版本** -- 例如，模板的标签或容器镜像发生变化。 其他更新，如 Deployment 的**扩缩容操作不会创建 Deployment 修订版本**。 这是为了方便同时执行手动缩放或自动缩放。 换言之，**当你回滚到较早的修订版本时，只有 Deployment 的 Pod 模板部分会被回滚。**
+
+
+
+假设在更新 Deployment 时犯了一个拼写错误，将镜像名称命名为 nginx:1.91 而不是 nginx:1.9.1，这样我们更新 Pod 的时候就会出现错误。
 
 ```shell
 # 设置镜像来更新服务
@@ -163,6 +233,10 @@ nginx-deployment-1564180365-jbqqo   1/1       Running            0          25s
 nginx-deployment-1564180365-hysrc   1/1       Running            0          25s
 nginx-deployment-3066724191-08mng   0/1       ImagePullBackOff   0          6s
 ```
+
+**Deployment 控制器自动停止有问题的上线过程，并停止对新的 ReplicaSet 扩容。 这行为取决于所指定的 rollingUpdate 参数（具体为 `maxUnavailable`）。 默认情况下，Kubernetes 将此值设置为 25%。**
+
+
 
 按照如下步骤，检查 Deployment 回滚历史。
 
@@ -221,6 +295,31 @@ $ kubectl autoscale deployment/nginx-deployment --min=10 --max=15 --cpu-percent=
 deployment/nginx-deployment scaled
 ```
 
+## 暂停、恢复
+
+这样做使得你能够在暂停和恢复执行之间应用多个修补程序，而**不会触发不必要的上线操作。(rolling histroy)**
+
+```bash
+# 暂停
+kubectl rollout pause deployment.v1.apps/nginx-deployment
+
+kubectl set resources deployment.v1.apps/nginx-deployment -c=nginx --limits=cpu=200m,memory=512Mi
+kubectl set image deployment.v1.apps/nginx-deployment nginx=nginx:1.16.1
+
+
+# 恢复
+kubectl rollout resume deployment.v1.apps/nginx-deployment
+```
+
+## 状态
+
+Deployment 的生命周期中会有许多状态。上线新的 ReplicaSet 期间可能处于 [Progressing（进行中）](https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/#progressing-deployment)，可能是 [Complete（已完成）](https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/#complete-deployment)，也可能是 [Failed（失败）](https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/#failed-deployment)以至于无法继续进行。
+
+- *Progressing* 使用 `kubectl rollout status` 监视 Deployment 的进度，rs（创建，缩放，pod就绪）
+- *Complete*更新都已完成，所有副本都可用
+- [Failed原因](https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/#failed-deployment)
+
+
 
 # StatefulSet
 
@@ -230,7 +329,7 @@ deployment/nginx-deployment scaled
 
 
 
-- 功能特点
+##  功能特点
 
 StatefulSets 最为重要的功能就是稳定，稳定意味着 Pod 调度或重调度的整个过程是有持久性的。如果应用程序不需要任何稳定的标识符或有序的部署、删除或伸缩，则应该使用由一组无状态的副本控制器提供的工作负载来部署应用程序，比如 Deployment 或者 ReplicaSet 可能更适用于您的无状态应用部署需要。
 
@@ -238,44 +337,82 @@ StatefulSets 最为重要的功能就是稳定，稳定意味着 Pod 调度或�
 - 稳定的、持久的存储
 - 有序的、优雅的部署和缩放
 - 有序的、自动的滚动更新
-
 - 访问方式
+
+
+
+## 特点详解
 
 我们在下面的示例中是使用 StatefulSet 和对应的无头服务来做演示的，当 StatefulSet Pod 创建之后其具有唯一的标识，该标识包括顺序标识、稳定的网络标识和稳定的存储。该标识和 Pod 是绑定的，不管它被调度在哪个节点上。
 
 - 有序索引
 
-对于具有 N 个副本的 StatefulSet，StatefulSet 中的每个 Pod 将被分配一个整数序号，从 0 到 N-1，该序号在 StatefulSet 上是唯一的。
+  对于具有 N 个副本的 StatefulSet，StatefulSet 中的每个 Pod 将被分配一个整数序号，从 0 到 N-1，该序号在 StatefulSet 上是唯一的。
 
-- 稳定的网络 ID
+- 稳定的pod ID
 
-  StatefulSet 中的每个 Pod 根据 StatefulSet 的名称和 Pod 的序号派生出它的主机名。 组合主机名的格式为`$(StatefulSet 名称)-$(序号)`。 上例将会创建三个名称分别为 `web-0、web-1、web-2` 的 Pod。 
+  StatefulSet 中的每个 Pod 根据 StatefulSet 的名称和 Pod 的序号派生出它的主机名。 组合主机名的格式为`$(StatefulSet 名称)-$(序号)`。 上例将会创**建三个名称分别为 `web-0、web-1、web-2` 的 Pod。** 
 
-  
 
-  StatefulSet 可以使用 [无头服务](https://kubernetes.io/zh/docs/concepts/services-networking/service/#headless-services) 控制它的 Pod 的网络域。管理域的这个服务的格式为： `$(服务名称).$(命名空间).svc.cluster.local`，其中 `cluster.local` 是集群域。
+- 稳定网络ID
 
-  
+  StatefulSet 当前需要[无头服务](https://kubernetes.io/zh/docs/concepts/services-networking/service/#headless-services) 来负责 Pod 的网络标识。**你需要负责创建此服务。**管理域的这个服务的格式为： `$(服务名称).$(命名空间).svc.cluster.local`，其中 `cluster.local` 是集群域。
 
-   一旦每个 Pod 创建成功，就会得到一个匹配的 **DNS 子域**，格式为： `$(pod 名称).$(所属服务的 DNS 域名)`，其中所属服务由 StatefulSet 的 `serviceName` 域来设定。
+  **一旦每个 Pod 创建成功，就会得到一个匹配的 DNS 子域，格式为： `$(pod 名称).$(所属服务的 DNS 域名)`，其中所属服务由	StatefulSet 的 `serviceName` 域来设定。**
 
-  
+  **集群内部pod之间通过service匹配到的DNS子域互相访问**
 
-​       **集群内部pod之间通过service匹配到的DNS子域互相访问**
+![图片](https://tva1.sinaimg.cn/large/008i3skNgy1gvxgu65tffj30qc05xdgm.jpg)
 
 - 稳定的存储
 
-在 Kubernetes 中 StatefulSet 模式会为每个 VolumeClaimTemplate 创建一个 PersistentVolumes。请注意，当 Pod 或者 StatefulSet 被删除时，与 PersistentVolumeClaims 相关联的 PersistentVolume 并不会被删除。要删除它必须通过手动方式来完成。
+  在 Kubernetes 中 StatefulSet 模式会为每个 VolumeClaimTemplate 创建一个 PersistentVolumes。
 
-![图片](https://tva1.sinaimg.cn/large/008i3skNgy1gvctka1wiij60qc05xgme02.jpg)
+  **请注意，当 Pod 或者 StatefulSet 被删除时，与 PersistentVolumeClaims 相关联的 PersistentVolume 并不会被删除。要删除它必须通过手动方式来完成。**
 
-- 管理策略
 
-对于某些分布式系统来说，StatefulSet 的顺序性保证是不必要和/或者不应该的。这些系统仅仅要求唯一性和身份标志。为了解决这个问题，在 Kubernetes 1.7 中引入了 **.spec.podManagementPolicy**。
 
-**OrderedReady 的 Pod 管理策略**：是 StatefulSets 的默认选项，它告诉 StatefulSet 控制器遵循上文展示的顺序性保证。
+## 管理伸缩策略
 
-**Parallel 的 Pod 管理策略**：是告诉 StatefulSet 控制器并行的终止所有 Pod，在启动或终止另一个 Pod 前，不必等待这些 Pod 变成 Running 和 Ready 或者完全终止状态。
+  对于某些分布式系统来说，StatefulSet 的顺序性保证是不必要和/或者不应该的。这些系统仅仅要求唯一性和身份标志。为了解决这个问题，在 Kubernetes 1.7 中引入了 **.spec.podManagementPolicy**。
+
+### OrderedReady 的 Pod 管理策略
+
+是 StatefulSets 的默认选项，它告诉 StatefulSet 控制器遵循上文展示的顺序性保证。
+
+  - 对于包含 N 个 副本的 StatefulSet，当部署 Pod 时，它们是依次创建的，顺序为 `0..N-1`。
+  - 当删除 Pod 时，它们是逆序终止的，顺序为 `N-1..0`。
+  - 在将缩放操作应用到 Pod 之前，它前面的所有 Pod 必须是 Running 和 Ready 状态。
+  - 在 Pod 终止之前，所有的继任者必须完全关闭。
+ StatefulSet 不应将 `pod.Spec.TerminationGracePeriodSeconds` 设置为 0。 这种做法是不安全的，要强烈阻止。更多的解释请参考 [强制删除 StatefulSet Pod](https://kubernetes.io/zh/docs/tasks/run-application/force-delete-stateful-set-pod/)。
+
+  在上面的 nginx 示例被创建后，会按照 web-0、web-1、web-2 的顺序部署三个 Pod。 在 web-0 进入 [Running 和 Ready](https://kubernetes.io/zh/docs/concepts/workloads/pods/pod-lifecycle/) 状态前不会部署 web-1。在 web-1 进入 Running 和 Ready 状态前不会部署 web-2。 如果 web-1 已经处于 Running 和 Ready 状态，而 web-2 尚未部署，在此期间发生了 web-0 运行失败，那么 web-2 将不会被部署，要等到 web-0 部署完成并进入 Running 和 Ready 状态后，才会部署 web-2。
+
+  如果用户想将示例中的 StatefulSet 收缩为 `replicas=1`，首先被终止的是 web-2。 在 web-2 没有被完全停止和删除前，web-1 不会被终止。 当 web-2 已被终止和删除、web-1 尚未被终止，如果在此期间发生 web-0 运行失败， 那么就不会终止 web-1，必须等到 web-0 进入 Running 和 Ready 状态后才会终止 web-1。
+
+### Parallel 的 Pod 管理策略
+
+是告诉 StatefulSet 控制器并行的终止所有 Pod，在启动或终止另一个 Pod 前，不必等待这些 Pod 变成 Running 和 Ready 或者完全终止状态
+
+`Parallel` Pod 管理让 StatefulSet 控制器并行的启动或终止所有的 Pod， 启动或者终止其他 Pod 前，无需等待 Pod 进入 Running 和 ready 或者完全停止状态。 这个选项只会影响伸缩操作的行为，更新则不会被影响。
+
+
+
+## 更新策略
+
+在默认 [Pod 管理策略](https://kubernetes.io/zh/docs/concepts/workloads/controllers/statefulset/#pod-management-policies)(`OrderedReady`) 下使用 [滚动更新](https://kubernetes.io/zh/docs/concepts/workloads/controllers/statefulset/#rolling-updates) ，**可能进入需要人工干预才能修复的损坏状态**。
+
+如果更新后 Pod 模板配置进入无法运行或就绪的状态（例如，由于错误的二进制文件 或应用程序级配置错误），StatefulSet 将停止回滚并等待。
+
+在这种状态下，仅将 Pod 模板还原为正确的配置是不够的。由于 [已知问题](https://github.com/kubernetes/kubernetes/issues/67250)，StatefulSet 将继续等待损坏状态的 Pod 准备就绪（永远不会发生），然后再尝试将其恢复为正常工作配置。
+
+**恢复模板后，还必须删除 StatefulSet 尝试使用错误的配置来运行的 Pod**。这样， StatefulSet 才会开始使用被还原的模板来重新创建 Pod。
+
+
+
+
+
+## 示例运行
 
 ```yaml
 sheapiVersion: v1
@@ -304,7 +441,7 @@ spec:
   ......
 ```
 
-#### 示例运行
+
 
 名为 nginx 的 Headless Service 用来控制网络域名。
 
@@ -360,7 +497,7 @@ spec:
             storage: 1Gi
 ```
 
-创建和查看 - StatefulSet
+### 创建和查看 - StatefulSet
 
 ```shell
 # 创建定义在web.yaml中的Headless Service和StatefulSet
@@ -396,7 +533,7 @@ web-0     1/1       Running   0          1m
 web-1     1/1       Running   0          1m
 ```
 
-查看绑定的特点 - StatefulSet
+### 查看绑定的特点 - StatefulSet
 
 ```shell
 # 使用稳定的网络身份标识
@@ -429,7 +566,7 @@ www-web-0   Bound     pvc-15c268c7-b507-11e6-932f-42010a800002   1Gi        RWO 
 www-web-1   Bound     pvc-15c79307-b507-11e6-932f-42010a800002   1Gi        RWO           48s
 ```
 
-删除 StatefulSet 中所有的 Pod 之后，我们使用上述查看网络身份标识的命令再次查看，发现 Pod 的序号、主机名、SRV 条目和记录名称没有改变，但和 Pod 相关联的 IP 地址可能发生了改变。因为我们使用的是 StatefulSet 的模式，其他模式不会有这个问题。这就是为什么不要在其他应用中使用 StatefulSet 中的 Pod 的 IP 地址进行连接，这点很重要。
+**删除 StatefulSet 中所有的 Pod 之后，我们使用上述查看网络身份标识的命令再次查看，发现 Pod 的序号、主机名、SRV 条目和记录名称没有改变，但和 Pod 相关联的 IP 地址可能发生了改变。**因为我们使用的是 StatefulSet 的模式，其他模式不会有这个问题。这就是为什么不要在其他应用中使用 StatefulSet 中的 Pod 的 IP 地址进行连接，这点很重要。
 
 ```shell
 $ sudo kubectl delete pod -l app=nginx
@@ -457,7 +594,7 @@ www-web-3   Bound     pvc-e1176df6-b508-11e6-932f-42010a800002   1Gi        RWO 
 www-web-4   Bound     pvc-e11bb5f8-b508-11e6-932f-42010a800002   1Gi        RWO           13h
 ```
 
-更新 - StatefulSet
+### 更新 - StatefulSet
 
 StatefulSet 里的 Pod 采用和序号相反的顺序更新。在更新下一个 Pod 前，StatefulSet 控制器终止每个 Pod 并等待它们变成 Running 和 Ready。请注意，虽然在顺序后继者变成 unning 和 Ready 之前 StatefulSet 控制器不会更新下一个 Pod，但它仍然会重建任何在更新过程中发生故障的 Pod，使用的是它们当前的版本。已经接收到更新请求的 Pod 将会被恢复为更新的版本，没有收到请求的 Pod 则会被恢复为之前的版本。像这样，控制器尝试继续使应用保持健康并在出现间歇性故障时保持更新的一致性。
 
@@ -473,7 +610,7 @@ $ sudo kubectl patch statefulset web --type='json' \
 statefulset.apps/web patched
 ```
 
-删除 - StatefulSet
+### 删除 - StatefulSet
 
 ```shell
 # 删除StatefulSet
@@ -484,6 +621,37 @@ statefulset.apps "web" deleted
 kubectl delete pod web-0
 pod "web-0" deleted
 ```
+
+## 注意事项
+
+主要讨论关于 StatefulSet 的使用和注意细节！
+
+- StatefulSet 的特性描述
+
+  - 匹配 Pod name (网络标识) 的模式为：名称(序号)，比如上面的示例：web-0，web-1，web-2。
+  - StatefulSet 为每个 Pod 副本创建了一个 DNS 域名，这个域名的格式为：**$(podname).(headless servername)**，也就意味着服务间是通过 Pod 域名来通信而非 Pod IP，因为当 Pod 所在 Node 发生故障时，Pod 会被飘移到其它 Node 上，Pod IP 会发生变化，但是 Pod 域名不会有变化。
+  - StatefulSet 使用 Headless 服务来控制 Pod 的域名，这个域名的 FQDN 为：(namespace).svc.cluster.local，其中，“cluster.local” 指的是集群的域名。
+  - 根据 volumeClaimTemplates，为每个 Pod 创建一个 pvc，pvc 的命名规则匹配模式：(volumeClaimTemplates.name)-(pod_name)，比如上面的 volumeMounts.name=www，Pod name=web-[0-2]，因此创建出来的 PVC 是 www-web-0、www-web-1、www-web-2。
+  - **删除 Pod 不会删除其 pvc，手动删除 pvc 将自动释放 pv。**
+
+- StatefulSet 的启停顺序
+
+  - 当对 Pod 执行扩展操作时，与部署一样，它前面的 Pod 必须都处于 Running 和 Ready 状态。
+  - 当 Pod 被删除时，它们被终止的顺序是从 N-1 到 0。
+  - 部署 StatefulSet 时，如果有多个 Pod 副本，它们会被顺序地创建（从 0 到 N-1）并且，在下一个 Pod 运行之前所有之前的 Pod 必须都是 Running 和 Ready 状态。
+  - 有序部署
+  - 有序删除
+  - 有序扩展
+
+- StatefulSet 的使用场景
+
+  - 有序收缩。
+  - 有序部署，有序扩展，基于 init containers 来实现。
+  - 稳定的网络标识符，即 Pod 重新调度后其 PodName 和 HostName 不变。
+  - 稳定的持久化存储，即 Pod 重新调度后还是能访问到相同的持久化数据，基于 PVC 来实现。
+
+
+
 
 
 # sts 和 deploy 区别
@@ -509,9 +677,10 @@ pod "web-0" deleted
 | 集群内部服务发现                | 只能通过 service 访问到随机的 pod                            | 可以打通 pod 之间的通信（主要是被发现）                      |
 | 性能开销                        | 无需维护 pod 与 node、pod 与 PVC 等关系                      | 比 deployment 类型需要维护额外的关系信息                     |
 
-- 综上选择总结
+综上选择总结
 
-- - 如果是不需额外数据依赖或者状态维护的部署，或者 replicas 是 1，优先考虑使用 Deployment；
+- 如果是不需额外数据依赖或者状态维护的部署，或者 replicas 是 1，优先考虑使用 Deployment；
+
 - 如果单纯的要做数据持久化，防止 pod 宕掉重启数据丢失，那么使用 pv/pvc 就可以了；
 - 如果要打通 app 之间的通信，而又不需要对外暴露，使用 headlessService 即可；
 - 如果需要使用 service 的负载均衡，不要使用 StatefulSet，尽量使用 clusterIP 类型，用 serviceName 做转发；
