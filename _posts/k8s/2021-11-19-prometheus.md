@@ -26,7 +26,7 @@ HTTP协议周期性抓取被监控组件的状态,任意组件只要提供对应
 过程。
 这样做非常适合做虚拟化环境监控系统,比如VM、Docker、Kubernetes等。输出被监控组件信息的HTTP接口被叫做
 exporter。目前互联网公司常用的组件大部分都有exporter可以眼接使用,比如Nginx、MySQL、Redis、Kafka、Linux系统信息
-(包括磁盘、内存、CPU、网络等等)。Promethus有以下特点:
+(包括磁盘、内存、CPU、网络等等)。Prometheus有以下特点:
 
 
 - 支持多维数据模型:由指标名和键值对组成的时间序列数据
@@ -222,7 +222,7 @@ Alertmanager除了提供基本的告警通知能力以外，还主要提供了�
 
 例如，当集群中有数百个正在运行的服务实例，并且为每一个实例设置了告警规则。假如此时发生了网络故障，可能导致大量的服务实例无法连接到数据库，结果就会有数百个告警被发送到Alertmanager。
 
-而作为用户，可能只希望能够在一个通知中中就能查看哪些服务实例收到影响。这时可以按照服务所在集群或者告警名称对告警进行分组，而将这些告警内聚在一起成为一个通知。
+而作为用户，可能只希望能够在一个通知中中就能查看哪些服务实例收到影响。**这时可以按照服务所在集群或者告警名称对告警进行分组，而将这些告警内聚在一起成为一个通知。**
 
 告警分组，告警时间，以及告警的接受方式可以通过Alertmanager的配置文件进行配置。
 
@@ -238,7 +238,15 @@ Alertmanager除了提供基本的告警通知能力以外，还主要提供了�
 
 静默提供了一个简单的机制可以快速根据标签对告警进行静默处理。如果接收到的告警符合静默的配置，Alertmanager则不会发送告警通知。
 
-静默设置需要在Alertmanager的Werb页面上进行设置。
+静默设置需要在Alertmanager的Web页面上进行设置。
+
+
+
+
+
+
+
+
 
 ## 定义告警规则
 
@@ -258,7 +266,7 @@ groups:
       description: description info
 ```
 
-修改Prometheus配置文件prometheus.yml,添加以下配置，为了能够让Prometheus能够启用定义的告警规则，我们需要在Prometheus全局配置文件中通过**rule_files**指定一组告警规则文件的访问路径，Prometheus启动后会自动扫描这些路径下规则文件中定义的内容，并且根据这些规则计算是否向外部发送通知：
+修改Prometheus配置文件**prometheus.yml**,添加以下配置，为了能够让Prometheus能够启用定义的告警规则，我们需要在Prometheus全局配置文件中通过**rule_files**指定一组告警规则文件的访问路径，Prometheus启动后会自动扫描这些路径下规则文件中定义的内容，并且根据这些规则计算是否向外部发送通知：
 
 ```
 rule_files:
@@ -311,6 +319,90 @@ groups:
 ```
 
 [告警实例](https://www.prometheus.wang/alert/prometheus-alert-rule.html)
+
+## alert manager
+
+```
+alertmanager --config.file=alertmanager.yml
+```
+
+[alertmanager.yml 官方配置详解](https://prometheus.io/docs/alerting/latest/configuration/)
+
+主要就是配置路由匹配对应的告警规则，上面的是告警规则，告警的receiver，组合之类的。
+
+
+
+## 告警状态
+
+- `inactive`: 非pending、非firing的状态
+- `pending`: 已经触发但是少于持续时间的状态
+- `firing`: 已经触发且超过持续时间的状态
+
+## 告警生命周期
+
+Prometheus定期从受监控的目标中**抓取指标**，由`scrape_interval`（默认为`1m`）定义。抓取间隔可以全局配置，然后按作业覆盖。然后将抓取的指标永久存储在其本地存储中。
+
+Prometheus 有另一个循环，它的*时钟*独立于抓取循环，它定期**评估警报规则**，由`evaluation_interval`（默认为`1m`）定义。在每个评估周期中，Prometheus 都会运行每个警报规则中定义的表达式并更新警报状态。
+
+
+
+### 状态转换
+
+警报**仅在评估周期期间从一种状态转换到另一种状态**。转换如何发生，取决于是否设置了警报的`FOR`子句
+
+- 警报**没有**的`FOR`（或设置为`0`）将立即变成`firing`。
+- 警报规则`FOR > 0`将先变成pending在变到firing，过程至少需要2个`evaluation_interval`周期
+
+Example
+
+让我们举一个例子来更好地解释警报的生命周期。我们确实有一个简单的警报来监控节点的负载 1m，并在它高于 20 时触发至少 1 分钟。
+
+```
+ALERT NODE_LOAD_1M
+  IF node_load1 > 20
+  FOR 1m
+```
+
+Prometheus 配置为每 20 秒抓取一次指标，评估间隔为 1 分钟。
+
+```
+global:
+  scrape_interval: 20s
+  evaluation_interval: 1m
+```
+
+**问题**：`NODE_LOAD_1M`一旦机器上的avgload高于20 ，需要多长时间才能**触发**？
+
+**答**：`1m`到 `20s + 1m + 1m`。上限可能比您在设置时预期的要高`FOR 1m`
+
+这种最坏情况计时的原因可以通过警报的生命周期来解释。下图显示了时间线上的事件序列：
+
+![2016-11-16-prometheus-alert-lifecycle.png](https://tva1.sinaimg.cn/large/008i3skNgy1gwqi7ha7n7j30iu05qq3b.jpg)
+
+1. 节点的负载不断变化，但它会被 Prometheus 每次`scrape_interval`（即。`20s`）
+2. 然后根据抓取的指标评估警报规则每个`evaluation_interval`（即。`1m`）
+3. 当警报规则表达式为真（即`node_load1 > 20`）时，警报切换到`pending`，以遵守`FOR`子句
+4. 在下一个评估周期中，如果警报表达式仍然为真，一旦`FOR`遵守该子句，警报最终会切换到`firing`并将通知推送到**alert manager**
+
+### alert manager
+
+告警发送前，alert manager会把告警状态从**firing**切换到**inactive ** ，然后才发送告警。
+
+分组通知的缺点是**它可能会导致进一步的延迟**
+
+警报管理器通知分组基本上由以下设置控制：
+
+```
+group_by: [ 'a-label', 'another-label' ]
+group_wait: 30s
+group_interval: 5m
+```
+
+当一个新的警报被触发时，它会等待`group_wait`一段时间，直到通知被调度。该等待时间对于最终将匹配相同`group_by`条件的更多即将到来的警报进行分组是必要的（换句话说，如果两个警报具有完全相同的`group_by`标签值，则会将它们组合在一起）。
+
+这意味着如果`group_wait`设置为`30s`，警报管理器会将警报通知缓冲 30 秒，等待其他潜在通知附加到缓冲的通知。一旦`group_wait`时间到期，则最终发送通知。
+
+下一次发送同组告警，需要等`group_interval`时间。
 
 
 
@@ -382,548 +474,53 @@ global:
   [ evaluation_interval: <duration> | default = 1m ]
 ```
 
+## 模板
+
+[配置说明](https://prometheus.io/docs/alerting/latest/notification_examples/)
+
+- Alertmanager配置文件中使用模板字符串
+
+  ```yaml
+  receivers:
+  - name: 'slack-notifications'
+    slack_configs:
+    - channel: '#alerts'
+      text: 'https://internal.myorg.net/wiki/alerts/{{ .GroupLabels.app }}/{{ .GroupLabels.alertname }}'
+  ```
+
+- 自定义模板文件custom-template.tmpl
+
+  ```
+  {{ define "slack.myorg.text" }}https://internal.myorg.net/wiki/alerts/{{ .GroupLabels.app }}/{{ .GroupLabels.alertname }}{{ end}}
+  ```
 
 
-# Exporter
+通过在Alertmanager的全局设置中定义templates配置来指定自定义模板的访问路径
 
-- [自定义 demo](http://www.xuyasong.com/?p=1942)
-- [redis exporter](https://github.com/oliver006/redis_exporter)
-
-
-
-## 自定义Exporter
-
-主要是要实现Collector的接口`Describe` 和`Collect`
-
-```go
-type Collector interface {
-	// Describe sends the super-set of all possible descriptors of metrics
-	// collected by this Collector to the provided channel and returns once
-	// the last descriptor has been sent. The sent descriptors fulfill the
-	// consistency and uniqueness requirements described in the Desc
-	// documentation.
-	//
-	// It is valid if one and the same Collector sends duplicate
-	// descriptors. Those duplicates are simply ignored. However, two
-	// different Collectors must not send duplicate descriptors.
-	//
-	// Sending no descriptor at all marks the Collector as “unchecked”,
-	// i.e. no checks will be performed at registration time, and the
-	// Collector may yield any Metric it sees fit in its Collect method.
-	//
-	// This method idempotently sends the same descriptors throughout the
-	// lifetime of the Collector. It may be called concurrently and
-	// therefore must be implemented in a concurrency safe way.
-	//
-	// If a Collector encounters an error while executing this method, it
-	// must send an invalid descriptor (created with NewInvalidDesc) to
-	// signal the error to the registry.
-	Describe(chan<- *Desc)
-	// Collect is called by the Prometheus registry when collecting
-	// metrics. The implementation sends each collected metric via the
-	// provided channel and returns once the last metric has been sent. The
-	// descriptor of each sent metric is one of those returned by Describe
-	// (unless the Collector is unchecked, see above). Returned metrics that
-	// share the same descriptor must differ in their variable label
-	// values.
-	//
-	// This method may be called concurrently and must therefore be
-	// implemented in a concurrency safe way. Blocking occurs at the expense
-	// of total performance of rendering all registered metrics. Ideally,
-	// Collector implementations support concurrent readers.
-	Collect(chan<- Metric)
-}
+```
+# Files from which custom notification template definitions are read.
+# The last component may use a wildcard matcher, e.g. 'templates/*.tmpl'.
+templates:
+  [ - <filepath> ... ]
 ```
 
-Describe Exceple  告诉 `prometheus` 我们定义了哪些 `prometheus.Desc` 结构，通过 `channel` 传递给上层
-
-```go
-func newMetricDesc(namespace string, metricName string, help string, labels []string) *prometheus.Desc {
-	return prometheus.NewDesc(prometheus.BuildFQName(namespace, "", metricName), help, labels, nil)
-}
-
-totalScrapes =: prometheus.NewCounter(prometheus.CounterOpts{
-  Namespace: opts.Namespace,
-  Name:      "exporter_scrapes_total",
-  Help:      "Current total redis scrapes.",
-})
-
-scrapeDuration:= prometheus.NewSummary(prometheus.SummaryOpts{
-  Namespace: opts.Namespace,
-  Name:      "exporter_scrape_duration_seconds",
-  Help:      "Durations of scrapes by the exporter",
-})
-
-func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
-  
-  // 把Desc放到ch
-	for _, desc := range e.metricDescriptions {
-		ch <- desc
-	}
-
-	for _, v := range e.metricMapGauges {
-		ch <- newMetricDesc(e.options.Namespace, v, v+" metric", nil)
-	}
-
-	for _, v := range e.metricMapCounters {
-		ch <- newMetricDesc(e.options.Namespace, v, v+" metric", nil)
-	}
-
-	ch <- e.totalScrapes.Desc()
-	ch <- e.scrapeDuration.Desc()
-
-}
-```
-
-Collect Example  真正实现数据采集的功能，将采集数据结果通过 channel 传递给上层
-
-```go
-func (e *Exporter) registerConstMetric(ch chan<- prometheus.Metric, metric string, val float64, valType prometheus.ValueType, labelValues ...string) {
-	descr := e.metricDescriptions[metric]
-	if descr == nil {
-		descr = newMetricDescr(e.options.Namespace, metric, metric+" metric", labelValues)
-	}
-  // 主要是为valType=GaugeValue,CounterValue 之类赋值，不同类型赋值不一样
-	if m, err := prometheus.NewConstMetric(descr, valType, val, labelValues...); err == nil {
-		ch <- m
-	}
-}
-
-func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
-	e.Lock()
-	defer e.Unlock()
-  // 原子操作
-  /*
-  func (c *counter) Inc() {
-		atomic.AddUint64(&c.valInt, 1)
-	}
-  */
-	e.totalScrapes.Inc()
-
-	if e.redisAddr != "" {
-		startTime := time.Now()
-    ......
-
-		e.registerConstMetricGauge(ch, "up", up)
-
-		took := time.Since(startTime).Seconds()
-		e.scrapeDuration.Observe(took)
-		e.registerConstMetricGauge(ch, "exporter_last_scrape_duration_seconds", took)
-	}
-
-	ch <- e.totalScrapes
-	ch <- e.scrapeDuration
-	ch <- e.targetScrapeRequestErrors
-}
-```
-
-main example
-
-```go
-var (
-    // 命令行参数
-    listenAddr       = flag.String("web.listen-port", "9002", "An port to listen on for web interface and telemetry.")
-    metricsPath      = flag.String("web.telemetry-path", "/metrics", "A path under which to expose metrics.")
-    metricsNamespace = flag.String("metric.namespace", "bec", "Prometheus metrics namespace, as the prefix of metrics name")
-)
-
-func main() {
-    flag.Parse()
-    // 初始化自定义Collter
-    metrics := collector.NewMetrics(*metricsNamespace)
-    registry := prometheus.NewRegistry()
-    registry.MustRegister(metrics)
-
-    http.Handle(*metricsPath, promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
-
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        w.Write([]byte(`<html>
-            <head><title>A Prometheus Exporter</title></head>
-            <body>
-            <h1>A Prometheus Exporter</h1>
-            <p><a href='/metrics'>Metrics</a></p>
-            </body>
-            </html>`))
-    })
-
-    log.Printf("Starting Server at http://localhost:%s%s", *listenAddr, *metricsPath)
-    log.Fatal(http.ListenAndServe(":" + *listenAddr, nil))
-}
-```
-
-## 采集源码分析
-
-主要是NewRegistry返回Registry，分别实现了**Registerer**和**Gatherer**的接口
-
-![image-20211120120812861](https://tva1.sinaimg.cn/large/008i3skNgy1gwlhkq42qfj31360g0jtj.jpg)
-
-**调用注册时候调用Collector.Describe**
-
-```go
-// Register implements Registerer.
-func (r *Registry) Register(c Collector) error {
-	var (
-		descChan           = make(chan *Desc, capDescChan)
-		newDescIDs         = map[uint64]struct{}{}
-		newDimHashesByName = map[string]uint64{}
-		collectorID        uint64 // All desc IDs XOR'd together.
-		duplicateDescErr   error
-	)
-	go func() {
-		c.Describe(descChan)
-		close(descChan)
-	}()
-	r.mtx.Lock()
-	defer func() {
-		// Drain channel in case of premature return to not leak a goroutine.
-		for range descChan {
-		}
-		r.mtx.Unlock()
-	}()
-	// Conduct various tests...
-	for desc := range descChan {
-    .....//保存Desc信息
-  }
-}
-```
-
-Prometheus Server pull 时候会调用`/MetricsPath`的handler
-
-```go
-// HandlerFor returns an uninstrumented http.Handler for the provided
-// Gatherer. The behavior of the Handler is defined by the provided
-// HandlerOpts. Thus, HandlerFor is useful to create http.Handlers for custom
-// Gatherers, with non-default HandlerOpts, and/or with custom (or no)
-// instrumentation. Use the InstrumentMetricHandler function to apply the same
-// kind of instrumentation as it is used by the Handler function.
-func HandlerFor(reg prometheus.Gatherer, opts HandlerOpts) http.Handler {
-	....
-  mfs, err := reg.Gather()
-	....
-  // 返回OpenMetrics
-}
-```
-
-**里面会调用Registry.Gather实现**，pull的时候才执行**collector.Collect**
-
-```go
-// Gather implements Gatherer.
-func (r *Registry) Gather() ([]*dto.MetricFamily, error) {
-  ....
-  r.mtx.RLock()
-  ....
-  for _, collector := range r.collectorsByID {
-		checkedCollectors <- collector
-	}
-  r.mtx.RUnlock()
-  ...
-  wg.Add(goroutineBudget)
-
-	collectWorker := func() {
-		for {
-			select {
-			case collector := <-checkedCollectors:
-				collector.Collect(checkedMetricChan)
-			case collector := <-uncheckedCollectors:
-				collector.Collect(uncheckedMetricChan)
-			default:
-				return
-			}
-			wg.Done()
-		}
-	}
-
-	// Start the first worker now to make sure at least one is running.
-	go collectWorker()
-	goroutineBudget--
-  
-  // Close checkedMetricChan and uncheckedMetricChan once all collectors
-	// are collected.
-	go func() {
-		wg.Wait()
-		close(checkedMetricChan)
-		close(uncheckedMetricChan)
-	}()
-  ......
-  cmc := checkedMetricChan
-	umc := uncheckedMetricChan
-
-	for {
-		select {
-		case metric, ok := <-cmc:
-			if !ok {
-				cmc = nil
-				break
-			}
-			errs.Append(processMetric(
-				metric, metricFamiliesByName,
-				metricHashes,
-				registeredDescIDs,
-			))
-  
-}
-```
-
-然后通过**processMetric**里面`metric.Write`输出指标值之类
-
-```go
-// processMetric is an internal helper method only used by the Gather method.
-func processMetric(
-	metric Metric,
-	metricFamiliesByName map[string]*dto.MetricFamily,
-	metricHashes map[uint64]struct{},
-	registeredDescIDs map[uint64]struct{},
-) error {
-	desc := metric.Desc()
-	// Wrapped metrics collected by an unchecked Collector can have an
-	// invalid Desc.
-	if desc.err != nil {
-		return desc.err
-	}
-	dtoMetric := &dto.Metric{}
-	if err := metric.Write(dtoMetric); err != nil {
-		return fmt.Errorf("error collecting metric %v: %s", desc, err)
-	}
-	.....
-]
-```
-
-
-
-## 部署
-
-可以看到exporter其实就是个http server，**可以使用k8s的Deployment部署，通过arg或者env传参启动exporter**
-
-```go
-// /health  
-func (e *Exporter) healthHandler(w http.ResponseWriter, r *http.Request) {
-	_, _ = w.Write([]byte(`ok`))
-}
-
-// 首页 /
-func (e *Exporter) indexHandler(w http.ResponseWriter, r *http.Request) {
-	_, _ = w.Write([]byte(`<html>
-<head><title>Redis Exporter ` + e.buildInfo.Version + `</title></head>
-<body>
-<h1>Redis Exporter ` + e.buildInfo.Version + `</h1>
-<p><a href='` + e.options.MetricsPath + `'>Metrics</a></p>
-</body>
-</html>
-`))
-}
-```
-
-一个Service可以公开一个或多个服务端口,通常情况下,这些端口由指向一个Pod的多个Endpoints支持。这也反映在各自的Endpoints对象中。
-
-Prometheus Operator引入ServiceMonitor对象, 它发现Endpoints对象并配置Prometheus去监控这些Pods。通过标签匹配到对应的Service，调用对应对应的服务
-
-ServiceMonitorSpec的endpoints部分用于配置需要收集metrics的Endpoints的端口和其他参数。在一些用例中会直接监控不
-在服务endpoints中的pods的端口。因此,在endpoints部分指定endpoint时,请严格使用,不要混淆。
-
-
-
-ServiceMonitor和发现的目标可能来自任何namespace。这对于跨namespace的监控十分重要,比如meta-monitoring。使用
-PrometheusSpec下ServiceMonitor Namespace Selectorn,通过各自Prometheus server限制ServiceMonitors作用namespece。使用ServiceMonitorSpec下的namespaceSelector可以现在允许发现Endpoints对象的命名空间。要发现所有命
-名空间下的目标,namespaceSelector必须为空。
-
+设置了自定义模板的访问路径后，用户则可以直接在配置中使用该模板
 
 ```yaml
-{{- if .Values.prometheus.serviceMonitor.enabled }}
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: {{ include "xxxx.fullname" . }}
-  {{- if .Values.prometheus.serviceMonitor.namespace }}
-  namespace: {{ .Values.prometheus.serviceMonitor.namespace }}
-  {{- end }}
-  labels:
-    app.kubernetes.io/name: {{ include "xxx.name" . }} # 带有同样label service
-    {{- if .Values.labels -}}
-    {{ .Values.labels | toYaml | nindent 4 -}}
-    {{- end }}
-spec:
-  jobLabel: jobLabel
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "xxx.name" . }} # 带有同样label service
-  namespaceSelector:
-    matchNames:
-      - {{ .Release.Namespace }}
-  endpoints:
-    - port: metrics  # pull端口
-      interval: {{ .Values.prometheus.serviceMonitor.interval }} # pull时间间隔
-      {{- if .Values.prometheus.serviceMonitor.scrapeTimeout }}
-      scrapeTimeout: {{ .Values.prometheus.serviceMonitor.scrapeTimeout }}
-      {{- end }}
-      {{- if .Values.prometheus.serviceMonitor.metricRelabelings }}
-      metricRelabelings:
-      {{- toYaml .Values.prometheus.serviceMonitor.metricRelabelings | nindent 4 }}
-  {{- end }}
-  {{- end }}
-  
-----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "xxx.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "xxx.name" . }}
-spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: metrics
-      protocol: TCP
-      name: metrics
-  selector:
-    app.kubernetes.io/name: {{ include "xxx.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-
-
-----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ include "kafka-exporter.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "kafka-exporter.name" . }}
-    helm.sh/chart: {{ include "kafka-exporter.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    {{- if .Values.labels -}}
-    {{ .Values.labels | toYaml | nindent 4 -}}
-    {{- end }}
-spec:
-  replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "kafka-exporter.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: {{ include "kafka-exporter.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
-        {{- if .Values.podLabels -}}
-        {{ .Values.podLabels | toYaml | nindent 8 -}}
-        {{- end }}
-    spec:
-      containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args:
-            {{- if .Values.kafkaExporter}}
-            {{- range .Values.kafkaExporter.kafka.servers }}
-            - "--kafka.server={{ . }}"
-            {{- end }}
-            {{- if .Values.kafkaExporter.kafka.version }}
-            - --kafka.version={{ .Values.kafkaExporter.kafka.version }}
-            {{- end }}
-            {{- end}}
-            {{- if .Values.kafkaExporter.sasl.enabled }}
-            - --sasl.enabled
-            {{- if not .Values.kafkaExporter.sasl.handshake }}
-            - --sasl.handshake=false
-            {{- end }}
-            - --sasl.username={{ .Values.kafkaExporter.sasl.username }}
-            - --sasl.password={{ .Values.kafkaExporter.sasl.password }}
-            - --sasl.mechanism={{ .Values.kafkaExporter.sasl.mechanism }}
-            {{- end }}
-            {{- if .Values.kafkaExporter.tls.enabled}}
-            - --tls.enabled
-            {{- if .Values.kafkaExporter.tls.insecureSkipTlsVerify}}
-            - --tls.insecure-skip-tls-verify
-            {{- else }}
-            - --tls.ca-file=/etc/tls-certs/ca-file
-            - --tls.cert-file=/etc/tls-certs/cert-file
-            - --tls.key-file=/etc/tls-certs/key-file
-            {{- end }}
-            {{- end }}
-            {{- if .Values.kafkaExporter.log }}
-            - --verbosity={{ .Values.kafkaExporter.log.verbosity }}
-            {{- end }}
-            {{- if .Values.kafkaExporter.log.enableSarama }}
-            - --log.enable-sarama
-            {{- end }}
-          ports:
-            - name: metrics
-              containerPort: 9308
-              protocol: TCP
-          livenessProbe:
-            failureThreshold: 1
-            httpGet:
-              path: /healthz
-              port: metrics
-              scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 30
-            successThreshold: 1
-            timeoutSeconds: 9
-          readinessProbe:
-            failureThreshold: 1
-            httpGet:
-              path: /healthz
-              port: metrics
-              scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 15
-            successThreshold: 1
-            timeoutSeconds: 9
-
-          {{- if and .Values.kafkaExporter.tls.enabled (not .Values.kafkaExporter.tls.insecureSkipTlsVerify) }}
-          volumeMounts:
-          - name: tls-certs
-            mountPath: "/etc/tls-certs/"
-            readOnly: true
-          {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- if and .Values.kafkaExporter.tls.enabled (not .Values.kafkaExporter.tls.insecureSkipTlsVerify) }}
-      volumes:
-      - name: tls-certs
-        secret:
-          secretName: {{ include "kafka-exporter.fullname" . }}
-    {{- end }}
-
-
-
-----
-# values
-prometheus:
-  serviceMonitor:
-    enabled: true
-    namespace: monitoring
-    interval: "30s"
-    additionalLabels:
-      app: kafka-exporter
-    metricRelabelings: {}
+receivers:
+- name: 'slack-notifications'
+  slack_configs:
+  - channel: '#alerts'
+    text: '{{ template "slack.myorg.text" . }}'
+templates:
+- '/etc/alertmanager/templates/myorg.tmpl'
 ```
-
-可以看到新发现的target
-
-![img](https://tva1.sinaimg.cn/large/008i3skNgy1gwlmrsatajj314q0ajdhj.jpg)
-
-
 
 
 
 # 高可用
 
-在Prometheus设计上，使用本地存储可以降低Prometheus部署和管理的复杂度同时减少高可用（HA）带来的复杂性。 在默认情况下，用户只需要部署多套Prometheus，采集相同的Targets即可实现基本的HA。同时由于Promethus高效的数据处理能力，单个Prometheus Server基本上能够应对大部分用户监控规模的需求。
+在Prometheus设计上，使用本地存储可以降低Prometheus部署和管理的复杂度同时减少高可用（HA）带来的复杂性。 在默认情况下，用户只需要部署多套Prometheus，采集相同的Targets即可实现基本的HA。同时由于Prometheus高效的数据处理能力，单个Prometheus Server基本上能够应对大部分用户监控规模的需求。
 
 当然本地存储也带来了一些不好的地方，首先就是数据持久化的问题，特别是在像Kubernetes这样的动态集群环境下，如果Promthues的实例被重新调度，那所有历史监控数据都会丢失。 **其次本地存储也意味着Prometheus不适合保存大量历史数据(一般Prometheus推荐只保留几周或者几个月的数据)。**最后本地存储也导致Prometheus无法进行弹性扩展。为了适应这方面的需求，**Prometheus提供了remote_write和remote_read的特性，支持将数据存储到远端和从远端读取数据。**通过将监控与数据分离，Prometheus能够更好地进行弹性扩展。
 
@@ -1192,7 +789,7 @@ scrape_configs:
 
 ![HA + Remote Storage](https://tva1.sinaimg.cn/large/008i3skNgy1gwlydvup6sj31dm0co750.jpg)
 
-在解决了Promthues服务可用性的基础上，同时确保了数据的持久化，当Promthues Server发生宕机或者数据丢失的情况下，可以快速的恢复。 同时Promthues Server可能很好的进行迁移。**因此，该方案适用于用户监控规模不大，但是希望能够将监控数据持久化，同时能够确保Promthues Server的可迁移性的场景。**
+在解决了Promthues服务可用性的基础上，同时确保了数据的持久化，当Promthues Server发生宕机或者数据丢失的情况下，可以快速的恢复。 同时Promthues Server可能很好的进行迁移。**因此，该方案适用于用户监控规模不大，但是希望能够将监控数据持久化，同时能够确保Promthues Server的可迁移性的场景。**
 
 ### 基本HA + 远程存储 + 联邦集群
 
