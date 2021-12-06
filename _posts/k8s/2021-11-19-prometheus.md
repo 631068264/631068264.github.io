@@ -476,7 +476,7 @@ global:
 
 ## 模板
 
-[配置说明](https://prometheus.io/docs/alerting/latest/notification_examples/)
+[配置说明](https://prometheus.io/docs/alerting/latest/notifications/)
 
 - Alertmanager配置文件中使用模板字符串
 
@@ -515,8 +515,6 @@ receivers:
 templates:
 - '/etc/alertmanager/templates/myorg.tmpl'
 ```
-
-
 
 # 高可用
 

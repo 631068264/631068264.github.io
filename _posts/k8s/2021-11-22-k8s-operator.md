@@ -188,3 +188,60 @@ my-new-cron-object   6s
 
 ```
 
+## openAPIV3Schema
+
+```yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+spec:
+  group: stable.example.com
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        # openAPIV3Schema 是用来检查定制对象的模式定义
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                cronSpec:
+                  type: string
+                  pattern: '^(\d+|\*)(/\d+)?(\s+(\d+|\*)(/\d+)?){4}$'
+                  default: "5 0 * * *"
+                image:
+                  type: string
+                replicas:
+                  type: integer
+                  minimum: 1
+                  maximum: 10
+                  default: 1
+  scope: Namespaced
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+    shortNames:
+    - ct
+```
+
+# 自定义k8s api 扩展 apiserver
+
+[Configure the Aggregation Layer](https://kubernetes.io/zh/docs/tasks/extend-kubernetes/configure-aggregation-layer/)
+
+Kubernetes apiserver 会与扩展 apiserver通信，使用 x509 证书向扩展 apiserver 认证
+
+大致流程如下：
+
+1. Kubernetes apiserver：对发出请求的用户身份认证，并对请求的 API 路径执行鉴权。
+2. Kubernetes apiserver：将请求转发到扩展 apiserver
+3. 扩展 apiserver：认证来自 Kubernetes apiserver 的请求
+4. 扩展 apiserver：对来自原始用户的请求鉴权
+5. 扩展 apiserver：执行
+
+![](https://tva1.sinaimg.cn/large/008i3skNly1gwsjko4jcuj30sg16kdhs.jpg)
+
