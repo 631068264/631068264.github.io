@@ -18,7 +18,57 @@ Deployment 为 Pod 和 ReplicaSet 提供了一个声明式定义的方法，用�
     - 暂停和继续 Deployment
 - RS 和 Deployment 的关联
 
+pod的owner是ReplicaSet，而不是Deployment。
+
 ![image-20211016214611265](https://tva1.sinaimg.cn/large/008i3skNgy1gvhhla38dxj61860jgta702.jpg)
+
+![image-20211212200640567](https://tva1.sinaimg.cn/large/008i3skNgy1gxbb1c8fg0j31n70u0dix.jpg)
+
+## Deployment 控制器
+
+![image-20211212200851043](https://tva1.sinaimg.cn/large/008i3skNgy1gxbb3lq6p1j322z0u0gp8.jpg)
+
+首先，我们所有的控制器都是通过 Informer 中的 Event 做一些 Handler 和 Watch。这个地方 Deployment 控制器，其实是关注 Deployment 和 ReplicaSet 中的 event，收到事件后会加入到队列中。而 Deployment controller 从队列中取出来之后，**它的逻辑会判断 Check Paused，这个 Paused 其实是 Deployment 是否需要新的发布，如果 Paused 设置为 true 的话，就表示这个 Deployment 只会做一个数量上的维持，不会做新的发布。**
+
+如上图，可以看到如果 Check paused 为 Yes 也就是 true 的话，那么只会做 Sync replicas。也就是说把 replicas sync 同步到对应的 ReplicaSet 中，最后再 Update Deployment status，那么 controller 这一次的 ReplicaSet 就结束了。
+
+ 
+
+那么如果 paused 为 false 的话，它就会做 Rollout，也就是通过 Create 或者是 Rolling 的方式来做更新，更新的方式其实也是通过 Create/Update/Delete 这种 ReplicaSet 来做实现的。
+
+![image-20211212202547757](https://tva1.sinaimg.cn/large/008i3skNgy1gxbbl8l2guj31460jut9w.jpg)
+
+当 Deployment 分配 ReplicaSet 之后，ReplicaSet 控制器本身也是从 Informer 中 watch 一些事件，这些事件包含了 ReplicaSet 和 Pod 的事件。从队列中取出之后，**ReplicaSet controller 的逻辑很简单，就只管理副本数。也就是说如果 controller 发现 replicas 比 Pod 数量大的话，就会扩容，而如果发现实际数量超过期望数量的话，就会删除 Pod。**
+
+上面 Deployment 控制器的图中可以看到，**Deployment 控制器其实做了更复杂的事情，包含了版本管理，而它把每一个版本下的数量维持工作交给 ReplicaSet 来做。**
+
+## rs 和 deploy 模拟
+
+![image-20211212203520743](https://tva1.sinaimg.cn/large/008i3skNgy1gxbbv68rxaj31400jkabv.jpg)
+
+![image-20211212203557514](https://tva1.sinaimg.cn/large/008i3skNgy1gxbbvt6hl4j31fo0qin0j.jpg)
+
+Deployment水平缩放，是不会创建新的ReplicaSet的，但是涉及到Pod模板的更新后，比如更改容器的镜像，那么Deployment会用创建一个新版本的ReplicaSet用来替换旧版本。
+
+
+
+![image-20211212203702555](https://tva1.sinaimg.cn/large/008i3skNgy1gxbbwxil9wj31gc0oatc4.jpg)
+
+## spec
+
+- MinReadySeconds：**判断pod available最少ready时间**。    Deployment 会根据 Pod ready 来看 Pod 是否可用，但是如果我们设置了 MinReadySeconds 之后，比如设置为 30 秒，那 Deployment 就一定会等到 Pod ready 超过 30 秒之后才认为 Pod 是 available 的。Pod available 的前提条件是 Pod ready，但是 ready 的 Pod 不一定是 available 的，它一定要超过 MinReadySeconds 之后，才会判断为 available；
+
+- revisionHistoryLimit：**保留历史 revision，即保留历史 ReplicaSet 的数量**，默认值为 10 个。这里可以设置为一个或两个，如果回滚可能性比较大的话，可以设置数量超过 10；
+
+- paused：paused 是标识，**Deployment 只做数量维持，不做新的发布**，这里在 Debug 场景可能会用到；
+
+- progressDeadlineSeconds：前面提到当 Deployment 处于扩容或者发布状态时，它的 condition 会处于一个 processing 的状态，processing 可以设置一个超时时间。**如果超过超时时间还处于 processing，那么 controller 将认为这个 Pod 会进入 failed 的状态。**
+
+ 
+
+
+
+
 
 ##  部署
 
@@ -96,10 +146,13 @@ Deployment 控制器将 `pod-template-hash` 标签添加到 Deployment 所创建
 
 - 如果 `.spec.strategy.type==Recreate`，在创建新 Pods 之前，所有现有的 Pods 会被杀死。
 -  `.spec.strategy.type==RollingUpdate`时，采取 滚动更新的方式更新 Pods。你可以指定 `maxUnavailable` 和 `maxSurge` 来控制滚动更新 过程。
-  - `.spec.strategy.rollingUpdate.maxUnavailable` 是一个可选字段，用来指定 更新过程中不可用的 Pod 的个数上限。该值可以是绝对数字（例如，5），也可以是 所需 Pods 的百分比（例如，10%）。百分比值会转换成绝对数并去除小数部分。**默认值为 25%。**
-  - `.spec.strategy.rollingUpdate.maxSurge` 是一个可选字段，用来指定可以创建的超出 期望 Pod 个数的 Pod 数量。此值可以是绝对数（例如，5）或所需 Pods 的百分比（例如，10%）。**此字段的默认值为 25%。**
+  - `.spec.strategy.rollingUpdate.maxUnavailable` 是一个可选字段，用来指定 **更新过程中不可用的 Pod 的个数上限**。该值可以是绝对数字（例如，5），也可以是 所需 Pods 的百分比（例如，10%）。百分比值会转换成绝对数并去除小数部分。**默认值为 25%。**
+  - `.spec.strategy.rollingUpdate.maxSurge` 是一个可选字段，用来指定**可以创建的超出 期望 Pod 个数的 Pod 数量**。此值可以是绝对数（例如，5）或所需 Pods 的百分比（例如，10%）。**此字段的默认值为 25%。**
+- **MaxSurge 和 MaxUnavailable 不能同时为 0**，当 MaxSurge 为 0 的时候，必须要删除 Pod，才能扩容 Pod；如果不删除 Pod 是不能新扩 Pod 的，因为新扩出来的话，总共的 Pod 数量就会超过期望数量。而两者同时为 0 的话，MaxSurge 保证不能新扩 Pod，而 MaxUnavailable 不能保证 ReplicaSet 中有 Pod 是 available 的，这样就会产生问题。所以说这两个值不能同时为 0。用户可以根据自己的实际场景来设置对应的、合适的值。
 
 让我们更新 nginx 的 Pods，使用 nginx:1.9.1 镜像来代替之前的旧镜像。
+
+![image-20211212173913626](https://tva1.sinaimg.cn/large/008i3skNgy1gxb6rvom63j31gy0rgq6l.jpg)
 
 ```bash
 # 更新nginx服务
@@ -319,7 +372,7 @@ Deployment 的生命周期中会有许多状态。上线新的 ReplicaSet 期间
 - *Complete*更新都已完成，所有副本都可用
 - [Failed原因](https://kubernetes.io/zh/docs/concepts/workloads/controllers/deployment/#failed-deployment)
 
-
+![image-20211212200024087](https://tva1.sinaimg.cn/large/008i3skNgy1gxbaut4b85j31mg0u0whb.jpg)
 
 # StatefulSet
 
