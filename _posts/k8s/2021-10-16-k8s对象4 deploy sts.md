@@ -884,3 +884,54 @@ pod "web-0" deleted
 - 如果需要使用 service 的负载均衡，不要使用 StatefulSet，尽量使用 clusterIP 类型，用 serviceName 做转发；
 - 如果是有多 replicas，且需要挂载多个 pv 且每个 pv 的数据是不同的，因为 pod 和 pv 之间是一一对应的，如果某个 pod 挂掉再重启，还需要连接之前的 pv，不能连到别的 pv 上，考虑使用 StatefulSet；
 - 能不用 StatefulSet，就不要用；
+
+[绑定pvc,pv写法不同](https://akomljen.com/kubernetes-persistent-volumes-with-deployment-and-statefulset/)
+
+```yaml
+kind: Deployment
+....
+    spec:
+      containers:
+        - name: nginx
+          image: k8s.gcr.io/nginx-slim:0.8
+          ports:
+            - containerPort: 80
+              name: web
+          volumeMounts:
+            - name: www
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: www
+          persistentVolumeClaim:
+            claimName: www
+```
+
+```yaml
+kind: StatefulSet
+...
+spec:
+  serviceName: "nginx"
+  replicas: 2
+ ....
+    spec:
+      containers:
+        - name: nginx
+          image: k8s.gcr.io/nginx-slim:0.8
+          ports:
+            - containerPort: 80
+              name: web
+          volumeMounts:
+            - name: www
+              mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+    - metadata:
+        name: www
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+```
+
+
+
