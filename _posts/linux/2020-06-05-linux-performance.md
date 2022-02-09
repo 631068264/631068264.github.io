@@ -403,6 +403,25 @@ dd if=/root/test of=test oflag=sync
 
 ```
 
+## 系统版本
+
+```sh
+# redheat 系列看系统版本
+cat /etc/redhat-release
+
+# 其他
+cat /etc/issue
+lsb_release -a
+
+# 内核版本
+cat /proc/version
+uname -a
+```
+
+
+
+
+
 
 
 ## RAID
@@ -411,7 +430,7 @@ dd if=/root/test of=test oflag=sync
 
 
 
-## raid 0
+### raid 0
 
 使用相同型号与容量的磁盘来组成时，效果较佳。等量模式，**性能最佳**
 
@@ -429,7 +448,7 @@ RAID-0 只要有任何一颗磁盘损毁，在 RAID 上面的所有数据都会�
 
 
 
-## raid1
+### raid1
 
 映射模式 **完整备份**
 
@@ -441,7 +460,7 @@ RAID-0 只要有任何一颗磁盘损毁，在 RAID 上面的所有数据都会�
 
 
 
-## RAID 1+0，RAID 0+1
+### RAID 1+0，RAID 0+1
 
 ![RAID-1+0 的磁盘写入示意图](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfhm8wrvbmj30c506aaa8.jpg)
 
@@ -449,7 +468,7 @@ RAID-0 只要有任何一颗磁盘损毁，在 RAID 上面的所有数据都会�
 
 
 
-## raid 5
+### raid 5
 
 RAID-5 至少需要三颗以上的磁盘才能够组成这种类型的磁盘阵列。这种磁盘阵列的数据写入有点类似 RAID-0 ， 不过每个循环的写入过程中 （striping），在每颗磁盘还加入一个同位检查数据 （Parity）
 

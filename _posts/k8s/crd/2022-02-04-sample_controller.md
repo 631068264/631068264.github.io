@@ -238,13 +238,7 @@ loop:
 }
 ```
 
-
-
-
-
-
-
-## 资源 Informer
+## Shared Informer
 
 每一个 k8s Resource 都实现了 Informer 机制，**均有 Informer 和 Lister 方法**，以 PodInformer 为例：
 
@@ -540,7 +534,9 @@ func (f *DeltaFIFO) syncKeyLocked(key string) error {
 }
 ```
 
-> 为什么需要 Resync 机制呢？因为在处理 SharedInformer 事件回调时，可能存在处理失败的情况，定时的 Resync 让这些处理失败的事件有了重新 onUpdate 处理的机会。
+> **为什么需要 Resync 机制呢？**因为在处理 SharedInformer 事件回调时，可能存在处理失败的情况，定时的 Resync 让这些处理失败的事件有了重新 onUpdate 处理的机会。
+
+
 
 那么经过 Resync 重新放入 Delta FIFO 队列的事件，和直接从 apiserver 中 watch 得到的事件处理起来有什么不一样呢？在消费者方法中有介绍过 `HandleDeltas`，其中就有关于 Resync 的部分：
 

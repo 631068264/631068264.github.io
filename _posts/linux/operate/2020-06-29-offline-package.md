@@ -1,7 +1,7 @@
 ---
 layout: post
 rewards: false
-title:  apt离线包
+title:  ubuntu centos离线包
 categories:
     - Linux
 
@@ -9,7 +9,9 @@ categories:
 
 
 
-# 离线包
+# ubuntu
+
+## 离线包
 
 ```dockerfile
 FROM xxxx
@@ -27,9 +29,7 @@ COPY offline_req.txt .
 RUN pip download -i https://mirrors.aliyun.com/pypi/simple/ -d wheelhouse -r offline_req.txt
 ```
 
-
-
-# apt
+## apt
 
 不安装缓存到`/var/cache/apt/archives/*.deb` ，同时要减少来避免安装非必须的文件，从而减小包体积
 
@@ -37,9 +37,7 @@ RUN pip download -i https://mirrors.aliyun.com/pypi/simple/ -d wheelhouse -r off
 - `-y` 对所有的询问选是
 - `--no-install-recommends` 来避免安装非必须的文件
 
-
-
-# pip
+## pip
 
 只下载不安装放到指定目录
 
@@ -48,9 +46,7 @@ RUN pip download -i https://mirrors.aliyun.com/pypi/simple/ -d wheelhouse -r off
 - `-d` 缓存目录
 - `-r` 依赖版本文件
 
-
-
-# 安装
+## 安装
 
 apt install
 
@@ -84,3 +80,70 @@ deactivate
 
 
 > 还是docker方便
+
+# Centos
+
+[全量依赖 rpm 包及离线安装](https://cloud.tencent.com/developer/article/1614031)
+
+```dockerfile
+FROM centos:7
+ARG PKG_NAME
+
+COPY Centos-7.repo /etc/yum.repos.d/CentOS-Base.repo
+RUN yum clean all \
+    && yum makecache \
+    && yum install yum-utils
+
+#RUN mkdir -p /data/rpm  && repotrack --download_path=/data/rpm ${PKG_NAME}
+RUN mkdir -p /data/rpm  && yumdownloader --resolve --destdir=/data/rpm ${PKG_NAME}
+```
+
+打包安装包
+
+```sh
+#!/bin/bash
+IMAGE_NAME=centos-offline
+CONTAINER_NAME=centos-offline
+LOCAL_PATH=$1-rpm
+
+set -ex
+
+docker build --no-cache \
+    --build-arg PKG_NAME=$1 \
+    -t ${IMAGE_NAME} -f centos.Dockerfile .
+mkdir -p ${LOCAL_PATH} && rm -rf ${LOCAL_PATH}
+docker run -d --rm --name ${CONTAINER_NAME} ${IMAGE_NAME} sleep 1m
+docker cp ${CONTAINER_NAME}:/data/rpm/ ${LOCAL_PATH}
+docker kill ${CONTAINER_NAME}
+tar -zcvf $1-rpm.tar.gz ${LOCAL_PATH} && rm -rf ${LOCAL_PATH}
+```
+
+安装  [rpm 命令](https://www.linuxcool.com/rpm)
+
+```sh
+tar -xzvf xxx.tar.gz -C path
+
+# --force 忽略报错，强制安装  --nodeps就是安装时不检查依赖关系
+rpm -Uvh *.rpm --nodeps --force
+# 直接安装软件包
+rpm -ivh --force *.rpm
+
+
+# 解压rpm到指定目录，通过yum安装
+cd $DECOMPRESS_PATH
+createrepo ./
+echo -e "[docker-ce]
+name=docker-ce
+baseurl=file://$DECOMPRESS_PATH
+enabled=1
+gpgcheck=0" > /etc/yum.repos.d/docker-ce.repo
+# 禁用其他repo 更新repo
+yum -y --disablerepo="*" --enablerepo="docker-ce" update
+yum -y install docker-ce --disablerepo="*" --enablerepo=docker-ce
+systemctl restart docker && systemctl enable docker
+```
+
+
+
+
+
