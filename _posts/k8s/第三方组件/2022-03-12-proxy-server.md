@@ -124,7 +124,9 @@ systemctl start sockd
 ```sh
 # the server will log both via syslog, to stdout and to /var/log/sockd.log
 #logoutput: syslog stdout /var/log/sockd.log
-logoutput: stderr
+# 报错日志通过journalctl可以看
+errorlog: syslog
+logoutput: /var/log/sockd.log
 
 # The server will bind to the address 10.1.1.1, port 1080 and will only
 # accept connections going to that address.
@@ -136,6 +138,7 @@ internal: 0.0.0.0 port = 1080
 external: eth0
 
 # methods for socks-rules.
+# 验证方式账号密码 或者 没有都支持
 socksmethod: username none #rfc931
 
 # methods for client-rules.
@@ -166,6 +169,57 @@ socks pass {
 | Socks规则  | 对于已经accept connection的连接，服务端有选择的拒绝转发Socket | 工作在Socks层                |
 
 所以Client规则是在TCP的accept阶段进行控制，Socks规则是满足Client规则后且建立TCP连接后的Sock层控制。有顺序之分。
+
+
+
+service修改，有个比较坑爹地方，默认报错不会重启，我艹，通过
+
+[alert: run_io(): mother unexpectedly closed the IPC control channel: mother unexpectedly exited](https://www.inet.no/dante/doc/latest/config/redundancy_process.html)
+
+
+报错发现
+
+
+
+```shell
+[Unit]
+Description=SOCKS v4 and v5 compatible proxy server and client
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/sockd/sockd.pid
+# -N 4 https://www.inet.no/dante/doc/latest/config/redundancy_process.html
+ExecStart=/usr/sbin/sockd -N 4 -D -p /var/run/sockd/sockd.pid
+# default no restart
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
+```
+
+update service
+
+```
+systemctl daemon-reload
+systemctl restart sockd
+```
+
+
+
+添加验证用户
+
+```shell
+useradd -M testuser
+passwd testuser
+```
+
+
+
+
+
+
 
 # 代码参考
 

@@ -365,6 +365,29 @@ fdisk -l |grep Disk
 
 df -h
 
+du -h --max-depth=1 | sort -hr
+参数说明：
+--max-depth：表示要查看几层目录
+sort -r：反向显示
+sort -h：compare human readable numbers (e.g., 2k 1G)
+
+
+
+1. 使用ls也可以实现文件按大小排序，使用-S参数。
+ls -lSh
+ 
+注意： 它不能识别视频文件和封装的其他系统文件的大小
+ 
+2. 把文件按时间排序，如下命令可实现
+ls -ltu --time-style=long-iso
+ 
+参数说明：
+-u: 和lt一起用，也就是-ltu，会按访问时间进行排序
+-t：一般和l一起用，也就是-lt，按修改时间排序，最新的在第一位；有时候需要逆排序，那个参数r就行了，也就是ls -ltr
+也可以试试ls -ltu --full-time，显示的时间很全。
+
+
+
 目录大小
 du -sh /var/lib/*
 ```
