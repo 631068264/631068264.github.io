@@ -1,7 +1,7 @@
 ---
 layout:     post
 rewards: false
-title:      dokcker 磁盘满了
+title:      docker 磁盘满了
 categories:
     - docker
 
