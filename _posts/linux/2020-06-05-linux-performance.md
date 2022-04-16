@@ -371,6 +371,9 @@ du -h --max-depth=1 | sort -hr
 sort -r：反向显示
 sort -h：compare human readable numbers (e.g., 2k 1G)
 
+du -d1 -h /var/lib/docker/containers | sort -h
+du -d1 -h /var/lib/docker/overlay2 | sort -h
+docker ps -q | xargs docker inspect --format '{{.State.Pid}}, {{.Name}}, {{.GraphDriver.Data.WorkDir}}' | grep "11f9eb2a7369936346812b6d8d95e8441ff4f2d2bd37723ea15f27c84e17a85a"
 
 
 1. 使用ls也可以实现文件按大小排序，使用-S参数。
