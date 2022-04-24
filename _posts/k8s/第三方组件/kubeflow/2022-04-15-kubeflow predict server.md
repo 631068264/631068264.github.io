@@ -123,11 +123,11 @@ tar czvf iris.tgz *
 
 
 
-# Custom
+# 自定义Model Server
 
 如果开箱即用的model server不能满足要求，可以使用 KServe ModelServer API 构建自己的模型服务器。
 
-**用户可以完全掌握model server的输入输出，和数据处理**
+**用户可以完全掌握model server的输入输出和数据处理**
 
 ## 继承扩展kserve.Model
 
@@ -156,11 +156,19 @@ tar czvf iris.tgz *
         return response
 ```
 
-还有一个额外的`load`方法用于编写自定义代码以将模型从本地文件系统或远程模型存储加载到内存中，一般的好做法是在模型服务器类函数中调用`__init__`，以便加载模型当用户进行预测调用时启动并准备好服务。
+还有一个额外的`load`方法用于编写自定义代码以将模型从本地文件系统或远程模型存储加载到内存中，一般的好做法是在model server 的 `__init__`中调用，以便加载模型当用户进行预测调用时启动并准备好服务。
 
 代码实例model.py  [完整示例](https://github.com/kserve/kserve/blob/master/python/custom_model/model.py)
 
 ```python
+import kserve
+from torchvision import models, transforms
+from typing import Dict
+import torch
+from PIL import Image
+import base64
+import io
+
 class AlexNetModel(kserve.Model):
     def __init__(self, name: str):
         super().__init__(name)
