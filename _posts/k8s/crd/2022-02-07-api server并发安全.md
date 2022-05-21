@@ -4,6 +4,8 @@ rewards: false
 title:   Kubernetes ApiServer 并发安全机制
 categories:
     - k8s
+tags:
+    - crd
 ---
 
 当向 Kubernetes ApiServer 并发的发起多个请求，对同一个 API 资源对象进行更新时，Kubernetes ApiServer 是如何确保更新不丢失，以及如何做冲突检测的

@@ -1,10 +1,12 @@
 ---
+
 layout:     post
 rewards: false
 title:   Programming Kubernetes 读书笔记
 categories:
     - k8s
-
+tags:
+    - crd
 ---
 
 # 扩展模式

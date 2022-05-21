@@ -4,7 +4,8 @@ rewards: false
 title:   k8s operator 开发
 categories:
     - k8s
-
+tags:
+    - crd
 ---
 
 # CR定制资源

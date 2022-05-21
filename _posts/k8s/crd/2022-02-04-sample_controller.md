@@ -4,7 +4,8 @@ rewards: false
 title:   Informer 机制详解
 categories:
     - k8s
-
+tags:
+    - crd
 ---
 
 - [Writing a Kubernetes Operator in Python without frameworks and SDK](https://medium.com/flant-com/kubernetes-operator-in-python-451f2d2e33f3)
@@ -13,6 +14,8 @@ categories:
 
 
 ![](https://tva1.sinaimg.cn/large/008i3skNgy1gz1lwztny6j30te0m2t9u.jpg)
+
+> 这张图分为两部分，黄色图标是开发者需要自行开发的部分，而其它的部分是 client-go 已经提供的，直接使用即可。
 
 # 客户端组件
 
