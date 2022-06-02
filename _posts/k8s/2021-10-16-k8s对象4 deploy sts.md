@@ -145,9 +145,13 @@ Deployment 控制器将 `pod-template-hash` 标签添加到 Deployment 所创建
 `.spec.strategy` 策略指定用于用新 Pods 替换旧 Pods 的策略。 `.spec.strategy.type` 可以是 “Recreate” 或 “RollingUpdate”。“RollingUpdate” 是默认值。
 
 - 如果 `.spec.strategy.type==Recreate`，在创建新 Pods 之前，所有现有的 Pods 会被杀死。
+
 -  `.spec.strategy.type==RollingUpdate`时，采取 滚动更新的方式更新 Pods。你可以指定 `maxUnavailable` 和 `maxSurge` 来控制滚动更新 过程。
   - `.spec.strategy.rollingUpdate.maxUnavailable` 是一个可选字段，用来指定 **更新过程中不可用的 Pod 的个数上限**。该值可以是绝对数字（例如，5），也可以是 所需 Pods 的百分比（例如，10%）。百分比值会转换成绝对数并去除小数部分。**默认值为 25%。**
   - `.spec.strategy.rollingUpdate.maxSurge` 是一个可选字段，用来指定**可以创建的超出 期望 Pod 个数的 Pod 数量**。此值可以是绝对数（例如，5）或所需 Pods 的百分比（例如，10%）。**此字段的默认值为 25%。**
+  
+  ![image-20220526215756697](https://tva1.sinaimg.cn/large/e6c9d24egy1h2m5hz2gcaj21v00i60w6.jpg)
+  
 - **MaxSurge 和 MaxUnavailable 不能同时为 0**，当 MaxSurge 为 0 的时候，必须要删除 Pod，才能扩容 Pod；如果不删除 Pod 是不能新扩 Pod 的，因为新扩出来的话，总共的 Pod 数量就会超过期望数量。而两者同时为 0 的话，MaxSurge 保证不能新扩 Pod，而 MaxUnavailable 不能保证 ReplicaSet 中有 Pod 是 available 的，这样就会产生问题。所以说这两个值不能同时为 0。用户可以根据自己的实际场景来设置对应的、合适的值。
 
 让我们更新 nginx 的 Pods，使用 nginx:1.9.1 镜像来代替之前的旧镜像。
