@@ -10,7 +10,10 @@ tags:
 
 ---
 
-参考：https://coredns.io/plugins/etcd/
+参考：
+
+- https://coredns.io/plugins/etcd/
+- [利用CoreDNS实现DNS负载均衡](https://itcn.blog/p/4855939141.html)
 
 # 获取etcd证书
 
@@ -183,7 +186,7 @@ etcdctl --endpoints=https://127.0.0.1:2379 \
 
 A记录添加是反向的即www.test.com要配成 /com/test/www/，后面的ep1为自定义内容，代表www.test.com对应的3个IP记录192.16.58.114 ~ 116三个IP地址
 
-**验证**
+# 验证
 
 ```sh
 kubectl get svc -n kube-system | grep dns
