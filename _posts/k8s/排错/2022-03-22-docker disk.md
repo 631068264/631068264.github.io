@@ -98,7 +98,7 @@ du -sh /var/lib/docker/
 #--max-depth：表示要查看几层目录
 #sort -r：反向显示
 #sort -h：compare human readable numbers (e.g., 2k 1G)
-du -h --max-depth=1 xxx | sort -hr
+du -h --max-depth=1 . | sort -hr
 ```
 
 

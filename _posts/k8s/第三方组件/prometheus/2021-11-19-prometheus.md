@@ -4,7 +4,32 @@ rewards: false
 title:      Prometheus
 categories:
     - k8s
+
 ---
+
+
+
+Kubemetes 的早期版本依靠 Heapster 来实 现 完整的性能数据采集和监控功能， Kubernetes 从 1.8 版本开始，性 能数据开始 以 Metrics API 方式提供标 准化接口，并且从 1.10 版本开始将 Heapster 替换为 Metrics Server。 在 Kubemeles 新的监控体系中， **Metrics Server 用于提供核心指标 (Core Metrics )， 包括 Node、 Pod 的 CPU 和内 存使用指标。对其他自 定义指标 ( Custom Metrics ) 的监控则由 Prometheus 等组件来完成。**
+
+# 监控 Node 和 Pod 的 CPU 和内存使用数据
+
+Metrics Server 在部署 完成 后，将通过 Kubemetes 核心 API Server 的 **/apis/ metrics.k8s.io/vIbeta1**路径提供Node和Pod的监控数据。
+
+```sh
+# 监控 Node CPU、 内存资源的使用情况
+kubectl top nodes
+
+# 监控 Node CPU、 内存资源的使用情况
+kubectl top pods --all-namespaces
+```
+
+
+
+
+
+
+
+
 
 Prometheus scrapes metrics from instrumented jobs, either directly or via an intermediary push gateway for short-lived jobs. It stores all scraped samples locally and runs rules over this data to either aggregate and record new time series from existing data or generate alerts. [Grafana](https://grafana.com/) or other API consumers can be used to visualize the collected data.
 
