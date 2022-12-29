@@ -141,9 +141,25 @@ gpgcheck=0" > /etc/yum.repos.d/docker-ce.repo
 yum -y --disablerepo="*" --enablerepo="docker-ce" update
 yum -y install docker-ce --disablerepo="*" --enablerepo=docker-ce
 systemctl restart docker && systemctl enable docker
+
+
+
+
+
 ```
 
 
+
+```sh
+# Duplicate Package
+package-cleanup --dupes # lists duplicate packages
+package-cleanup --cleandupes # removes duplicate packages
+
+
+
+yum list installed > my_list.txt
+yum list installed | grep nginx
+```
 
 
 

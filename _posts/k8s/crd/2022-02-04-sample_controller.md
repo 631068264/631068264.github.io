@@ -13,7 +13,7 @@ tags:
 
 
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gz1lwztny6j30te0m2t9u.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gz1lwztny6j30te0m2t9u.jpg)
 
 > 这张图分为两部分，黄色图标是开发者需要自行开发的部分，而其它的部分是 client-go 已经提供的，直接使用即可。
 

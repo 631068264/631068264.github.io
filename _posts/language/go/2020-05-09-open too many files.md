@@ -49,8 +49,8 @@ file locks                      (-x) unlimited
 
 # TCP 状态解释
 
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g1kl4m77guj31860meq3z.jpg)
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g1kl4x2guzj314s0mwdh6.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301035730.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301035731.jpg)
 
 对于已经建立的连接，网络双方要进行四次握手才能成功断开连接，如果缺少了其中某个步骤，
 将会使连接处于假死状态，连接本身占用的资源不 会被释放。

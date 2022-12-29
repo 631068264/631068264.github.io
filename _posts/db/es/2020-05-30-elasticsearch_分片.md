@@ -11,41 +11,41 @@ tags:
 
 # 分片
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjd4rwc21kj31720iamyt.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017558.jpg)
 
-![image-20201004111652659](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjd4sckohtj31560ksabk.jpg)
+![image-20201004111652659](https://cdn.jsdelivr.net/gh/631068264/img/202212301017559.jpg)
 
-![image-20201004111812510](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjd4toowa8j31m00u0e5f.jpg)
+![image-20201004111812510](https://cdn.jsdelivr.net/gh/631068264/img/202212301017560.jpg)
 
 
 
 
 # 主分片
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr06work5qj31d20u044v.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017561.jpg)
 
 # 副本分片
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr072xm56ij31sn0u0qah.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017562.jpg)
 
 
 # 分片数设定
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr07590g3vj31mm0u0tgj.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017563.jpg)
 
 ##  分片过多  增加节点 rebalance
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr077j7kywj31jf0u0n1c.jpg)
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr0783s295j32370u0jwa.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017564.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017565.jpg)
 
 增加一台服务器，此时shard是如何分配的呢
 
 Rebalance（再平衡），当集群中节点数量发生变化时，将会触发es集群的rebalance，即重新分配shard。Rebalance的原则就是尽量使shard在节点中分布均匀，**primary shard和replica shard不能分配到一个节点上的**，达到负载均衡的目的。
 
-![image-20210530093202876](https://tva1.sinaimg.cn/large/008i3skNgy1gr078kp9zbj320o0u0to1.jpg)
+![image-20210530093202876](https://cdn.jsdelivr.net/gh/631068264/img/202212301017566.jpg)
 
 ## 故障转移 集群容灾
 
-![image-20210530093334113](https://tva1.sinaimg.cn/large/008i3skNgy1gr07a5z51nj31rk0u01kx.jpg)
+![image-20210530093334113](https://cdn.jsdelivr.net/gh/631068264/img/202212301017567.jpg)
 
 - primary shard 所在节点发生故障（**red, 因为部分主分片不可用**）
 
@@ -55,35 +55,35 @@ Rebalance（再平衡），当集群中节点数量发生变化时，将会触�
 
 - R0 也会重新分配，集群变绿
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr07b6pkmfj32010u0aei.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017568.jpg)
 
 
 
 # 文档保存到分片
 
-![image-20201004225303315](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjdownvlsmj31hf0u01bu.jpg)
+![image-20201004225303315](https://cdn.jsdelivr.net/gh/631068264/img/202212301017569.jpg)
 
 所以设置好index后主分片数不能改，整个存储完全不一样
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr07qu1zdjj31hk0u0n4w.jpg)
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr07r8d5elj31j90u0gqk.jpg)
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr07suyndvj31hf0u0te5.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017570.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017571.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017572.jpg)
 
 
 
 # 分片设计
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr09laa87pj31d70u0n1v.jpg)
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gr09ll161vj31jv0u077s.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017573.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301017574.jpg)
 
-![image-20201005215651480](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjeswi6atij31fo0u04d7.jpg)
+![image-20201005215651480](https://cdn.jsdelivr.net/gh/631068264/img/202212301017575.jpg)
 
-![image-20201005215758649](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjesxoa6klj31lh0u0tta.jpg)
+![image-20201005215758649](https://cdn.jsdelivr.net/gh/631068264/img/202212301017576.jpg)
 
-![image-20201005215824881](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjesy4axdvj31870u0qip.jpg)
+![image-20201005215824881](https://cdn.jsdelivr.net/gh/631068264/img/202212301017577.jpg)
 
-![image-20201005215841945](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjesyf2jx7j31950u0tr6.jpg)
+![image-20201005215841945](https://cdn.jsdelivr.net/gh/631068264/img/202212301017578.jpg)
 
-![image-20201005215956469](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjeszpvv22j31ts0u07wh.jpg)
+![image-20201005215956469](https://cdn.jsdelivr.net/gh/631068264/img/202212301017579.jpg)
 
 # 分片机制 写入原理
 
@@ -91,13 +91,13 @@ Rebalance（再平衡），当集群中节点数量发生变化时，将会触�
 
 ## 倒排索引不可变性
 
-![image-20201004230145470](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjdp5q6y6bj31pg0u0nn6.jpg)
+![image-20201004230145470](https://cdn.jsdelivr.net/gh/631068264/img/202212301017580.jpg)
 
 删除的文档不会立即清理
 
 多个segment（倒排索引文件）=> lucene index => es shard
 
-![image-20201006102814479](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjfemb5pphj31jr0u0b29.jpg)
+![image-20201006102814479](https://cdn.jsdelivr.net/gh/631068264/img/202212301017581.jpg)
 
 ## refresh
 
@@ -105,7 +105,7 @@ Rebalance（再平衡），当集群中节点数量发生变化时，将会触�
 
 refresh后才数据会被搜索到
 
-![image-20201004230453959](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjdp906xsxj31r20u01kx.jpg)
+![image-20201004230453959](https://cdn.jsdelivr.net/gh/631068264/img/202212301017582.jpg)
 
 
 
@@ -113,16 +113,16 @@ refresh后才数据会被搜索到
 
 防断电
 
-![image-20201004231400579](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjdpih3khmj31k40u04qp.jpg)
+![image-20201004231400579](https://cdn.jsdelivr.net/gh/631068264/img/202212301017583.jpg)
 
 ## flush
 
-![image-20201004232216254](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjdpr3557sj31pu0u01as.jpg)
+![image-20201004232216254](https://cdn.jsdelivr.net/gh/631068264/img/202212301017584.jpg)
 
 ## 总结
 ### 插入
 
-![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjx1ldd79kj30w00hyq3o.jpg)
+![img](https://cdn.jsdelivr.net/gh/631068264/img/202212301017585.jpg)
 
 **写入操作的延时**就等于latency = Latency(Primary Write) + Max(Replicas Write)。只要有副本在，写入延时最小也是两次单Shard的写入时延总和，写入效率会较低。
 
@@ -130,10 +130,10 @@ Elasticsearch是先写内存，最后才写TransLog，一种可能的原因是Lu
 
 ### update
 
-![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjx1vgeal8j31400g7go8.jpg)
+![img](https://cdn.jsdelivr.net/gh/631068264/img/202212301017586.jpg)
 
 
 
 ## merge
 
-![image-20201004232327765](https://tva1.sinaimg.cn/large/007S8ZIlgy1gjdpsbp64yj31ey0u0dpa.jpg)
+![image-20201004232327765](https://cdn.jsdelivr.net/gh/631068264/img/202212301017588.jpg)

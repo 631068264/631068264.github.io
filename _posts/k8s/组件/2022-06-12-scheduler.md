@@ -33,7 +33,7 @@ Kubernetes Scheduler 的作用是将待调度的 Pod (API 新创建的 Pod、 Co
 
 考虑到旧版本的 Kubernetes Scheduler 不足以支持更复杂 和 灵活的调度场景，因此在 Kubernetes 1.5 版本中出现一个新的调度机制一 Scheduler Framework。 从整个调度流程来 看，新的 Scheduler Framework 是在旧流程的基础上增加了 一些扩展点(基于调度 Stage 的 扩展点)，同时支持用户以插件的方式 (Plugin) 进行扩展 。
 
-![image-20220613221600609](https://tva1.sinaimg.cn/large/e6c9d24egy1h36z6bqpqjj21n40u079h.jpg)
+![image-20220613221600609](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h36z6bqpqjj21n40u079h.jpg)
 
 - QueueSort: 对调度队列中待调度的 Pod 进行排序，一次只能启用一个队列排序插件 。
 

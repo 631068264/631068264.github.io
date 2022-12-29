@@ -64,9 +64,9 @@ ClickHouse引入了外置的ZooKeeper集群，来进行分布式DDL任务（节�
 
 ## 写入
 
-![1.png](https://tva1.sinaimg.cn/large/008i3skNgy1gsx14ee7ssj316x0kldh9.jpg)
+![1.png](https://cdn.jsdelivr.net/gh/631068264/img/202212301025356.jpg)
 
-![2.png](https://tva1.sinaimg.cn/large/008i3skNgy1gsx14rghkuj32030u0teu.jpg)
+![2.png](https://cdn.jsdelivr.net/gh/631068264/img/202212301025357.jpg)
 
 
 
@@ -152,17 +152,17 @@ ClickHouse是完全列式的存储计算引擎，而且是以有序存储为核�
 # why clickhouse
 
 <span class='gp-2'>
-    <img src='http://ww4.sinaimg.cn/large/006tNc79gy1g41p7txcy8j31iw0u0q7b.jpg' />
-    <img src='http://ww3.sinaimg.cn/large/006tNc79gy1g41pc5fdj8j31ma0u0tg1.jpg' />
-    <img src='http://ww1.sinaimg.cn/large/006tNc79gy1g41pdsxjgpj31h10u00v3.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301025372.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301025373.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301025374.jpg' />
 </span>
 
 # what is clickhouse
 
 ClickHouse是一个用于联机分析(OLAP)的列式数据库管理系统(DBMS)
 <span class='gp-2'>
-    <img src='http://ww3.sinaimg.cn/large/006tNc79gy1g41pkq41fkj318o0kugod.jpg' />
-    <img src='http://ww2.sinaimg.cn/large/006tNc79gy1g41pl4hufhj314u0j2wg7.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301025375.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301025376.jpg' />
 </span>
 
 对于存储而言，列式数据库总是将同一列的数据存储在一起，不同列的数据也总是分开存储。
@@ -208,10 +208,10 @@ ClickHouse 会为**每个数据片段创建一个索引文件**，**索引文件
 **ClickHouse 不要求主键唯一。所以，你可以插入多条具有相同主键的行。**
 
 <span class='gp-2'>
-    <img src='http://ww3.sinaimg.cn/large/006tNc79gy1g41q7tsr9uj31ld0u0q7g.jpg' />
-    <img src='http://ww4.sinaimg.cn/large/006tNc79gy1g41q88nzx5j31ll0u075r.jpg' />
-    <img src='http://ww3.sinaimg.cn/large/006tNc79gy1g41qfiihtlj31ko0u0wlz.jpg' />
-    <img src='http://ww2.sinaimg.cn/large/006tNc79gy1g41qfz40htj31m30u041z.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301025377.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301025378.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301025379.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301025380.jpg' />
 </span>
 
 # 视图
@@ -258,17 +258,17 @@ SELECT level, sum(total) FROM daily GROUP BY level;
 
 # BestPractice 配置
 
-![](http://ww2.sinaimg.cn/large/006tNc79gy1g41qsxh7hgj31mr0u0n1k.jpg)
-![](http://ww3.sinaimg.cn/large/006tNc79gy1g41qvabku6j31jp0u0diu.jpg)
-![](http://ww1.sinaimg.cn/large/006tNc79gy1g41qx4h4ulj31mj0u0jtz.jpg)
-![](http://ww2.sinaimg.cn/large/006tNc79gy1g41qxzqvntj31qe0u0myt.jpg)
-![](http://ww4.sinaimg.cn/large/006tNc79gy1g41r0c8kl5j31m20u041b.jpg)
-![](http://ww4.sinaimg.cn/large/006tNc79gy1g41r1lxyw2j31ey0u0439.jpg)
-![](http://ww3.sinaimg.cn/large/006tNc79gy1g41r25bco9j31kl0u0qbf.jpg)
-![](http://ww4.sinaimg.cn/large/006tNc79gy1g41r4f77j4j31c00u0q8s.jpg)
-![](http://ww3.sinaimg.cn/large/006tNc79gy1g41r4n5p4rj31c00u0jvl.jpg)
-![](http://ww2.sinaimg.cn/large/006tNc79gy1g41r5fgyxjj31c00u0n24.jpg)
-![](http://ww2.sinaimg.cn/large/006tNc79gy1g41r68roxpj31c00u0775.jpg)
-![](http://ww3.sinaimg.cn/large/006tNc79gy1g41r7ajwcdj31c00u0jsv.jpg)
-![](http://ww3.sinaimg.cn/large/006tNc79gy1g41r8uwc0wj31c00u0q58.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025358.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025359.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025360.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025361.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025363.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025364.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025365.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025366.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025367.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025368.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025369.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025370.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301025371.jpg)
 

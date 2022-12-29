@@ -16,7 +16,7 @@ categories:
 Error response from daemon: Get http://reg.mydomain.com:8443/v2/nginx/manifests/test: Get http://reg.mydomain.com:20000/service/token?account=admin&scope=repository%3Anginx%3Apull&service=harbor-registry: dial tcp xxxx:20000: connect: connection refused
 ```
 
-![ ](https://tva1.sinaimg.cn/large/008i3skNly1gx8tb8fwddj30bk09ft8x.jpg)
+![ ](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNly1gx8tb8fwddj30bk09ft8x.jpg)
 
 1. `docker client`从官方 Index(“index.docker.io/v1”)查询镜像(“samalba/busybox”)的 位置
 2. Index 回复:

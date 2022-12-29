@@ -55,7 +55,7 @@ vrrp_instance VI_1 {
     # 当 state 为 master 的时候就添加
     # 当 state 为 backup 的时候删除这里主要是有优先级来决定的和 state 设置的值没有多大关系,这里可以设置多个 IP 地址
     virtual_ipaddress {
-        10.21.17.94  
+        10.xx.xx.94  
     }
 }
 ```
@@ -95,10 +95,10 @@ systemctl start  keepalived.service && systemctl enable keepalived.service
 
 | 角色        | ip          |
 | ----------- | ----------- |
-| client      | 10.21.17.92 |
-| master      | 10.21.17.91 |
-| slave       | 10.21.17.93 |
-| 虚拟（VIP） | 10.21.17.94 |
+| client      | 10.xx.xx.92 |
+| master      | 10.xx.xx.91 |
+| slave       | 10.xx.xx.93 |
+| 虚拟（VIP） | 10.xx.xx.94 |
 
 在 Master 上编写一个定时任务来检测 nfs 服务是否宕机
 
@@ -148,7 +148,7 @@ for (( i = 0; i < 60; i=(i+step) )); do
   mount=`df -Th|grep /data/nfsdata`
   if [ "$mount" = "" ];then
      umount /data/nfsdata
-     mount -t nfs 10.21.17.94:/data/nfs /data/nfsdata
+     mount -t nfs 10.xx.xx.94:/data/nfs /data/nfsdata
   fi
   sleep $step 
 done 

@@ -28,17 +28,17 @@ categories:
 - Underlay 的标准是它与 Host 网络是同层的，从外在可见的一个特征就是它是不是使用了 Host 网络同样的网段、输入输出基础设备、容器的 IP 地址是不是需要与 Host 网络取得协同（来自同一个中心分配或统一划分）。这就是 Underlay；
 - Overlay 不一样的地方就在于它并不需要从 Host 网络的 IPM 的管理的组件去申请IP，一般来说，它只需要跟 Host 网络不冲突，这个 IP 可以自由分配的。
 
-![image-20211225204954013](https://tva1.sinaimg.cn/large/008i3skNgy1gxqdcbqhnej310o0cw74w.jpg)
+![image-20211225204954013](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxqdcbqhnej310o0cw74w.jpg)
 
 # Network namespace
 
 **Network Namespace 里面能网络实现的内核基础**。狭义上来说 runC 容器技术是不依赖于任何硬件的，**它的执行基础就是它的内核里面，进程的内核代表就是 task，它如果不需要隔离，那么用的是主机的空间（ namespace）**，并不需要特别设置的空间隔离数据结构（ nsproxy-namespace proxy）。
 
-![image-20211225205332165](https://tva1.sinaimg.cn/large/008i3skNgy1gxqdg2rz9aj316s0rmq6d.jpg)
+![image-20211225205332165](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxqdg2rz9aj316s0rmq6d.jpg)
 
 从感官上来看一个隔离的网络空间，它会拥有自己的网卡或者说是网络设备。网卡可能是虚拟的，也可能是物理网卡，它会拥有自己的 IP 地址、IP 表和路由表、拥有自己的协议栈状态。这里面特指就是 TCP/Ip协议栈，它会有自己的status，会有自己的 iptables、ipvs。**这就相当于拥有了一个完全独立的网络，它与主机网络是隔离的。当然协议栈的代码还是公用的，只是数据结构不相同。**
 
-![image-20211225210241163](https://tva1.sinaimg.cn/large/008i3skNgy1gxqdpl06iuj31ak0pg419.jpg)
+![image-20211225210241163](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxqdpl06iuj31ak0pg419.jpg)
 
 这张图可以清晰表明 pod 里 Netns 的关系，每个 pod 都有着独立的网络空间，pod net container 会共享这个网络空间。一般 K8s 会推荐选用 Loopback 接口，在 pod net container 之间进行通信，而所有的 container 通过 pod 的 IP 对外提供服务。另外对于宿主机上的 Root Netns，可以把它看做一个特殊的网络空间，只不过它的 Pid 是1。
 
@@ -48,7 +48,7 @@ categories:
 
 容器网络方案可能是 K8s 里最为百花齐放的一个领域，它有着各种各样的实现。容器网络的复杂性，其实在于它需要跟底层 Iass 层的网络做协调、需要在性能跟 IP 分配的灵活性上做一些选择，这个方案是多种多样的。
 
-![image-20211225211107681](https://tva1.sinaimg.cn/large/008i3skNgy1gxqdydfaocj31dc0nsjw6.jpg)
+![image-20211225211107681](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxqdydfaocj31dc0nsjw6.jpg)
 
 - **Flannel** 是一个比较大一统的方案，它提供了多种的网络 backend。不同的 backend 实现了不同的拓扑，它可以覆盖多种场景；
 - **Calico** 主要是采用了策略路由，节点之间采用 BGP 的协议，去进行路由的同步。它的特点是功能比较丰富，尤其是对 Network Point 支持比较好，大家都知道 Calico 对底层网络的要求，一般是需要 mac 地址能够直通，不能跨二层域；
@@ -57,7 +57,7 @@ categories:
 
 ## Flannel
 
-![image-20211225212155431](https://tva1.sinaimg.cn/large/008i3skNgy1gxqe9m0xj0j31aw0regow.jpg)
+![image-20211225212155431](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxqe9m0xj0j31aw0regow.jpg)
 
 Flannel 方案是目前使用最为普遍的。如上图所示，可以看到一个典型的容器网方案。它首先要解决的是 container 的包如何到达 Host，这里采用的是加一个 Bridge 的方式。它的 backend 其实是独立的，也就是说这个包如何离开 Host，是采用哪种封装方式，还是不需要封装，都是可选择的。 
 
@@ -75,7 +75,7 @@ Flannel 方案是目前使用最为普遍的。如上图所示，可以看到一
 
  
 
-![img](https://tva1.sinaimg.cn/large/008i3skNgy1gxqeww1hl9j31ab0b00uw.jpg)
+![img](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxqeww1hl9j31ab0b00uw.jpg)
 
  
 
@@ -124,7 +124,7 @@ spec:
 
 
 
-![image-20211225215619028](https://tva1.sinaimg.cn/large/008i3skNgy1gxqf9e0l73j316w0s0jur.jpg)
+![image-20211225215619028](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxqf9e0l73j316w0s0jur.jpg)
 
 - 第一件事是控制对象，就像这个实例里面 spec 的部分。spec 里面通过 podSelector 或者 namespace 的 selector，可以选择做特定的一组 pod 来接受我们的控制；
 - 第二个就是对流向考虑清楚，需要控制入方向还是出方向？还是两个方向都要控制？

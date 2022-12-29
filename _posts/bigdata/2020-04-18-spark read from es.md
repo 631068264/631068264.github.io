@@ -87,4 +87,4 @@ df.filter(df.col("balance").geq(39225));
 temp.show(1)
 ```
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdwz3vmn1xj31mc08wt95.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gdwz3vmn1xj31mc08wt95.jpg)

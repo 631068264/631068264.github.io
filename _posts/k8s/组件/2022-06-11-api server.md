@@ -42,11 +42,11 @@ Kubernetes API Server 通过一个名为 kube-apiserver 的进程 提供服务 �
 - 注册表层 : Kubernetes 把所有资源对象都保存在注册表 (Registry) 中，针对注册 表中的各种资源对象都定义了资源对象的类型、如何创建资源对象、如何转换资源的不同版本，以及如何将资源编码和解码为 JSON 或 ProtoBuf格式进行存储 。
 - etcd 数据库:用千持久化存储 Kubernetes 资源对象的 KV 数据库 。 etcd 的 Watch API 接口对千 API Server 来说至关重要，因为通过这个接口， API Server 创新性地设计了 List-Watch 这种高性能的 资源对象实时同步机制，使 Kubernetes 可以 管理超大规模的集群， 及时响应和快速处理集群中的各种事件 。
 
-![image-20220611210434101](https://tva1.sinaimg.cn/large/e6c9d24egy1h34lvdr22aj20u00u90w9.jpg)
+![image-20220611210434101](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h34lvdr22aj20u00u90w9.jpg)
 
 # API Server 中资源对象的 List-Watch 机制 
 
-![image-20220611210827131](https://tva1.sinaimg.cn/large/e6c9d24egy1h34lzd5urqj21ga0u0wjy.jpg)
+![image-20220611210827131](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h34lzd5urqj21ga0u0wjy.jpg)
 
 首先，借助etcd提供的WatchAPI接口， **APIServer可以监听 (Watch) 在etcd上发 生的数据操作事件**，比如 Pod 创建事件、更新事件 、 删除事件等，在这些事件发生后， etcd 会及时通知 API Server。 图 5.3 中 API Server 与 etcd 之间的交互 箭头表明了这个过程:当 一个 ReplicaSet对象被创建并保存到 etcd 中后(图中的 2. Create RepliatSet箭头)， etcd会 立 即发送一个对应的 Create 事件给 API Server (图中的 3. Send RepliatSet Create Event 箭 头 )， 与其类似的 6、 7、 10、 11 箭头都针对 Pod 的创建 、更新事件 。
 
@@ -80,7 +80,7 @@ kube-scheduler与 APIServer的交互。 Scheduler在通 过 API Server 的 Watch
 
 API Server Network Proxy 的 核心设计思想是将 API Server 放 翌在一个独立的网络中， 与 Node 节点的网络相互隔离，然后增加独立的 Network Proxy 进 程来解决这两个网络直 接的连通性 (Connectivity) 问题
 
-![image-20220612171143296](https://tva1.sinaimg.cn/large/e6c9d24egy1h35krcumczj219y0rywja.jpg)
+![image-20220612171143296](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h35krcumczj219y0rywja.jpg)
 
 具体实现方式是在 Master 节点的网络里部署 Konnectivity Server，在 Node节点的网络里部署 KonnectivityAgent, 两者之间建立起安全链接，对通信协议 可以采用标准的 HTTP 或者 gRPC, 此设计允许 Node 节点网络被划分为多个独立的分片， 这些分片都通过 Konnectivity Server/Agent建立的安全链接与 API Server实现点对点的连 通。
 

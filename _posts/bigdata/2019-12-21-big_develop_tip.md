@@ -298,7 +298,7 @@ hbase分布式配置
 `java.lang.NoClassDefFoundError: org/apache/spark/internal/Logging`
 
 **pom**已经有spark的依赖，但是run跑不起来,是因为maven里面配置了`<scope>provided</scope>`，配置了这个就可以跑了
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1ga4st1zhjqj31cn0u0jwh.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030355.jpg)
 
 [spark no class found](https://stackoverflow.com/questions/58899517/structured-streaming-kafka-spark-java-lang-noclassdeffounderror-org-apache-spar)
 
@@ -616,9 +616,9 @@ YARN `hadoop.registry.dns.bind-port` default value = 53
 根据log找对应的task和**attempt_***
 
 <span class='gp-3'>
-    <img src='https://tva1.sinaimg.cn/large/006tNbRwgy1gai1l3tx92j31bz0j23z5.jpg' />
-    <img src='https://tva1.sinaimg.cn/large/006tNbRwgy1gai1mzw5icj31hb0fcq3v.jpg' />
-    <img src='https://tva1.sinaimg.cn/large/006tNbRwgy1gai1prnyk6j315y0glmxy.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301030357.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301030358.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301030359.jpg' />
 </span>
 
 # hadoop namenode -format
@@ -857,4 +857,4 @@ cp /usr/hdp/share/hst/hst-common/lib/commons-configuration-1.10.jar $KYLIN_HOME/
 
 kafka offset 要latest
 
-![](https://tva1.sinaimg.cn/large/00831rSTgy1gd7p3l07efj31ma0j4abh.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030356.jpg)

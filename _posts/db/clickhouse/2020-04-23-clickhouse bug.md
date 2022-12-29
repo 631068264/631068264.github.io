@@ -67,7 +67,7 @@ table xx 通过消费kafka插入数据
     - **LOG-END-OFFSET** 最新的offset 
     - **LAG** offset相差
     
-    ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ge434ns6ojj321i0tyn91.jpg)
+    ![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1ge434ns6ojj321i0tyn91.jpg)
     
     > 原因找到了clickhouse消费速度跟不上生产速度，差距还越拉越大
 
@@ -82,7 +82,7 @@ table xx 通过消费kafka插入数据
 
     https://clickhouse.tech/docs/en/engines/table_engines/integrations/kafka/#description
     
-    ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1ge43l3jlebj31cs06ajrp.jpg)
+    ![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1ge43l3jlebj31cs06ajrp.jpg)
 
 
 # engine 改变

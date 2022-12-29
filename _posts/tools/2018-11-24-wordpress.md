@@ -13,7 +13,7 @@ categories:
 
 ## 端口
 设置一下 端口，由于本来就有mysql:3306 所以我选了default
-![](https://tva2.sinaimg.cn/large/006tNbRwgy1fxpu9anyedj315o0tiqgs.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fxpu9anyedj315o0tiqgs.jpg)
 
 ## 建库
 - start server 去到 `http//localhost:8888/phpMyAdmin`
@@ -34,14 +34,14 @@ $cfg['Servers'][$i]['password']      = 'root';
 [wordpress下载](https://wordpress.org/download/)
 
 下载解压放到 htdocs 下面
-![](https://tva3.sinaimg.cn/large/006tNbRwgy1fxq0a9dan8j30tu0oedk1.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fxq0a9dan8j30tu0oedk1.jpg)
 
 访问 `http://localhost:8888/wordpress` 进行配置 （路径和解压后的文件名一致 可以改名）
 
 按照提示填写 数据库 填上上面的建的库
 
 # 设置中文
-![](https://tva2.sinaimg.cn/large/006tNbRwgy1fxq1dalt76j31om0daq3f.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fxq1dalt76j31om0daq3f.jpg)
 
 # 设置API
 - [WP API doc](https://developer.wordpress.org/rest-api/reference/)

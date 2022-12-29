@@ -42,7 +42,7 @@ Replication Controller 的核心作用是确保集群中某个 RC 关联的 Pod 
 
 **kubelet 进程在启动时通过 API Server 注册自身节点信息**，并定时向 API Server 汇报 状 态信息， API Sen·er 在接收到这些信息后，会将这些信息更新到 etcd 中 。 在 etcd 中存储的 节点信息包括节 点健 康状况、节点资源 、 节点名称 、 节点地址信息 、操作 系统版本、 Docker 版本、 kubelet 版本等。节点健康状况包含就绪 (True)、未就绪 (False)、未知 (Unknown ) 三种 。
 
-![image-20220612200432792](https://tva1.sinaimg.cn/large/e6c9d24egy1h35pr7ykyvj21ct0u0q6s.jpg)
+![image-20220612200432792](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h35pr7ykyvj21ct0u0q6s.jpg)
 
 - 为每个没有设置 Spec.PodCIDR的 Node都生成一个 CIDR地址,并用该 CIDR地址设置节点的 Spec.PodCIDR属性，这样做的目的是防止不同节点的 CIDR 地址发生冲突 。
 
@@ -62,4 +62,4 @@ Replication Controller 的核心作用是确保集群中某个 RC 关联的 Pod 
 
 Kubernetes 的配额管理是通过 Admission Control (准入控制 )来控制的， Admission Control 当前提供了两种方式的配额约束，分别是 LimitRanger 与 ResourceQuota, 其中 L画 tRanger 作 用 千 Pod 和 Container; ResourceQuota 则作用 千 Namespace, 限定一个 Namespace 里各类资源的使用总额 。
 
-![image-20220612211510934](https://tva1.sinaimg.cn/large/e6c9d24egy1h35rsog10fj21bk0u00wn.jpg)
+![image-20220612211510934](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h35rsog10fj21bk0u00wn.jpg)

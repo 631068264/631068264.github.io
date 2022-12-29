@@ -7,7 +7,7 @@ categories:
 ---
 
 
-![total-table-engine.png](https://tva1.sinaimg.cn/large/008i3skNgy1gsva6l6t2cj313x0ohjtl.jpg)
+![total-table-engine.png](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gsva6l6t2cj313x0ohjtl.jpg)
 
 # log 系列
 

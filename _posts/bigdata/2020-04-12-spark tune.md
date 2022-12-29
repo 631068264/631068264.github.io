@@ -77,18 +77,18 @@ http://node2:9200/_cat/indices/loh_traffic?format=json
 - spark kafka **处理过的offset**
 
 通过kafka脚本获取不到consumer的offset，因为没有[自动commit](https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html#kafka-specific-configurations)
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdufhll4erj30qp0e7myb.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030371.jpg)
 
 [最后通过checkpointLocation读取offset，读取hadoop文件](https://stackoverflow.com/a/55808666/5360312) 
 
 
 # spark概念
 
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0k6x29qopj312e0n4qi3.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030373.jpg)
 
 使用`yarn application --list`通过**Tracking-URL**查看spark application工作情况
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdug6ssqoqj31b305m74d.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030374.jpg)
 
 
 # 测试
@@ -150,7 +150,7 @@ total: 6996504 总时间: 60103.43 ms store: 309mb
 kafka偏移 3078 avg 19.52678 ms/条
 ```
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdumikndxfj30rv0btt92.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030375.jpg)
 
 
 -  提高num-executors
@@ -184,8 +184,8 @@ total: 7007527 总时间: 63803.23 ms store: 309.7mb
 kafka偏移 2470 avg 25.83127 ms/条
 ```
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdun0u76a7j30is07gaa2.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030376.jpg)
 
 不能完全发挥理论上 cores = 2 * 500  上面的测试达到了
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduo3nnyv3j313d04xdft.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030377.jpg)

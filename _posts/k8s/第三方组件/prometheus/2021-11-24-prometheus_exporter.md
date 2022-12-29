@@ -328,7 +328,7 @@ histogram: <
 
 主要是NewRegistry返回Registry，分别实现了**Registerer**和**Gatherer**的接口
 
-![image-20211120120812861](https://tva1.sinaimg.cn/large/008i3skNgy1gwlhkq42qfj31360g0jtj.jpg)
+![image-20211120120812861](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwlhkq42qfj31360g0jtj.jpg)
 
 **调用注册时候调用Collector.Describe**
 
@@ -762,7 +762,7 @@ prometheus:
 
 可以看到新发现的target
 
-![img](https://tva1.sinaimg.cn/large/008i3skNgy1gwlmrsatajj314q0ajdhj.jpg)
+![img](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwlmrsatajj314q0ajdhj.jpg)
 
 
 

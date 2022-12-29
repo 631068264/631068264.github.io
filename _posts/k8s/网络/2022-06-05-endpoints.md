@@ -20,7 +20,7 @@ EndpointSlice通过对Endpoint进行分片管理来实现降低Master和各Node�
 
 EndpointSlice根据Endpoint所在Node的拓扑信息进行分片管理
 
-![image-20220605203821213](https://tva1.sinaimg.cn/large/e6c9d24egy1h2xne8q4eqj21ls0rqq8a.jpg)
+![image-20220605203821213](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h2xne8q4eqj21ls0rqq8a.jpg)
 
 Endpoint Slices 要 实现的第 2 个目标是为基千 Node 拓扑的服务路由提供支持，这 需要 与服务拓扑 ( Service Topology ) 机制共同实现。
 
@@ -30,17 +30,17 @@ Endpoint Slices 要 实现的第 2 个目标是为基千 Node 拓扑的服务路
 
 # 端点分片 (EndpointSlices)
 
-![image-20220605205255691](https://tva1.sinaimg.cn/large/e6c9d24egy1h2xntd1p7qj21ng0b240m.jpg)
+![image-20220605205255691](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h2xntd1p7qj21ng0b240m.jpg)
 
-![image-20220605205906790](https://tva1.sinaimg.cn/large/e6c9d24egy1h2xnzsy0l5j21i00u00xc.jpg)
+![image-20220605205906790](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h2xnzsy0l5j21i00u00xc.jpg)
 
 EndpointSlice 的复制功能和数据分布管理机制进行说明
 
-![image-20220605212814486](https://tva1.sinaimg.cn/large/e6c9d24egy1h2xou4epe0j21qy0qa105.jpg)
+![image-20220605212814486](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h2xou4epe0j21qy0qa105.jpg)
 
 Kubernetes 控制平面对千 EndpointSlice 中数据的管理机制是尽可能填满，但不 会在多 个 EndpointSlice 数据不均衡的情况下主动执行重新平衡 (rebalance) 操作，其背后的逻辑 也很简单，步骤如下 。
 
-![image-20220605213007173](https://tva1.sinaimg.cn/large/e6c9d24egy1h2xow28gojj21b50u0tfy.jpg)
+![image-20220605213007173](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h2xow28gojj21b50u0tfy.jpg)
 
 # Service Topology服务拓扑
 

@@ -19,7 +19,7 @@ Kubernetes 在创建服务时会为服务分配一个虚拟 IP 地址，客户�
 
 起初， kube-proxy 进程是 一个 直实的 TCP/UDP 代理，类似 HA Proxy, 负责转发从 Service 到 Pod 的访问流摆，这被称为 userspace (用户空间代理)模式 。 当某个客户端 Pod 以 ClusterIP 地址访问某个 Service 时，这个流 立就 被 Pod 所在 Node 的 iptables 转发给 kube-proxy 进程，然后由 kube-proxy 建立起到后端 Pod 的 TCP/UDP 连接， 再将请求转发到某个后端 Pod 上，并在这个过程中实现负载均衡功能。
 
-![image-20220618135935445](https://tva1.sinaimg.cn/large/e6c9d24egy1h3ccxc12i8j213u0tkwh5.jpg)
+![image-20220618135935445](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h3ccxc12i8j213u0tkwh5.jpg)
 
 此外， **Service 的 ClusterIP 与 NodePort 等概念是 kube-proxy 服务通过 iptables 的 NAT 转换实现的， kube-proxy在运行过程中动态创建与 Service相关的 iptables规则，这些规则 实现了将访问服务 (ClusterIP或 NodePort) 的请求负载分发到后端 Pod 的功能。**由于 iptables 机制针对的是本地的 kube-proxy 端口，所以在每个 Node 上都要运行 kube-proxy 组件，这 样一来，在 Kubernetes集群内部，我们可以在任意 Node上发起对 Service的访问请求。 
 

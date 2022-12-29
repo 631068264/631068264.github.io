@@ -29,7 +29,7 @@ for  t=1,⋯,T  {
 经过T次循环之后，**所有m个训练样本都进行了梯度下降计算**。这个过程，我们称之为经历了一个**epoch**。
 对于Batch Gradient Descent而言，一个epoch只进行一次梯度下降算法；而Mini-Batches Gradient Descent，一个epoch会进行T次梯度下降算法。
 mini-batch上迭代训练，其cost不是单调下降，而是受类似noise的影响，**出现振荡**。但整体的趋势是下降的，最终也能得到较低的cost值。
-![](https://tva3.sinaimg.cn/large/006tNc79gy1fvrnnmbjt9j30yi0e6mzz.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrnnmbjt9j30yi0e6mzz.jpg)
 **振荡的原因**是不同的mini-batch之间是有差异的
 
 - mini-batch size=m，即为Batch gradient descent
@@ -58,15 +58,15 @@ $$\frac{1}{1-\beta}$$
 
 # Gradient descent with momentum
 动量梯度下降算法，其速度要比传统的梯度下降算法快很多。每次训练时，对梯度进行**指数加权平均**处理，然后用得到的梯度值更新权重W和常数项b
-![](https://tva3.sinaimg.cn/large/006tNc79gy1fvrozgchg8j31kw0t80vw.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrozgchg8j31kw0t80vw.jpg)
 
 # RMSprop
-![](https://tva4.sinaimg.cn/large/006tNc79gy1fvrpbc5dx9j31kw0prq6s.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrpbc5dx9j31kw0prq6s.jpg)
 加快了W方向的速度，减小了b方向的速度，减小振荡，实现快速梯度下降。因此，表达式中Sb较大，而SW较小。
 
 # Adam
 Adam（Adaptive Moment Estimation）算法结合了动量梯度下降算法和RMSprop算法。
-![](https://tva3.sinaimg.cn/large/006tNc79gy1fvrpmmlxsfj31kw0rl410.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrpmmlxsfj31kw0rl410.jpg)
 
 # Learning rate decay
 随着迭代次数增加，学习因子α逐渐减小,有效提高神经网络训练速度
@@ -85,10 +85,10 @@ $$\alpha=\frac{1}{1+decay\_rate*epoch}\alpha_0$$
 在plateaus上梯度很小，前进缓慢，到达**saddle point**需要很长时间。
 到达saddle point后，由于随机扰动，梯度一般能够沿着图中绿色箭头，离开saddle point，继续前进，只是在plateaus上花费了太多时间。
 <span class='gp-4'>
-    <img src='https://tva2.sinaimg.cn/large/006tNc79gy1fvrq36lqeoj30yy0segsl.jpg' />
-    <img src='https://tva3.sinaimg.cn/large/006tNc79gy1fvrq3fn1ovj30yq0s4gon.jpg' />
-    <img src='https://tva3.sinaimg.cn/large/006tNc79gy1fvrq3vddn3j31f40hgwgx.jpg' />
-    <img src='https://tva1.sinaimg.cn/large/006tNc79gy1fvrqb74cd1j308c05ygn4.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrq36lqeoj30yy0segsl.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrq3fn1ovj30yq0s4gon.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrq3vddn3j31f40hgwgx.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrqb74cd1j308c05ygn4.jpg' />
 </span>
 
 - 只要选择合理的强大的神经网络，一般不太可能陷入local optima

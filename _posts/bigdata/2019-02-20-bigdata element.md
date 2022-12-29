@@ -15,7 +15,7 @@ tags:
 - 运行Pig Latin程序的执行环境
 
 Pig能够让你专心于数据及业务本身，而不是纠结于数据的格式转换以及MapReduce程序的编写。
-![](https://tva4.sinaimg.cn/large/006tKfTcgy1g0jz6f0kp0j31gw0bk7fh.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027419.jpg)
 
 ## Execution Modes
 
@@ -86,7 +86,7 @@ DUMP R;
 (alice,22,3.76) 
 (susan,26,3.25)
 ```
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0egcywet8j30zu09m3yr.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027420.jpg)
 
 #### FOREACH
 处理行 有点像select
@@ -94,17 +94,17 @@ DUMP R;
 ```
 R = FOREACH A GENERATE *;
 ```
-![](https://tva2.sinaimg.cn/large/006tKfTcgy1g0eghch92lj30ek0bidg5.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027421.jpg)
 
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0egi7gevyj31hw0imaav.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027422.jpg)
 
 #### GROUP
 ```
 B = GROUP A BY age;
 ```
-![](https://tva4.sinaimg.cn/large/006tKfTcgy1g0egkxb7cpj31h60jswfo.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027423.jpg)
 
-![](https://tva2.sinaimg.cn/large/006tKfTcgy1g0ehjnt6a6j31hg0jujsk.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027424.jpg)
 
 #### STORE
 
@@ -117,7 +117,7 @@ A = LOAD 'students' AS (name:chararray, age:int, gpa:float);
 STORE A INTO 'output' USING PigStore('|');
 CAT output;
 ```
-![](https://tva2.sinaimg.cn/large/006tKfTcgy1g0ehsqlwbwj318b0u0wg2.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027425.jpg)
 
 
 ## UDF
@@ -153,42 +153,44 @@ term_length = FOREACH unique_terms GENERATE word, string_udf.num_chars(word) as 
 
 
 ## 数据模型概念
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j0kby1r1j31sw0u07wh.jpg)
-![](https://tva4.sinaimg.cn/large/006tKfTcgy1g0iufa0m5hj30ls0euq7x.jpg)
-![](https://tva2.sinaimg.cn/large/006tKfTcgy1g0j0ofjbh9j31u80gyqfm.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027426.jpg)
+
+![img](https://cdn.jsdelivr.net/gh/631068264/img/202212301039683.jpg)
+
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027427.jpg)
 
 ### 表
 
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0j036smpmj31ai04g771.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027428.jpg)
 
 ### 行
 
-![](https://tva2.sinaimg.cn/large/006tKfTcgy1g0j063g65gj31w40dutlm.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027429.jpg)
 
 ### 列族
 
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j08zji2tj31e00u04qp.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027430.jpg)
 
 ### 限定字符
 
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0j0cbtd0uj31ti04ydk6.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027431.jpg)
 
 ### 单元格
 
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j0davtrdj31ss07cdme.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027432.jpg)
 
 ### 时间戳
 
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0j0emqp1jj31tc0c2tlj.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027433.jpg)
 
 ## 列族存储
 
 <span class='gp-2'>
-    <img src='https://tva2.sinaimg.cn/large/006tKfTcgy1g0j0vyl9z4j31tc0o27hu.jpg' />
-    <img src='https://tva4.sinaimg.cn/large/006tKfTcgy1g0j0xh0892j31460u0b29.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301027460.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/202212301027461.jpg' />
 </span>
 
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j10j0m8lj31ti0gitpj.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027434.jpg)
 
 - 降低IO
 - 大并发查询
@@ -196,55 +198,55 @@ term_length = FOREACH unique_terms GENERATE word, string_udf.num_chars(word) as 
 
 ## 架构
 与Hadoop访问过程，结构有点像
-![](https://tva2.sinaimg.cn/large/006tKfTcgy1g0j1b6nlxdj31v40t84qp.jpg)
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j27rn5jmj316g0owwrb.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027435.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027436.jpg)
 
 ###  zookeeper
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j2e19djxj31dl0u0nof.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027437.jpg)
 
 ### master
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0j2k466laj31g00p0dzp.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027438.jpg)
 
 ### region
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0j2l8eelij31ie0dm14t.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027440.jpg)
 
 #### 表 Region
 
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j1frorkej31f80u04qp.jpg)
-![](https://tva4.sinaimg.cn/large/006tKfTcgy1g0j1ltajqij31uk0b0qcx.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027441.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027442.jpg)
 
 #### Region 定位
 
-![](https://tva2.sinaimg.cn/large/006tKfTcgy1g0j1x3cpv4j31bc0u0no6.jpg)
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j200u1u3j31260u01kx.jpg)
-![](https://tva4.sinaimg.cn/large/006tKfTcgy1g0j22s6oo9j31800u0x51.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027443.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027444.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027445.jpg)
 
 #### 结构
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j2qvmpcij313l0u07v1.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027446.jpg)
 
 **MemStore**容量有限，周期性写入到**StoreFile**,HLog写入一个标记。每次缓存刷新生成新的**StoreFile**，
 当**StoreFile**数量到达某个阈值，会合并一个大**StoreFile**。当大**StoreFile**大小到达某个阈值，会分裂。
-![](https://tva4.sinaimg.cn/large/006tKfTcgy1g0j3evboptj31gc0iiwqf.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027447.jpg)
 
 
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j3j6dkl4j31hc0n8avu.jpg)
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0j31qmnmcj31g609ith9.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027448.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027449.jpg)
 
 
 
 #### 读写
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0j2rfgaj2j31gu084tf3.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027450.jpg)
 
 
 ## 局限
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0j16237y9j31uw0bwans.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027451.jpg)
 
 # NoSQL
 不需要事务，读写实时性，没有复杂SQL查询。
 
 ## 种类
 
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0jl40p0b9j317u0u0nig.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027452.jpg)
 
 # Spark
 
@@ -254,19 +256,19 @@ term_length = FOREACH unique_terms GENERATE word, string_udf.num_chars(word) as 
 
 - 静态数据 批量计算 时间充足批量处理海量数据
 - 流数据 实时计算
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0l0c3ng4ij31kk0f0gsc.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027453.jpg)
 
 ## 流数据特征
-![](https://tva2.sinaimg.cn/large/006tKfTcly1g0kzn90nq6j31z60g67hy.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027454.jpg)
 
 ## 实时采集
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0l0iquglqj31620u0e81.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027455.jpg)
 
 ## 实时计算
-![](https://tva1.sinaimg.cn/large/006tKfTcgy1g0l0la1nw4j31zs0f6nad.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027456.jpg)
 
 ## 实时查询
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0l0nnadogj32080r41kx.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027457.jpg)
 
 ## Storm
 
@@ -274,9 +276,9 @@ term_length = FOREACH unique_terms GENERATE word, string_udf.num_chars(word) as 
 
 ## Spark Streaming
 将stream拆分成小量批处理, 做不到**毫秒级别**，**storm** 可以
-![](https://tva2.sinaimg.cn/large/006tKfTcgy1g0l3u9pl8lj31y40r4e5z.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027458.jpg)
 
 ### 对比storm
 做不到**毫秒级别**，**storm** 可以
-![](https://tva3.sinaimg.cn/large/006tKfTcgy1g0l3xi6k1oj31xq0deh0q.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301027459.jpg)
 

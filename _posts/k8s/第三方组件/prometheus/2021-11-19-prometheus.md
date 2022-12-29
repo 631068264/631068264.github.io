@@ -33,7 +33,7 @@ kubectl top pods --all-namespaces
 
 Prometheus scrapes metrics from instrumented jobs, either directly or via an intermediary push gateway for short-lived jobs. It stores all scraped samples locally and runs rules over this data to either aggregate and record new time series from existing data or generate alerts. [Grafana](https://grafana.com/) or other API consumers can be used to visualize the collected data.
 
-![普罗米修斯架构](https://tva1.sinaimg.cn/large/008i3skNgy1gwj43un831j311j0mjq64.jpg)
+![普罗米修斯架构](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwj43un831j311j0mjq64.jpg)
 
 The Prometheus ecosystem consists of multiple components, many of which are optional:
 
@@ -94,7 +94,7 @@ sample由以下两部分组成:
 -  时间戳(timestamp)：一个精确到毫秒的时间戳。
 -  样本值(value)：一个float64的浮点型数据表示当前样本的值。
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gwjcag31kqj30vb0d0t9k.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwjcag31kqj30vb0d0t9k.jpg)
 
 ## 指标分类 
 
@@ -224,7 +224,7 @@ vector,N条只有一个Sample的时序数据),区间向量(Rangevector,N条包�
 
 - Alertmanager组件则用于处理这些由Prometheus产生的告警。
 
-![Prometheus告警处理](https://tva1.sinaimg.cn/large/008i3skNgy1gwlzahlk7pj31io0g2dh4.jpg)
+![Prometheus告警处理](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwlzahlk7pj31io0g2dh4.jpg)
 
 在Prometheus中一条告警规则主要由以下几部分组成：
 
@@ -239,7 +239,7 @@ Alertmanager作为一个独立的组件，负责接收并处理来自Prometheus 
 
 Alertmanager除了提供基本的告警通知能力以外，还主要提供了如：分组、抑制以及静默等告警特性：
 
-![Alertmanager特性](https://tva1.sinaimg.cn/large/008i3skNgy1gwm0eakumqj318w0bsmxm.jpg)
+![Alertmanager特性](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwm0eakumqj318w0bsmxm.jpg)
 
 **分组**
 
@@ -402,7 +402,7 @@ global:
 
 这种最坏情况计时的原因可以通过警报的生命周期来解释。下图显示了时间线上的事件序列：
 
-![2016-11-16-prometheus-alert-lifecycle.png](https://tva1.sinaimg.cn/large/008i3skNgy1gwqi7ha7n7j30iu05qq3b.jpg)
+![2016-11-16-prometheus-alert-lifecycle.png](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwqi7ha7n7j30iu05qq3b.jpg)
 
 1. 节点的负载不断变化，但它会被 Prometheus 每次`scrape_interval`（即。`20s`）
 2. 然后根据抓取的指标评估警报规则每个`evaluation_interval`（即。`1m`）
@@ -638,7 +638,7 @@ Prometheus 通过三种方式与远程存储系统集成：
 - Prometheus 可以以标准化格式从其他 Prometheus 服务器接收样本。
 - Prometheus 可以从远程 URL 以标准化格式读取（返回）样本数据。
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gwlws72gvpj30jb02ot8l.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwlws72gvpj30jb02ot8l.jpg)
 
 读和写协议都使用通过 HTTP 进行快速压缩的协议缓冲区编码。这些协议尚未被视为稳定的 API，将来可能会更改为使用基于 HTTP/2 的 gRPC，届时 Prometheus 和远程存储之间的所有跃点都可以安全地被假定支持 HTTP/2。
 
@@ -755,7 +755,7 @@ func main() {
 
 分层联邦允许 Prometheus 扩展到具有数十个数据中心和数百万个节点的环境。在这个用例中，联邦拓扑类似于一棵树，更高级别的 Prometheus 服务器从大量从属服务器收集聚合时间序列数据
 
-![联邦集群](https://tva1.sinaimg.cn/large/008i3skNgy1gwlxklag4tj319k0dojsi.jpg)
+![联邦集群](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwlxklag4tj319k0dojsi.jpg)
 
 在每个数据中心部署单独的Prometheus Server，用于采集当前数据中心监控数据。并由一个中心的Prometheus Server负责聚合多个数据中心的监控数据。这一特性在Promthues中称为联邦集群。
 
@@ -792,7 +792,7 @@ scrape_configs:
 
 联邦集群的特性可以帮助用户根据不同的监控规模对Promthues部署架构进行调整。例如如下所示，可以在各个数据中心中部署多个Prometheus Server实例。每一个Prometheus Server实例只负责采集当前数据中心中的一部分任务(Job)，例如可以将不同的监控任务分离到不同的Prometheus实例当中，再有中心Prometheus实例进行聚合。
 
-![功能分区](https://tva1.sinaimg.cn/large/008i3skNgy1gwly1pvbrkj319q0ecgmz.jpg)
+![功能分区](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwly1pvbrkj319q0ecgmz.jpg)
 
 功能分区，即通过联邦集群的特性在任务级别对Prometheus采集任务进行划分，以支持规模的扩展。
 
@@ -802,7 +802,7 @@ scrape_configs:
 
 由于Promthues的Pull机制的设计，为了确保Promthues服务的可用性，用户只需要部署多套Prometheus Server实例，并且采集相同的Exporter目标即可。
 
-![基本HA](https://tva1.sinaimg.cn/large/008i3skNgy1gwlyd4hxoxj314e0coaak.jpg)
+![基本HA](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwlyd4hxoxj314e0coaak.jpg)
 
 基本的HA模式**只能确保Promthues服务的可用性**问题，但是**不解决Prometheus Server之间的数据一致性问题以及持久化问题**(数据丢失后无法恢复)，也无法进行动态的扩展。因此这种部署方式适合监控规模不大，Promthues Server也不会频繁发生迁移的情况，并且只需要保存短周期监控数据的场景。
 
@@ -810,7 +810,7 @@ scrape_configs:
 
 在基本HA模式的基础上通过添加Remote Storage存储支持，将监控数据保存在第三方存储服务上。
 
-![HA + Remote Storage](https://tva1.sinaimg.cn/large/008i3skNgy1gwlydvup6sj31dm0co750.jpg)
+![HA + Remote Storage](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwlydvup6sj31dm0co750.jpg)
 
 在解决了Promthues服务可用性的基础上，同时确保了数据的持久化，当Promthues Server发生宕机或者数据丢失的情况下，可以快速的恢复。 同时Promthues Server可能很好的进行迁移。**因此，该方案适用于用户监控规模不大，但是希望能够将监控数据持久化，同时能够确保Promthues Server的可迁移性的场景。**
 
@@ -818,7 +818,7 @@ scrape_configs:
 
 当单台Promthues Server无法处理大量的采集任务时，用户可以考虑基于Prometheus联邦集群的方式将监控采集任务划分到不同的Promthues实例当中即在任务级别功能分区。
 
-![基本HA + 远程存储 + 联邦集群](https://tva1.sinaimg.cn/large/008i3skNgy1gwlygfvaumj31j60m0tb2.jpg)基本HA + 远程存储 + 联邦集群
+![基本HA + 远程存储 + 联邦集群](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwlygfvaumj31j60m0tb2.jpg)基本HA + 远程存储 + 联邦集群
 
 这种部署方式一般适用于两种场景：
 
@@ -834,7 +834,7 @@ scrape_configs:
 
 这时在考虑另外一种极端情况，即单个采集任务的Target数也变得非常巨大。这时简单通过联邦集群进行功能分区，Prometheus Server也无法有效处理时。这种情况只能考虑继续在实例级别进行功能划分。
 
-![实例级别功能分区](https://tva1.sinaimg.cn/large/008i3skNgy1gwlykjazxpj31fy0eydgl.jpg)实例级别功能分区
+![实例级别功能分区](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwlykjazxpj31fy0eydgl.jpg)实例级别功能分区
 
 如上图所示，将统一任务的不同实例的监控数据采集任务划分到不同的Prometheus实例。通过relabel设置，我们可以确保当前Prometheus Server只收集当前采集任务的一部分实例的监控指标。
 
@@ -876,29 +876,29 @@ scrape_configs:
 
 Alertmanager成为单点
 
-![Alertmanager成为单点](https://tva1.sinaimg.cn/large/008i3skNgy1gwmm1qwhxvj311i0883z3.jpg)
+![Alertmanager成为单点](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwmm1qwhxvj311i0883z3.jpg)
 
 虽然Alertmanager能够同时处理多个相同的Prometheus Server所产生的告警。但是由于单个Alertmanager的存在，**当前的部署结构存在明显的单点故障风险**，当Alertmanager单点失效后，告警的后续所有业务全部失效。
 
 如下所示，最直接的方式，就是尝试部署多套Alertmanager。但是由于**Alertmanager之间不存在并不了解彼此的存在，因此则会出现告警通知被不同的Alertmanager重复发送多次的问题。**
 
-![img](https://tva1.sinaimg.cn/large/008i3skNgy1gwmm955gclj31940ac0tq.jpg)
+![img](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwmm955gclj31940ac0tq.jpg)
 
 Alertmanager引入了Gossip机制。**Gossip机制为多个Alertmanager之间提供了信息传递的机制。确保及时在多个Alertmanager分别接收到相同告警信息的情况下，也只有一个告警通知被发送给Receiver。**
 
-![Alertmanager Gossip](https://tva1.sinaimg.cn/large/008i3skNgy1gwmmar828wj319i0aejse.jpg)
+![Alertmanager Gossip](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwmmar828wj319i0aejse.jpg)
 
 ### gossip 协议
 
 用于实现分布式节点之间的信息交换和状态同步。Gossip协议同步状态类似于流言或者病毒的传播，如下所示：
 
-![Gossip分布式协议](https://tva1.sinaimg.cn/large/008i3skNgy1gwmmfyi21oj310609274k.jpg)
+![Gossip分布式协议](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwmmfyi21oj310609274k.jpg)
 
 一般来说Gossip有两种实现方式分别为Push-based和Pull-based。在Push-based当集群中某一节点A完成一个工作后，随机的从其它节点B并向其发送相应的消息，节点B接收到消息后在重复完成相同的工作，直到传播到集群中的所有节点。而Pull-based的实现中节点A会随机的向节点B发起询问是否有新的状态需要同步，如果有则返回。
 
 在简单了解了Gossip协议之后，我们来看Alertmanager是如何基于Gossip协议实现集群高可用的。如下所示，当Alertmanager接收到来自Prometheus的告警消息后，会按照以下流程对告警进行处理：
 
-![通知流水线](https://tva1.sinaimg.cn/large/008i3skNgy1gwmmh7f0t6j318i0cit9v.jpg)**通知流水线**
+![通知流水线](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwmmh7f0t6j318i0cit9v.jpg)**通知流水线**
 
 1. 在第一个阶段Silence中，Alertmanager会判断当前通知是否匹配到任何的静默规则，如果没有则进入下一个阶段，否则则中断流水线不发送通知。
 2. 在第二个阶段Wait中，Alertmanager会根据当前Alertmanager在集群中所在的顺序(index)等待index * 5s的时间。
@@ -907,7 +907,7 @@ Alertmanager引入了Gossip机制。**Gossip机制为多个Alertmanager之间提
 
 因此如下所示，Gossip机制的关键在于两点：
 
-![Gossip机制](https://tva1.sinaimg.cn/large/008i3skNgy1gwmmh7wubxj31h00fctaj.jpg)**Gossip机制**
+![Gossip机制](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gwmmh7wubxj31h00fctaj.jpg)**Gossip机制**
 
 - Silence设置同步：Alertmanager启动阶段基于Pull-based从集群其它节点同步Silence状态，当有新的Silence产生时使用Push-based方式在集群中传播Gossip信息。
 - 通知发送状态同步：告警通知发送完成后，基于Push-based同步告警发送状态。Wait阶段可以确保集群状态一致。

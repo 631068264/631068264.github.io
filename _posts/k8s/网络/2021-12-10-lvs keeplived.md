@@ -68,7 +68,7 @@ LVS 已经是 Linux 内核标准的一部分。使用 LVS 可以达到的技术�
 
 # LVS 原理
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gx94hi9k98j30o70brdg7.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gx94hi9k98j30o70brdg7.jpg)
 
 - 当用户向负载均衡调度器（Director Server）发起请求，调度器将请求发往至内核空间
 - PREROUTING 链首先会接收到用户请求，判断**目标 IP 确定是本机 IP，将数据包发往 INPUT 链**
@@ -89,7 +89,7 @@ IPVS 是 LVS 集群系统的核心软件，它的主要作用是：
 
 ## LVS/NAT
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gx95ex3rgdj30or0dsgma.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gx95ex3rgdj30or0dsgma.jpg)
 
 > NAT 方式的实现原理和数据包的改变。
 
@@ -119,7 +119,7 @@ NAT 模式的优点在于配置及管理简单，由于了使用 NAT 技术，LV
 
 ## LVS/DR
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gx9nm66uhgj30p10e0t9r.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gx9nm66uhgj30p10e0t9r.jpg)
 
 > 重点将请求报文的目标 MAC 地址设定为挑选出的 RS 的 MAC 地址
 
@@ -149,7 +149,7 @@ DR（Direct Routing 直接路由模式）**此模式时 LVS 调度器只接收�
 
 ## LVS/TUN
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gx9pifs1n8j30p30e53zi.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gx9pifs1n8j30p30e53zi.jpg)
 
 > 在原有的 IP 报文外再次封装多一层 IP 首部，内部 IP 首部(源地址为 CIP，目标 IIP 为 VIP)，外层 IP 首部(源地址为 DIP，目标 IP 为 RIP)
 

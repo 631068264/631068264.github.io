@@ -118,7 +118,7 @@ auth users = nfsuser
 # 模块验证密码文件 可放在全局配置里
 secrets file = /etc/rsync_master.pass
 # 填写client端IP 设定白名单，可以指定 IP 段（172.18.50.1/255.255.255.0）, 各个 Ip 段用空格分开 
-hosts allow = 10.21.17.93 10.21.17.91
+hosts allow = 10.xx.xx.93 10.xx.xx.91
 ```
 
 启动服务
@@ -173,7 +173,7 @@ rsync error: error in rsync protocol data stream (code 12) at io.c(759) [Receive
 
 [Synchronize files and folders between servers -using inotiy and rsync with c++ 服务器实时同步文件，服务器镜像解决方案](https://github.com/wsgzao/sersync)
 
-![img](https://tva1.sinaimg.cn/large/e6c9d24ely1h1kmme8urjj20f80fpt9v.jpg)
+![img](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24ely1h1kmme8urjj20f80fpt9v.jpg)
 
 - [Sersync使用指南](https://www.linuxidc.com/Linux/2012-02/53572.htm?spm=a2c6h.12873639.article-detail.8.157d4f64YGci9E)
 

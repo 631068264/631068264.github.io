@@ -39,7 +39,7 @@ Kubernetes 提供了很强的扩展能力，其本身的很多组件也是使用
 
 - 重复循环，返回步骤 1。
 
-![image-20220209142831200](https://tva1.sinaimg.cn/large/008i3skNly1gz78tnb9fbj315q0kymza.jpg)
+![image-20220209142831200](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNly1gz78tnb9fbj315q0kymza.jpg)
 
 修改状态使用**Optimistic Concurrency，通过对比resource version，拒绝修改 **
 
@@ -102,19 +102,19 @@ k8s怎样应付错误（网络原因，controller bug，远程服务挂了）
 
 - 只有边缘触发，state有可能丢
 
-  ![image-20220209163616424](https://tva1.sinaimg.cn/large/008i3skNly1gz7cikca6gj31ik0b00ua.jpg)
+  ![image-20220209163616424](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNly1gz7cikca6gj31ik0b00ua.jpg)
 
   丢了的event不管它，会造成一些组件无法达到理想状态
 
 - 边缘触发，通过轮询获取最新状态
 
-  ![image-20220209170901025](https://tva1.sinaimg.cn/large/008i3skNly1gz7dgn9d3zj315c08o754.jpg)
+  ![image-20220209170901025](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNly1gz7dgn9d3zj315c08o754.jpg)
 	
 	当收到另一个事件时可以从错误中恢复，因它根据集群中的最新状态实现其逻辑。
 	
 - 加入定时resync
 
-  ![image-20220209171253928](https://tva1.sinaimg.cn/large/008i3skNly1gz7dkos1hqj317g0amwfn.jpg)
+  ![image-20220209171253928](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNly1gz7dkos1hqj317g0amwfn.jpg)
 
   如果最后一个事件丢失了，后面没有事件来了，所以也不会去触发(Level-driven triggers)，这个时候需要借助resync来得到最新的状态。**k8s通常执行这个策略**
 
@@ -136,7 +136,7 @@ Kubernetes 由一堆不同角色的节点（集群中机器）组成，如下图
 -  负责对象的存储和读取，API Server最终还会和底层的etcd交互
 -  API Server负责给集群内部的组件做代理，例如对Kubernetes dashboard、strea logs、service ports、以及kubectl exec等
 
-![引用自《Programming Kubernetes》](https://tva1.sinaimg.cn/large/008i3skNgy1gz7ktc2ldfj30go0auq3y.jpg)
+![引用自《Programming Kubernetes》](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gz7ktc2ldfj30go0auq3y.jpg)
 
 ## API Server HTTP 协议接口
 
@@ -195,7 +195,7 @@ RESTful API 是基于 HTTP 协议且符合 REST 原则的软件架构，controll
 
 Resource 和 API group、Version 一起称为 GroupVersionResource（GVR），来唯一标示一个 HTTP 路径。
 
-![引用自《Programming Kubernetes》](https://tva1.sinaimg.cn/large/008i3skNgy1gz7l6mon00j30go03z3yp.jpg)
+![引用自《Programming Kubernetes》](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gz7l6mon00j30go03z3yp.jpg)
 
 
 ## 声明式状态管理
@@ -208,7 +208,7 @@ spec 定义的期望状态提供了实现 “infrastructure-as-code” 的基础
 
 ## api 处理过程
 
-![image-20220210104651867](https://tva1.sinaimg.cn/large/008i3skNly1gz8841kid8j31ls0haad5.jpg)
+![image-20220210104651867](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNly1gz8841kid8j31ls0haad5.jpg)
 
 - http request 会被**DefaultBuildHandlerChain()**里面的一系列过滤条件，failed return 401
 
@@ -273,7 +273,7 @@ pod, err := podInformer.Lister().Pods("programming-kubernetes").Get("client-go")
 
 内存cache，为了缓解controller每次修改对象访问api server产生的高负载，此外，informers 可以几乎实时地对对象的变化做出反应，而不需要轮询请求。
 
-![image-20220210151752993](https://tva1.sinaimg.cn/large/008i3skNly1gz8fvcpu3nj314s0rwq76.jpg)
+![image-20220210151752993](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNly1gz8fvcpu3nj314s0rwq76.jpg)
 
 当长时间运行的 watch 连接中断时，Informers尝试用发起另一个 watch 请求从错误中恢复，在不丢失任何事件的情况下拾取事件流。
 
@@ -398,13 +398,13 @@ WorkQueue支持3种队列，并提供了3种接口，不同队列实现可应对
 
 ## 建立过程
 
-![image-20220211103601108](https://tva1.sinaimg.cn/large/008i3skNgy1gz9dcehn6uj31dc0p0n08.jpg)
+![image-20220211103601108](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gz9dcehn6uj31dc0p0n08.jpg)
 
 crd的创建由api server里面的apiextensions-apiserver处理，将检查名称并确定它们是否冲突，是否其他资源或它们本身是否一致。
 
 cr创建由apiextensions-apiserver根据 [OpenAPI v3 schema](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.0.md#schemaObject)检验失败返回400
 
-![image-20220211113059544](https://tva1.sinaimg.cn/large/008i3skNgy1gz9exk12qwj31gs0q477u.jpg)
+![image-20220211113059544](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gz9exk12qwj31gs0q477u.jpg)
 
 
 
@@ -413,7 +413,7 @@ cr创建由apiextensions-apiserver根据 [OpenAPI v3 schema](https://github.com/
 - kubectl 通过/apis询问Api server所有的 API group
 - kubectl 通过/apis/group/version 查看所有的group存在的资源，找到对应资源所在的Group、VersionheResources
 
-![image-20220211113940066](https://tva1.sinaimg.cn/large/008i3skNgy1gz9f6kuj39j310m0u0juj.jpg)
+![image-20220211113940066](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gz9f6kuj39j310m0u0juj.jpg)
 
 kubectl 会维护一个缓存在*~/.kubectl*，**不必在每次访问时重新检索发现信息**，10min失效一次。因此，CRD 的更改可能会在最多 10 分钟后显示在相应用户的 CLI 中。
 
@@ -628,7 +628,7 @@ CRD的一些限制:
 -  请求会走到kube-aggregator组件，这个组件知道哪些API 请求是需要走自定义API Server的，那些Group走API server这是API Service定义的。
 -  转发请求给自定义API Server
 
-![image-20220213204558493](https://tva1.sinaimg.cn/large/008i3skNgy1gzc67nnszsj31ci0u0afo.jpg)
+![image-20220213204558493](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gzc67nnszsj31ci0u0afo.jpg)
 
 ```yaml
 apiVersion: apiregistration.k8s.io/v1beta1

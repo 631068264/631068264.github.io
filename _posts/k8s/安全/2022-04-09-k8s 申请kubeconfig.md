@@ -120,13 +120,13 @@ current-context: '${SA_NAME}'-cluster' > ${SA_NAME}_kubeconfig
 - 在官方提供的客户端 REST 框架代码里，通过 HTTPS 方式与 API Server 建立连接 后，会用 Pod 里指定路径下的一个 CA 证书 (/run/secrets/kubernetes.io/serviceaccount/ ca.crt) 验证 API Server发来的证书，验证是否为 CA 证书签名的合法证书。
 - API Server 在收到 这个 Token 以后， 会采 用自己的私 钥(实际 上 是使 用 service-account- key-file 参数指定的私钥，如果没有设置此参数，则默认采用 tis-private-key-file 指定的参数，即自己的私钥)对 Token 进行合法性验证 。
 
-![image-20220623222556194](https://tva1.sinaimg.cn/large/e6c9d24egy1h3ijnpzexjj21460fejsq.jpg)
+![image-20220623222556194](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h3ijnpzexjj21460fejsq.jpg)
 
 
 
 接下来看看 default-token-77oyg都有什么内容
 
-![image-20220623222631592](https://tva1.sinaimg.cn/large/e6c9d24egy1h3ijoaslonj21400u0gqs.jpg)
+![image-20220623222631592](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h3ijoaslonj21400u0gqs.jpg)
 
 
 
@@ -134,7 +134,7 @@ current-context: '${SA_NAME}'-cluster' > ${SA_NAME}_kubeconfig
 
 我们恍然大悟 : **在每个命名空间中都有一个名为 default 的默认 Service A ccount 对象 ， 在这个 ServiceAccount 里面有一个名为 Tokens 的可以作为 Volume 被挂载到 Pod 里 的 Secret, Pod启动时，这个 Secret会自动被挂载到 Pod 的指定目录下，用来协助完成 Pod 中的进程访问 API Server 时的 身份鉴权。**
 
-![image-20220623223800142](https://tva1.sinaimg.cn/large/e6c9d24egy1h3ik08i4thj21pe0p8gpa.jpg)
+![image-20220623223800142](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h3ik08i4thj21pe0p8gpa.jpg)
 
 Kubernetes 之所以要创建两套独立的账号系统
 

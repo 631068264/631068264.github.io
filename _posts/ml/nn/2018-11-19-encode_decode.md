@@ -18,7 +18,7 @@ $$y = h(x)$$
 $$r = f(y) = f(h(x))$$
 
 weights 可以share, encode decode的weights 可以简单地反过来用
-![](https://tva2.sinaimg.cn/large/006tNbRwgy1fxd77qop3fj30t80hkdfu.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fxd77qop3fj30t80hkdfu.jpg)
 损失函数的不一样，hidden layer不一样 => 不同的AE
 
 
@@ -34,13 +34,13 @@ VAE对于任意d维随机变量，不管他们实际上服从什么分布，我�
 
 - AE 是还原x
 - VAE是产生新的x
-![](https://tva4.sinaimg.cn/large/006tNbRwgy1fxfofnw3maj30wu0k8dgd.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fxfofnw3maj30wu0k8dgd.jpg)
 训练完后VAE，使用decode来生成新的X
 
 
 >KL 散度(Kullback–Leibler Divergence) 来衡量两个分布的差异，或者说距离
 
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1fxd82llvovj31j80dcweq.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fxd82llvovj31j80dcweq.jpg)
 [cross-entry 与 KL散度等效 对于损失函数](https://stackoverflow.com/questions/41863814/kl-divergence-in-tensorflow)
 
 ```python
@@ -68,7 +68,7 @@ GAN 生成式对抗网络
 - 判别器(Discriminator):记作D，接受真实样本和G生成的样本，并进行判别和区分
 - G 和 D 相互博弈，通过学习，G 的生成能力和 D 的判别能力都逐渐 增强并收敛,交替地训练，避免一方过强
 
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1fxdgtf0tnvj30f406hjri.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fxdgtf0tnvj30f406hjri.jpg)
 
 核心代码
 ```python
@@ -116,7 +116,7 @@ g_opt = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=beta1).minimiz
 使用[CNN](https://www.oreilly.com/learning/generative-adversarial-networks-for-beginners?imm_mid=0f3eba&cmp=em-data-na-na-newsltr_20170628)的话没有GPU加速就别搞了，用CPU慢,超级慢。要非常注意`shape`
 
 用普通FC训练 G生成出来的结果
-![](https://tva2.sinaimg.cn/large/006tNbRwgy1fxfimk5r0jg30hy0hukjp.gif)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fxfimk5r0jg30hy0hukjp.gif)
 ```python
 def discriminator_fc(X, reuse=None):
     """判别器"""

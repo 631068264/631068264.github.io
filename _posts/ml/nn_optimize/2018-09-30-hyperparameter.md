@@ -30,7 +30,7 @@ tags:
 而[0.1, 1]范围内$\alpha$值效果并不好。因此我们更关注的是区间[0.0001, 0.1]，应该在这个区间内细分更多刻度。
 
 将linear scale转换为log scale，将均匀尺度转化为非均匀尺度，然后再在log scale下进行均匀采样。
-![](https://tva4.sinaimg.cn/large/006tNc79gy1fvsg9eb0u5j30nq0763yg.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvsg9eb0u5j30nq0763yg.jpg)
 一般解法是，如果线性区间为[a, b]，令m=log(a)，n=log(b)，则对应的log区间为[m,n]。对log区间的[m,n]进行随机均匀采样，
 然后得到的采样值r，最后反推到线性区间，即$10^r$。$10^r$就是最终采样的超参数。
 ```python

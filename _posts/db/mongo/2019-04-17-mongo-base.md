@@ -8,9 +8,9 @@ categories:
 
 # 概念
 
-![](https://tva3.sinaimg.cn/large/006tNc79ly1g25u6yxv5vj31bc0iaaan.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g25u6yxv5vj31bc0iaaan.jpg)
 
-![](https://tva3.sinaimg.cn/large/006tNc79ly1g25ui32etaj31am0hy3zt.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g25ui32etaj31am0hy3zt.jpg)
 
 # 集合
 
@@ -44,7 +44,7 @@ MongoDB 的操作日志文件
 
 # 数据类型
 
-![](https://tva4.sinaimg.cn/large/006tNc79ly1g25v6k3nlsj312w0u0mz8.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g25v6k3nlsj312w0u0mz8.jpg)
 
 ObjectId 类似唯一主键，可以很快的去生成和排序，MongoDB 中存储的**文档必须有一个 _id 键**。这个键的值**可以是任何类型**的，默认是个 ObjectId 对象
 
@@ -75,7 +75,7 @@ ObjectId 类似唯一主键，可以很快的去生成和排序，MongoDB 中存
 
 建立
 `db.createCollection(name, options)`
-![](https://tva1.sinaimg.cn/large/006tNc79ly1g25zy2dq74j31ao0msjss.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g25zy2dq74j31ao0msjss.jpg)
 
 
 # select
@@ -140,7 +140,7 @@ db.collection.createIndex(keys, options)
 db.col.createIndex({"title":1,"description":-1})
 ```
 
-![](https://tva4.sinaimg.cn/large/006tNc79ly1g26m47yby1j311k0u0ad3.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g26m47yby1j311k0u0ad3.jpg)
 
 查看集合索引
 `db.col.getIndexes()`

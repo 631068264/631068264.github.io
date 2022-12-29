@@ -33,7 +33,7 @@ Test sets也是一样，目标是测试已选算法的实际表现，无偏估�
 Bias和Variance是对立的，分别对应着欠拟合和过拟合，我们常常需要在Bias和Variance之间进行权衡。
 而在深度学习中，我们可以同时减小Bias和Variance，构建最佳神经网络模型，两者可以区分对待，而不用权衡。
 
-![](https://tva3.sinaimg.cn/large/006tNc79gy1fvqj2k3bx9j311s0bs415.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvqj2k3bx9j311s0bs415.jpg)
 通过两个数值Train set error和Dev set error来理解bias和variance
 
 - **首先要知道算法的偏差高不高**，如果偏差较高，试着评估训练集或训练数据的性能。如果偏差的确很高，甚至无法拟合训练集，那么你要做的就是选择一个新的网络
@@ -100,8 +100,8 @@ with tf.name_scope("loss"):                                     # not shown in t
 
 概率为0.5
 <span class='gp-2'>
-    <img src='https://tva2.sinaimg.cn/large/006tNc79gy1fvqkuz85k9j30s80ic77m.jpg' />
-    <img src='https://tva2.sinaimg.cn/large/006tNc79gy1fvqkv5w4ahj30uq0j20v9.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvqkuz85k9j30s80ic77m.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvqkv5w4ahj30uq0j20v9.jpg' />
 </span>
 
 ```python
@@ -176,7 +176,7 @@ get min cost function 和 防止overfit 是对立的。**early stopping** 通过
 
 $$X:=\frac{X-\mu}{\sigma^2}$$
 
-![](https://tva1.sinaimg.cn/large/006tNc79gy1fvrcgymr77j30go09dwhh.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrcgymr77j30go09dwhh.jpg)
 标准化后代价函数优化起来更简单快速。可用较大步长，较小次数迭代。
 
 # 梯度消失/梯度爆炸（Vanishing / Exploding gradients）
@@ -185,7 +185,7 @@ $$X:=\frac{X-\mu}{\sigma^2}$$
 
 
 极深的网络存在的问题
-![](https://tva4.sinaimg.cn/large/006tNc79gy1fvrdptva91j31kw0ku0wn.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrdptva91j31kw0ku0wn.jpg)
 - 各层权重W的元素都稍大于1，1.5，L越大，Ŷ呈指数型增长。我们称之为数值爆炸。
 - 各层权重W的元素都稍小于1，0.5,L越大，Ŷ呈指数型减小。我们称之为数值消失。
 同样，这种情况也会引起梯度呈现同样的指数型增大或减小的变化。L非常大时，例如L=150，则梯度会非常大或非常小
@@ -194,8 +194,8 @@ $$X:=\frac{X-\mu}{\sigma^2}$$
 ## 完善w初始化
 单个unit
 <span class='gp-2'>
-    <img src='https://tva1.sinaimg.cn/large/006tNc79gy1fvrdycv50cj308c04twev.jpg'/>
-    <img src='https://tva3.sinaimg.cn/large/006tNc79gy1fvre8vkvpwj30hi06st8k.jpg'/>
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrdycv50cj308c04twev.jpg'/>
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvre8vkvpwj30hi06st8k.jpg'/>
 </span>
 这里忽略了常数项b。为了让z不会过大或者过小，思路是让w与n有关，且n越大，w应该越小才好。
 这样能够保证z不会过大。一种方法是在设$Var(w_i)\;=\;\frac1n$，n表示神经元的输入特征数量。
@@ -207,9 +207,9 @@ tanh，一般选择上面的初始化方法
 ReLU，权重w的初始化一般令其方差为$\frac2n$
 
 ### Xavier and He Initialization
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1fwuoqqt6xej31fa0xgtg3.jpg)
-![](https://tva3.sinaimg.cn/large/006tNbRwgy1fwuormlrwxj31eq0iqwj1.jpg)
-![](https://tva2.sinaimg.cn/large/006tNbRwgy1fwuoruzu32j31ey03wq3a.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fwuoqqt6xej31fa0xgtg3.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fwuormlrwxj31eq0iqwj1.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fwuoruzu32j31ey03wq3a.jpg)
 ```python
 W1 = tf.get_variable('W1',[25,12288],initializer=tf.contrib.layers.xavier_initializer(seed=1))
 b1 = tf.get_variable('b1',[25,1],initializer=tf.zeros_initializer())
@@ -238,8 +238,8 @@ Back Propagation神经网络有一项重要的测试是梯度检查（gradient c
 近似求出梯度值
 
 <span class='gp-2'>
-    <img src='https://tva2.sinaimg.cn/large/006tNc79gy1fvrjleyllbj30hd0b6glq.jpg' />
-    <img src='https://tva4.sinaimg.cn/large/006tNc79gy1fvrjm7s69wj31kw08bwep.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrjleyllbj30hd0b6glq.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvrjm7s69wj31kw08bwep.jpg' />
 </span>
 
 梯度检查首先要做的是分别将$W^{[1]},b^{[1]},\cdots,W^{[L]},b^{[L]}$这些矩阵构造成一维向量，
@@ -276,11 +276,11 @@ Batch Normalization不仅可以让调试超参数更加简单，而且可以让�
 
 第l层隐藏层的输入就是第l-1层隐藏层的输出$A^{[l-1]}$。对$A^{[l-1]}$进行标准化处理，从原理上来说可以提高$W^{[l]}$和$b^{[l]}$的训练速度和准确度。
 这种对各隐藏层的标准化处理就是Batch Normalization。值得注意的是，实际应用中，一般是对$Z^{[l-1]}$进行标准化处理而不是$A^{[l-1]}$，其实差别不是很大。
-![](https://tva2.sinaimg.cn/large/006tNc79gy1fvshpr5ehvj31kw0v1n05.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvshpr5ehvj31kw0v1n05.jpg)
 > Normalizing inputs和Batch Normalization有区别的,Normalizing inputs使所有输入的均值为0，方差为1。
 而Batch Normalization可使各隐藏层输入的均值和方差为任意值。实际上，从激活函数的角度来说，如果各隐藏层的输入均值在靠近0的区域即处于激活函数的线性区域，
 这样不利于训练好的非线性神经网络，得到的模型效果也不会太好。这也解释了为什么需要用**γ和β来对z[l](i)**作进一步处理。
-![](https://tva1.sinaimg.cn/large/006tNc79gy1fvshzkjj5cj31kw0mwjuv.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvshzkjj5cj31kw0mwjuv.jpg)
 
 如果实际应用的样本与训练样本分布不同，即发生了**covariate shift**，则一般是要对模型重新进行训练的。深度神经网络中，covariate shift会导致模型预测效果变差。
 而Batch Norm的作用恰恰是减小covariate shift的影响，让模型变得更加健壮，鲁棒性更强。Batch Norm减少了各层$W^{[l]}、B^{[l]}$之间的耦合性，让各层更加独立，

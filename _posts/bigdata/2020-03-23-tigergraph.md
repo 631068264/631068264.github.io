@@ -25,8 +25,8 @@ TigerGraph使用gadmin命令进行管理，需要在tigergraph用户下执行，
 从图存储中删除所有数据
 `clear graph store –HARD`
 
-![](https://tva1.sinaimg.cn/large/00831rSTgy1gd3q6wolnxj30v30u0tae.jpg)
-![](https://tva1.sinaimg.cn/large/00831rSTgy1gd3q7i0tqvj30ul0hjmxq.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/00831rSTgy1gd3q6wolnxj30v30u0tae.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/00831rSTgy1gd3q7i0tqvj30ul0hjmxq.jpg)
 
 
 # Schema

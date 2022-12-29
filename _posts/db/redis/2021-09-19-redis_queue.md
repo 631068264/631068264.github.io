@@ -19,7 +19,7 @@ List 底层的实现就是一个「链表」，在头部和尾部操作元素，
 
 ```
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gulrl758vvj60ix05ldfp02.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gulrl758vvj60ix05ldfp02.jpg)
 
 ## RPOP
 
@@ -72,9 +72,9 @@ while true:
 
 
 
-![图片](https://tva1.sinaimg.cn/large/008i3skNgy1gulrzixqc4j60k108374d02.jpg)
+![图片](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gulrzixqc4j60k108374d02.jpg)
 
-![图片](https://tva1.sinaimg.cn/large/008i3skNgy1guls2x4kdnj60kl07taa502.jpg)
+![图片](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1guls2x4kdnj60kl07taa502.jpg)
 
 ```shell
 // 2个消费者 都订阅一个队列
@@ -180,7 +180,7 @@ Pub/Sub 在实现时非常简单，它没有基于任何数据类型，也没有
 (nil)
 ```
 
-![图片](https://tva1.sinaimg.cn/large/008i3skNgy1gulsjv7jttj60ix04hjrb02.jpg)
+![图片](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gulsjv7jttj60ix04hjrb02.jpg)
 
 - 支持阻塞等待拉取消息
 
@@ -255,7 +255,7 @@ Pub/Sub 在实现时非常简单，它没有基于任何数据类型，也没有
   127.0.0.1:6379> XACK queue group1 1618472043089-0
   ```
 
-  ![图片](https://tva1.sinaimg.cn/large/008i3skNgy1gulsoo0t4xj60jh089aa702.jpg)
+  ![图片](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gulsoo0t4xj60jh089aa702.jpg)
 
   **消费者异常宕机，肯定不会发送 XACK，那么 Redis 就会依旧保留这条消息**
 
@@ -309,7 +309,7 @@ Pub/Sub 在实现时非常简单，它没有基于任何数据类型，也没有
 
 一个消息队列分为三大块**生产者、队列中间件、消费者**。
 
-![图片](https://tva1.sinaimg.cn/large/008i3skNgy1gulsu2b0g4j60kb05cjrf02.jpg)
+![图片](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gulsu2b0g4j60kb05cjrf02.jpg)
 
 **生产者**
 

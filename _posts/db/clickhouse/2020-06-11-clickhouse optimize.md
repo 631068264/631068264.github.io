@@ -12,27 +12,27 @@ categories:
 # 建表
 
 <span class='gp-2'>
-    <img src='https://tva1.sinaimg.cn/large/007S8ZIlgy1gfo535wuwcj31lk0u0gya.jpg' />
-    <img src='https://tva1.sinaimg.cn/large/007S8ZIlgy1gfo54ga7rjj31i30u07e7.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfo535wuwcj31lk0u0gya.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfo54ga7rjj31i30u07e7.jpg' />
 </span>
 
 # join 
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfo59rz2yvj31hs0u0gy5.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfo59rz2yvj31hs0u0gy5.jpg)
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfoel9scokj31kw0u0k6t.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfoel9scokj31kw0u0k6t.jpg)
 
 # select 优化
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfoeuq87l7j31o90u0drb.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfoeuq87l7j31o90u0drb.jpg)
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfof4klklbj31z10u0alj.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfof4klklbj31z10u0alj.jpg)
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfofcfp74qj31h40u07ic.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfofcfp74qj31h40u07ic.jpg)
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfoff16qh3j31x10u04cc.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfoff16qh3j31x10u04cc.jpg)
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfofm2osutj31g90u0dx2.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfofm2osutj31g90u0dx2.jpg)
 
 [lowcardinality](https://clickhouse.tech/docs/zh/sql-reference/data-types/lowcardinality/)
 
@@ -43,8 +43,8 @@ lowcardinality 是一种改变数据存储和数据处理方法的概念。 clic
 当使用字符类型的时候，可以考虑使用 lowcardinality 代替enum。 lowcardinality 通常更加灵活和高效。
 
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfofx5l97oj31lu0u0ap5.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfofx5l97oj31lu0u0ap5.jpg)
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfofydqrtzj31mm0u0gxj.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfofydqrtzj31mm0u0gxj.jpg)
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfog8k3xd6j31k10u0k3a.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfog8k3xd6j31k10u0k3a.jpg)

@@ -32,9 +32,9 @@ https://levelup.gitconnected.com/deciphering-the-difference-between-a-service-me
 
   管理数据平面的服务策略和编排。
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gsc3gx6b4zj30dw05rgli.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gsc3gx6b4zj30dw05rgli.jpg)
 
-![img](https://tva1.sinaimg.cn/large/008i3skNgy1gsc6dbzq7zj312o0m6t9u.jpg)
+![img](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gsc6dbzq7zj312o0m6t9u.jpg)
 
 ## 数据平面
 
@@ -94,7 +94,7 @@ Galley 是 [Istio](https://www.servicemesher.com/istio-handbook/GLOSSARY.html#is
 
     根据权重把 5% 的流量路由给新版本，如果服务正常，再逐渐转移更多的流量到新版本。
 
-    ![image-20210920095305671](https://tva1.sinaimg.cn/large/008i3skNgy1gumuvaqfbdj61ay0fsabg02.jpg)
+    ![image-20210920095305671](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gumuvaqfbdj61ay0fsabg02.jpg)
 
   - AB testing。
 
@@ -152,11 +152,9 @@ Galley 是 [Istio](https://www.servicemesher.com/istio-handbook/GLOSSARY.html#is
 
 服务间流量控制
 
-<img src="https://www.servicemesher.com/istio-handbook/images/concept-feature-routing.png" alt="路由示意图（图片来自 Istio 官方网站）" style="zoom: 40%;" />
-
 控制与网格边界交互的流量，在系统的入口和出口处部署 Sidecar代理，让所有流入和流出的流量都由代理进行转发。负责入和出的代理就叫做入口网关和出口网关，它们把守着进入和流出网格的流量。
 
-![入口和出口网关（图片来自 Istio 官方网站）](https://tva1.sinaimg.cn/large/008i3skNgy1gumvrqsa6gj61la0iwdi202.jpg)
+![入口和出口网关（图片来自 Istio 官方网站）](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gumvrqsa6gj61la0iwdi202.jpg)
 
 还能设置流量策略。比如可以对连接池相关的属性进行设置，通过修改最大连接等参数，实现对请求负载的控制。还可以对负载均衡策略进行设置，在轮询、随机、最少访问等方式之间进行切换。还能设置异常探测策略，将满足异常条件的实例从负载均衡池中摘除，以保证服务的稳定性。
 
@@ -207,7 +205,7 @@ Isito 支持注入两种类型的故障：延迟和中断。
 
 [Istio](https://www.servicemesher.com/istio-handbook/GLOSSARY.html#istio) 中的安全架构是由多个组件协同完成的。Citadel 是负责安全的主要组件，用于密钥和证书的管理；[Pilot](https://www.servicemesher.com/istio-handbook/GLOSSARY.html#pilot) 会将安全策略配置分发给 [Envoy](https://www.servicemesher.com/istio-handbook/GLOSSARY.html#envoy) 代理；[Envoy](https://www.servicemesher.com/istio-handbook/GLOSSARY.html#envoy) 执行安全策略来实现访问控制。下图展示了 [Istio](https://www.servicemesher.com/istio-handbook/GLOSSARY.html#istio) 的安全架构和运作流程。
 
-![安全架构（图片来自 Istio 官方网站）](https://tva1.sinaimg.cn/large/008i3skNgy1guo2wkh97kj61pc0u079602.jpg)
+![安全架构（图片来自 Istio 官方网站）](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1guo2wkh97kj61pc0u079602.jpg)
 
 
 
@@ -296,5 +294,5 @@ Istio的 mTLS 提供了一种宽容模式（permissive mode）的配置方法，
 
 总而言之，**API 网关和服务网格两者是相辅相成的：API 网关处理外部流量和服务网格处理内部流量**，其拓扑结构如下图所示：
 
-![图片](https://tva1.sinaimg.cn/large/008i3skNgy1gsc6a3ctkbj30dw0g50ud.jpg)
+![图片](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gsc6a3ctkbj30dw0g50ud.jpg)
 

@@ -99,6 +99,10 @@ du -sh /var/lib/docker/
 #sort -r：反向显示
 #sort -h：compare human readable numbers (e.g., 2k 1G)
 du -h --max-depth=1 . | sort -hr
+
+
+ls    -Slh
+
 ```
 
 
@@ -209,7 +213,7 @@ lsblk
 
 如图有个200G的盘没有挂载，mount point 是空的
 
-![企业微信截图_b34aed63-4667-4eb7-a1a1-dea18aad3b21](https://tva1.sinaimg.cn/large/e6c9d24egy1h4ebipfkcgj20r20audhh.jpg)
+![企业微信截图_b34aed63-4667-4eb7-a1a1-dea18aad3b21](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h4ebipfkcgj20r20audhh.jpg)
 
 
 

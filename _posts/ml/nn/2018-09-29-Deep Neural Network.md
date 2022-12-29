@@ -9,24 +9,24 @@ tags:
 ---
 # 结构
 L-layer NN，则包含了L-1个隐藏层，最后的L层是输出层
-![](https://tva2.sinaimg.cn/large/006tNc79gy1fvq8vr40idj316o0vcwlf.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvq8vr40idj316o0vcwlf.jpg)
 
 # 传播
-![](https://tva3.sinaimg.cn/large/006tNc79gy1fvqgpcpsvdj31kw0uu7hc.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvqgpcpsvdj31kw0uu7hc.jpg)
 ## 正向传播过程
 $A^{\lbrack0\rbrack}$ 就是X。 只使用一次`for` 循环 从后往前层数l 1到L
-![](https://tva4.sinaimg.cn/large/006tNc79gy1fvq91hpkcjj31jc08saa5.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvq91hpkcjj31jc08saa5.jpg)
 
 ## 反向传播
-![](https://tva3.sinaimg.cn/large/006tNc79gy1fvqg95eyhsj31bc13egn9.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvqg95eyhsj31bc13egn9.jpg)
 
 
 # 矩阵维度
 做深度神经网络的反向传播时，一定要确认所有的矩阵维数是前后一致的，可以大大提高代码通过率
 
 <span class='gp-2'>
-    <img src='https://tva4.sinaimg.cn/large/006tNc79gy1fvqe3tqfq1j31co0qswfx.jpg' />
-    <img src='https://tva1.sinaimg.cn/large/006tNc79gy1fvqe60c0lmj31im0jqwfl.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvqe3tqfq1j31co0qswfx.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1fvqe60c0lmj31im0jqwfl.jpg' />
 </span>
 
 

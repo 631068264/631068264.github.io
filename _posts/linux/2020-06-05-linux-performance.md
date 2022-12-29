@@ -163,9 +163,9 @@ du df 区别
 netstat -n| awk '/^tcp/ {++S[$NF]} END {for(a in S) print a,S[a]}'
 ```
 
-![](https://tva1.sinaimg.cn/large/008eGmZEgy1goqkn3plpmj31hc0u041x.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008eGmZEgy1goqkn3plpmj31hc0u041x.jpg)
 
-![](https://tva1.sinaimg.cn/large/008eGmZEgy1goqklzidoqj31860megmm.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008eGmZEgy1goqklzidoqj31860megmm.jpg)
 
 **我们看一下系统默认是如何控制连接建立超时时间的？**
 
@@ -207,7 +207,7 @@ TCP三次握手的第一个SYN报文没有收到ACK，系统会自动对SYN报�
 
 
 
-![](https://tva1.sinaimg.cn/large/008eGmZEgy1goqkm7dhh3j314s0mwt9y.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008eGmZEgy1goqkm7dhh3j314s0mwt9y.jpg)
 
 - LISTENING 服务启动处于侦听状态
 
@@ -345,6 +345,31 @@ cat /proc/cpuinfo| grep "cpu cores"| uniq
 逻辑CPU的个数
 cat /proc/cpuinfo| grep "processor"| wc -l
 ```
+
+
+
+提高多核负载
+
+```sh
+# 运行
+
+
+
+
+# 删除dd
+ps -ef | grep if=/dev/zero | grep -v grep |awk '{print $2}' | xargs kill -9
+
+# 个数
+ps -ef | grep if=/dev/zero | grep -v grep |wc -l
+```
+
+
+
+
+
+
+
+
 
 ## 内存 
 
@@ -488,7 +513,7 @@ RAID-0 只要有任何一颗磁盘损毁，在 RAID 上面的所有数据都会�
 
 ### RAID 1+0，RAID 0+1
 
-![RAID-1+0 的磁盘写入示意图](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfhm8wrvbmj30c506aaa8.jpg)
+![RAID-1+0 的磁盘写入示意图](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfhm8wrvbmj30c506aaa8.jpg)
 
 为何会推荐 RAID 1+0 呢？想像你有 20 颗磁盘组成的系统，每两颗组成一个 RAID1，因此你就有总共 10组可以自己复原的系统了！ 然后这 10组再组成一个新的 RAID0，速度立刻拉升 10倍了！同时要注意，因为每组 RAID1 是个别独立存在的，因此任何一颗磁盘损毁， 数据都是从另一颗磁盘直接复制过来重建，并不像 RAID5/RAID6 必须要整组 RAID 的磁盘共同重建一颗独立的磁盘系统！性能上差非常多！ 而且 RAID 1 与 RAID 0 是不需要经过计算的 （striping） ！读写性能也比其他的 RAID 等级好太多了！
 
@@ -500,7 +525,7 @@ RAID-5 至少需要三颗以上的磁盘才能够组成这种类型的磁盘阵�
 
 
 
-![RAID-5 的磁盘写入示意图](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfhmqvuyg6g30b205974b.gif)
+![RAID-5 的磁盘写入示意图](https://cdn.jsdelivr.net/gh/631068264/img/007S8ZIlgy1gfhmqvuyg6g30b205974b.gif)
 
 每个循环写入时，都会有部分的同位检查码 （parity） 被记录起来，并且记录的同位检查码每次都记录在不同的磁盘， 因此，任何一个磁盘损毁时都能够借由其他磁盘的检查码来重建原本磁盘内的数据喔！不过需要注意的是， 由于有同位检查码，因此 RAID 5 的总容量会是整体磁盘数量减一颗。以上图为例， 原本的 3 颗磁盘只会剩下 （3-1）=2 颗磁盘的容量。而且当损毁的磁盘数量大于等于两颗时，这整组 RAID 5 的数据就损毁了。 因为 RAID 5 默认仅能支持一颗磁盘的损毁情况。
 

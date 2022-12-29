@@ -8,22 +8,22 @@ categories:
 
 np 结构化数组
 
-![](https://tva2.sinaimg.cn/large/006tNbRwgy1fv96fty84ej31kw0wvq65.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fv96fty84ej31kw0wvq65.jpg)
 
 结构化数组 每列类型不一样
-![](https://tva2.sinaimg.cn/large/006tNbRwgy1fv96fybwxkj31kw0j1dik.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fv96fybwxkj31kw0j1dik.jpg)
 
 ---
 
 pd
 
 增
-![](https://tva2.sinaimg.cn/large/006tNbRwgy1fv96jv1utuj31ka0f8q3n.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fv96jv1utuj31ka0f8q3n.jpg)
 **append**
-![](https://tva1.sinaimg.cn/large/006tNbRwgy1fv96k43kj9j31kw0gy3zk.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fv96k43kj9j31kw0gy3zk.jpg)
 
 **join** how='outer' 并集 inner (索寻|的交集)、 left (默认俏，使用调用方法 的对象中的索引值)以及 right (使用被连接对象的索引值)。
-![](https://tva4.sinaimg.cn/large/006tNbRwgy1fv96kbxfe9j31kw0mkjsr.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fv96kbxfe9j31kw0mkjsr.jpg)
 
 删
 del df['xxx']
@@ -32,4 +32,4 @@ del df['xxx']
 
 Python 整数可以为任意大
 
-![](https://tva3.sinaimg.cn/large/006tNbRwgy1fv96fcrou3j31kw0xxadj.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNbRwgy1fv96fcrou3j31kw0xxadj.jpg)

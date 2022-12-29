@@ -88,7 +88,7 @@ INSERT INTO user (name, age) VALUES (%s, %s)
 
 **only for mysql** [insert-on-duplicate-key-update-upsert](https://docs.sqlalchemy.org/en/13/dialects/mysql.html#insert-on-duplicate-key-update-upsert)
 
-![](http://ww4.sinaimg.cn/large/006tNc79ly1g3dwhn16i7j31pw0fq0tm.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g3dwhn16i7j31pw0fq0tm.jpg)
 
 **update or insert by unique key**
 
@@ -115,7 +115,7 @@ session.execute(stmt)
 session.commit()
 ```
 
-![](http://ww4.sinaimg.cn/large/006tNc79ly1g3dwrz6ovzj31pi0luq45.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g3dwrz6ovzj31pi0luq45.jpg)
 
 ```sql
 INSERT INTO user (name, age) VALUES (%s, %s), (%s, %s), (%s, %s), (%s, %s), (%s, %s), (%s, %s), (%s, %s), (%s, %s), (%s, %s), (%s, %s) ON DUPLICATE KEY UPDATE name = VALUES(name), age = VALUES(age)

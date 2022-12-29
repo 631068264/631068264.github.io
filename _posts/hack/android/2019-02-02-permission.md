@@ -10,22 +10,22 @@ tags:
 
 # 辅助功能
 监听当前window变化
-![](https://tva1.sinaimg.cn/large/006tNc79gy1fzs288x1spj31ey0s0qbk.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030457.jpg)
 
 
 ## 风险
-![](https://tva4.sinaimg.cn/large/006tNc79gy1fzs2bmm3a0j31g00jawlw.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030458.jpg)
 
 # 设备管理
-![](https://tva1.sinaimg.cn/large/006tNc79gy1fzs2e98o25j31bg0u0dpl.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030459.jpg)
 
-![](https://tva4.sinaimg.cn/large/006tNc79gy1fzs2eknkzxj31fu0lkjui.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030460.jpg)
 
 # 通知栏
 
-![](https://tva3.sinaimg.cn/large/006tNc79gy1fzs2gksmrjj31hg0p0tgi.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030461.jpg)
 
-![](https://tva3.sinaimg.cn/large/006tNc79gy1fzs2gxsyjpj31gi0gijv0.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030462.jpg)
 
 
 # allowBackup
@@ -33,7 +33,7 @@ tags:
 `AndroidManifest.xml application  android:allowBackup="true"`
 
 应用数据备份和恢复
-![](https://tva1.sinaimg.cn/large/006tNc79gy1fzsbbo0bjjj31fy0sm7kf.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/202212301030463.jpg)
 
 ```
 可以设置密码

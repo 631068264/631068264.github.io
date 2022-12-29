@@ -33,7 +33,7 @@ tags:
 
 - 定义具体的业务问题
 
-    ![](https://tva1.sinaimg.cn/large/00831rSTgy1gd1eswmrt9j30u00ab0tk.jpg)
+    ![](https://cdn.jsdelivr.net/gh/631068264/img/00831rSTgy1gd1eswmrt9j30u00ab0tk.jpg)
 
 - 数据的收集
 - 预处理

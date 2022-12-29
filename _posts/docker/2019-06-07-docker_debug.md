@@ -9,19 +9,19 @@ Pycharm local debug docker
 
 
 # Build, Execution, Deployment
-![](http://ww1.sinaimg.cn/large/006tNc79ly1g3sc1hgc0fj31jy0u0gmp.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g3sc1hgc0fj31jy0u0gmp.jpg)
 
 # Python Interpreter
 
 <span class='gp-2'>
-    <img src='http://ww2.sinaimg.cn/large/006tNc79ly1g3sc9a2lnij31co0u00tm.jpg' />
-    <img src='http://ww1.sinaimg.cn/large/006tNc79ly1g3scamb6anj31dd0u0jsx.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g3sc9a2lnij31co0u00tm.jpg' />
+    <img src='https://cdn.jsdelivr.net/gh/631068264/img/006tNc79ly1g3scamb6anj31dd0u0jsx.jpg' />
 </span>
 
 基本弄好这个就可以下断点
 
 # docker log
-![](http://ww4.sinaimg.cn/large/006tNc79gy1g3seaxhfujj31ps0u0aca.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/006tNc79gy1g3seaxhfujj31ps0u0aca.jpg)
 
 
 # update project

@@ -244,5 +244,5 @@ Kubernetes apiserver 会与扩展 apiserver通信，使用 x509 证书向扩展 
 4. 扩展 apiserver：对来自原始用户的请求鉴权
 5. 扩展 apiserver：执行
 
-![](https://tva1.sinaimg.cn/large/008i3skNly1gwsjko4jcuj30sg16kdhs.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNly1gwsjko4jcuj30sg16kdhs.jpg)
 

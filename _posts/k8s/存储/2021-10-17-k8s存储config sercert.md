@@ -6,7 +6,7 @@ categories:
     - k8s
 ---
 
-![image-20211213223333055](https://tva1.sinaimg.cn/large/008i3skNgy1gxckwfwxqyj31vd0u079y.jpg)
+![image-20211213223333055](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxckwfwxqyj31vd0u079y.jpg)
 
 - 第一，比如说一些可变的配置。因为我们不可能把一些可变的配置写到镜像里面，当这个配置需要变化的时候，可能需要我们重新编译一次镜像，这个肯定是不能接受的；
 - 第二就是一些敏感信息的存储和使用。比如说应用需要使用一些密码，或者用一些 token；
@@ -15,7 +15,7 @@ categories:
 - 第五个就是容器在节点上，它们是共享内核的，那么它的一个安全管控怎么办？
 - 最后一点我们说一下容器启动之前的一个前置条件检验。比如说，一个容器启动之前，我可能要确认一下 DNS 服务是不是好用？又或者确认一下网络是不是联通的？那么这些其实就是一些前置的校验。
 
-![image-20211213224659115](https://tva1.sinaimg.cn/large/008i3skNgy1gxclaf5jsnj321k0u0gpt.jpg)
+![image-20211213224659115](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxclaf5jsnj321k0u0gpt.jpg)
 
 
 
@@ -27,11 +27,11 @@ categories:
 
 ## 介绍
 
-![image-20211213225923394](https://tva1.sinaimg.cn/large/008i3skNgy1gxclnc8tqej31bl0u0dk7.jpg)
+![image-20211213225923394](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxclnc8tqej31bl0u0dk7.jpg)
 
 ## 注意点
 
-![image-20211213231930396](https://tva1.sinaimg.cn/large/008i3skNgy1gxcm89kiycj31vb0u045z.jpg)
+![image-20211213231930396](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxcm89kiycj31vb0u045z.jpg)
 
 
 
@@ -301,9 +301,9 @@ Secret 解决了密码、token、密钥等敏感数据的配置问题，而不�
   - 用来存储私有 docker registry 的认证信息。
 - bootstrap.token，是用于节点接入集群校验用的 Secret。
 
-![image-20211218120216635](https://tva1.sinaimg.cn/large/008i3skNgy1gxhur5dghfj31lk0u0dmn.jpg)
+![image-20211218120216635](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxhur5dghfj31lk0u0dmn.jpg)
 
-![image-20211218124618905](https://tva1.sinaimg.cn/large/008i3skNgy1gxhw0yzg3aj320c0r4qar.jpg)
+![image-20211218124618905](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxhw0yzg3aj320c0r4qar.jpg)
 
 ## Service Account
 
@@ -321,7 +321,7 @@ namespace
 token
 ```
 
-![image-20211218165837349](https://tva1.sinaimg.cn/large/008i3skNgy1gxi3bhsibdj31kw0u010e.jpg)
+![image-20211218165837349](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gxi3bhsibdj31kw0u010e.jpg)
 
 
 

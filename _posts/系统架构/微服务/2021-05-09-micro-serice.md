@@ -18,7 +18,7 @@ categories:
 
 [可伸缩性的艺术](http://theartofscalability.com/)
 
-![image-20210802222315115](https://tva1.sinaimg.cn/large/008i3skNgy1gt2t6ryamnj31eq0u0n1j.jpg)
+![image-20210802222315115](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt2t6ryamnj31eq0u0n1j.jpg)
 
 - X 负载均衡+多实例 （每个副本都可能访问所有数据，缓存需要更多内存才能有效。这种方法的另一个问题是它没有解决增加开发和应用程序复杂性的问题。）
 
@@ -37,11 +37,11 @@ categories:
   - 我们需要实现一个分区方案，这可能很棘手，特别是如果我们需要重新分区数据。
   - Z 轴缩放的另一个缺点是不能解决增加开发和应用程序复杂性的问题。为了解决这些问题，我们需要应用[Y 轴缩放](https://microservices.io/patterns/microservices.html)。
 
-  ![image-20210802222521824](https://tva1.sinaimg.cn/large/008i3skNgy1gt2t8xgt8rj31lf0u0jvq.jpg)
+  ![image-20210802222521824](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt2t8xgt8rj31lf0u0jvq.jpg)
 
 -  Y 轴缩放将应用程序拆分为多个不同的服务。每个服务负责一个或多个密切相关的功能。有几种不同的方法可以将应用程序分解为服务。
 
-  ![image-20210802222443402](https://tva1.sinaimg.cn/large/008i3skNgy1gt2t8fju26j31h60u0dkm.jpg)
+  ![image-20210802222443402](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt2t8fju26j31h60u0dkm.jpg)
 
 可以先按y轴缩放，具体的某个服务再按x或者z轴缩放
 
@@ -49,23 +49,23 @@ categories:
 
 微服务架构
 
-![image-20210808110558796](https://tva1.sinaimg.cn/large/008i3skNgy1gt97bxcdicj31l10u077w.jpg)
+![image-20210808110558796](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt97bxcdicj31l10u077w.jpg)
 
-![image-20210808110617578](https://tva1.sinaimg.cn/large/008i3skNgy1gt97c7kkfsj31n20rmdl4.jpg)
+![image-20210808110617578](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt97c7kkfsj31n20rmdl4.jpg)
 
 # 服务拆分
 
 通过定义业务能力映射到服务，可能随时间架构改变，好些服务不好拆要合并，服务成长要拆等
 
-![image-20210808111815511](https://tva1.sinaimg.cn/large/008i3skNgy1gt97ontvmdj310h0u0dkg.jpg)
+![image-20210808111815511](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt97ontvmdj310h0u0dkg.jpg)
 
 子域拆分
 
 子域和限界上下文
 
-![image-20210808112601572](https://tva1.sinaimg.cn/large/008i3skNgy1gt97wqygmsj321u0tigvf.jpg)
+![image-20210808112601572](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt97wqygmsj321u0tigvf.jpg)
 
-![image-20210808112625079](https://tva1.sinaimg.cn/large/008i3skNgy1gt97x5qyc5j31ao0u0af2.jpg)
+![image-20210808112625079](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt97x5qyc5j31ao0u0af2.jpg)
 
 
 
@@ -73,11 +73,11 @@ categories:
 
 单一责任
 
-![image-20210808112910959](https://tva1.sinaimg.cn/large/008i3skNgy1gt9800vo64j324s0myq7x.jpg)
+![image-20210808112910959](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9800vo64j324s0myq7x.jpg)
 
 闭包
 
-![image-20210808112944377](https://tva1.sinaimg.cn/large/008i3skNgy1gt980lyc47j32140t07ar.jpg)
+![image-20210808112944377](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt980lyc47j32140t07ar.jpg)
 
 ## 拆分障碍
 
@@ -95,15 +95,15 @@ categories:
 
   - 上帝类是整个程序的全局类
 
-    ![image-20210808123425398](https://tva1.sinaimg.cn/large/008i3skNgy1gt99vxwp7ij31xm0ge44q.jpg)
+    ![image-20210808123425398](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt99vxwp7ij31xm0ge44q.jpg)
 
-		![image-20210808124404388](https://tva1.sinaimg.cn/large/008i3skNgy1gt9a5y1dirj320o0nkgu7.jpg)
+		![image-20210808124404388](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9a5y1dirj320o0nkgu7.jpg)
 
-		![image-20210808124843404](https://tva1.sinaimg.cn/large/008i3skNgy1gt9aasnx3cj31820u00wy.jpg)
+		![image-20210808124843404](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9aasnx3cj31820u00wy.jpg)
 		
 		**每个领域模型中的Order类表示同一个Order业务实体的不同方向**，(简化原始Order类)
 		
-		![image-20210808125540039](https://tva1.sinaimg.cn/large/008i3skNgy1gt9ai0hyz6j322w0ecn2z.jpg)
+		![image-20210808125540039](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9ai0hyz6j322w0ecn2z.jpg)
 
 ## 服务拆分
 
@@ -135,7 +135,7 @@ categories:
 
 ## 依赖消除
 
-![img](https://tva1.sinaimg.cn/large/008i3skNgy1grcul8azm9j30ml09sgm1.jpg)
+![img](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1grcul8azm9j30ml09sgm1.jpg)
 
 **循环依赖危害**
 
@@ -164,13 +164,13 @@ categories:
 
 # 服务通信
 
-![image-20210808163800581](https://tva1.sinaimg.cn/large/008i3skNgy1gt9gxd5u2lj31s10u07b1.jpg)
+![image-20210808163800581](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9gxd5u2lj31s10u07b1.jpg)
 
-![image-20210808164015653](https://tva1.sinaimg.cn/large/008i3skNgy1gt9gzpcuu1j31xu0lygrh.jpg)
+![image-20210808164015653](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9gzpcuu1j31xu0lygrh.jpg)
 
-![image-20210808164139637](https://tva1.sinaimg.cn/large/008i3skNgy1gt9h15nxnlj31vu0aimzg.jpg)
+![image-20210808164139637](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9h15nxnlj31vu0aimzg.jpg)
 
-![image-20210808212640221](https://tva1.sinaimg.cn/large/008i3skNgy1gt9p9pkoxaj318t0u0qac.jpg)
+![image-20210808212640221](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9p9pkoxaj318t0u0qac.jpg)
 
 异步通信要注意
 
@@ -183,11 +183,11 @@ categories:
 
 ## 断路器
 
-![image-20210808170422297](https://tva1.sinaimg.cn/large/008i3skNgy1gt9hos93qij31y20u012f.jpg)
+![image-20210808170422297](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9hos93qij31y20u012f.jpg)
 
 规定时间内多次失败，立即拒绝其他调用
 
-![image-20210808170716591](https://tva1.sinaimg.cn/large/008i3skNgy1gt9hrt94rej31d30u079r.jpg)
+![image-20210808170716591](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9hrt94rej31d30u079r.jpg)
 
 防止故障扩散
 
@@ -206,13 +206,13 @@ categories:
 
 多个服务组合，**根据数据重要情况**调整响应策略
 
-![image-20210808173248419](https://tva1.sinaimg.cn/large/008i3skNgy1gt9iidxjg4j31bv0u0dks.jpg)
+![image-20210808173248419](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9iidxjg4j31bv0u0dks.jpg)
 
 
 
 # 服务发现
 
-![image-20210808174350857](https://tva1.sinaimg.cn/large/008i3skNgy1gt9itv9z0vj31490u0795.jpg)
+![image-20210808174350857](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9itv9z0vj31490u0795.jpg)
 
 - 服务端和客户端直接和服务注册表进行交互
 
@@ -225,25 +225,25 @@ categories:
   - 开发者需要为不同语言准备服务发现框架
   - 开发者需要自己设置管理注册表
   
-  ![image-20210808175242444](https://tva1.sinaimg.cn/large/008i3skNgy1gt9j32q36ej31360u0aek.jpg)
+  ![image-20210808175242444](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9j32q36ej31360u0aek.jpg)
 
 
 
 部署平台比较方便
 
-![image-20210808210919328](https://tva1.sinaimg.cn/large/008i3skNgy1gt9ornlugcj31ls0cw0x1.jpg)
+![image-20210808210919328](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9ornlugcj31ls0cw0x1.jpg)
 
-![image-20210808211118242](https://tva1.sinaimg.cn/large/008i3skNgy1gt9otq61kpj30v10u00x7.jpg)
+![image-20210808211118242](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9otq61kpj30v10u00x7.jpg)
 
-![image-20210808211846254](https://tva1.sinaimg.cn/large/008i3skNgy1gt9p1hqovfj31k00dwgor.jpg)
+![image-20210808211846254](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9p1hqovfj31k00dwgor.jpg)
 
 # 基础架构
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgiqi44j30zk0k00tk.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gqbzgiqi44j30zk0k00tk.jpg)
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgnj3kqj30zk0k0gms.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gqbzgnj3kqj30zk0k0gms.jpg)
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gqbzgytvt9j30ug0u0gmk.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gqbzgytvt9j30ug0u0gmk.jpg)
 
 - 注册中心：注册并维护远程服务及服务提供者的地址，供服务消费者发现和调用，为保证可用性，通常基于分布式 kv 存储器来实现，比如 zookeeper、etcd 等；
 - 服务框架：用于实现微服务的 RPC 框架，包含服务接口描述及实现方案、向注册中心发布服务等功能，常见的 RPC 框架包括 Spring Cloud、Dubbo、gRPC、 Thrift、go-micro 等；
@@ -263,7 +263,7 @@ categories:
 
 这种模式是针对不同的客户端来实现一个不同的 API 网关，也就是「用于前端的后端」（Backends for frontends，检查 BFF）模式，对应的架构图
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gqc59d3vuzj30sg0lcmzy.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gqc59d3vuzj30sg0lcmzy.jpg)
 
 # 注册中心
 
@@ -344,7 +344,7 @@ categories:
 
 熔断模式可以防止应用程序不断地尝试可能超时和失败的服务
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1grfslkb09ej30te0x575s.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1grfslkb09ej30te0x575s.jpg)
 
 `熔断器模式（Circuit Breaker Pattern）`，是一个现代软件开发的设计模式。用以侦测错误，并避免不断地触发相同的错误（如维护时服务不可用、暂时性的系统问题或是未知的系统错误）。
 
@@ -380,11 +380,11 @@ categories:
 
 漏桶(Leaky Bucket)算法思路很简单,水(请求)先进入到漏桶里,漏桶以一定的速度出水(接口有响应速率),当水流入速度过大会直接溢出(访问频率超过接口响应速率),然后就拒绝请求,可以看出漏桶算法能强行限制数据的传输速率.示意图如下:
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gqoxmx57ihj30cb08b0sp.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gqoxmx57ihj30cb08b0sp.jpg)
 
 令牌桶算法(Token Bucket)和 Leaky Bucket 效果一样但方向相反的算法,更加容易理解.随着时间流逝,系统会按恒定1/QPS时间间隔(如果QPS=100,则间隔是10ms)往桶里加入Token(想象和漏洞漏水相反,有个水龙头在不断的加水),如果桶已经满了就不再加了.新请求来临时,会各自拿走一个Token,如果没有Token可拿了就阻塞或者拒绝服务.
 
-![](https://tva1.sinaimg.cn/large/008i3skNgy1gqoxn8gjf0j30bp06p3yh.jpg)
+![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gqoxn8gjf0j30bp06p3yh.jpg)
 
 令牌桶的另外一个好处是可以方便的改变速度. 一旦需要提高速率,则按需提高放入桶中的令牌的速率. 一般会定时(比如100毫秒)往桶中增加一定数量的令牌, 有些变种算法则实时的计算应该增加的令牌的数量.
 
@@ -418,7 +418,7 @@ TP50、TP90、TP99 是工程性能指标，以网络请求耗时为例：
 
 - 爆炸式的重试风暴
 
-  ![](https://tva1.sinaimg.cn/large/008i3skNgy1gt81x7in7wj30j1082747.jpg)
+  ![](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt81x7in7wj30j1082747.jpg)
 
 最底层的服务 D 出现超时，这样上游服务都将发起重试。
 
@@ -438,11 +438,11 @@ TP50、TP90、TP99 是工程性能指标，以网络请求耗时为例：
 
 # 从单体到微服务
 
-![image-20210808223259396](https://tva1.sinaimg.cn/large/008i3skNgy1gt9r6q5kb5j31260u0tdy.jpg)
+![image-20210808223259396](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9r6q5kb5j31260u0tdy.jpg)
 
 - 新功能用微服务
 
-  ![image-20210808224318245](https://tva1.sinaimg.cn/large/008i3skNgy1gt9rhg7qhzj30u00wgaei.jpg)
+  ![image-20210808224318245](https://cdn.jsdelivr.net/gh/631068264/img/008i3skNgy1gt9rhg7qhzj30u00wgaei.jpg)
 
 - 隔离表现层和后端
 

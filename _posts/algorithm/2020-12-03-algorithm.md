@@ -338,9 +338,9 @@ def lengthOfLongestSubstring(self, seq: str) -> int:
 
 - **画图**。就是说不要偷懒，勤动手，两个区间的相对位置到底有几种可能，不同的相对位置我们的代码应该怎么去处理。
 
-![image-20201227132759028](https://tva1.sinaimg.cn/large/0081Kckwgy1gm2cmna2bwj317s0l4485.jpg)
+![image-20201227132759028](https://cdn.jsdelivr.net/gh/631068264/img/0081Kckwgy1gm2cmna2bwj317s0l4485.jpg)
 
-![image-20201227132902760](https://tva1.sinaimg.cn/large/0081Kckwgy1gm2cnp8vxoj31340ky79q.jpg)
+![image-20201227132902760](https://cdn.jsdelivr.net/gh/631068264/img/0081Kckwgy1gm2cnp8vxoj31340ky79q.jpg)
 
 ```python
     def removeCoveredIntervals(self, intervals: List[List[int]]) -> int:
