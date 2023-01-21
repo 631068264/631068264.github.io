@@ -295,7 +295,7 @@ systemctl stop docker
 
 # 重启断开，防止自启，断开docker挂载，防止迁移过程出现Device or resource busy
 systemctl disable docker
-reboot
+
 
 # 迁移
 cp -r /var/lib/docker /data/docker

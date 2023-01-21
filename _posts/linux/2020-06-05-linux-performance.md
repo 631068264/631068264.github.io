@@ -61,6 +61,22 @@ load average: 0.00, 0.01, 0.05
 - id（idle cpu time）：空闲的cpu时间比。如果该值持续为0，同时sy是us的两倍，则通常说明系统则面临着 CPU 资源的短缺。 **这个值过低，表明系统CPU存在瓶颈**
 - wa（io wait cpu  time）：cpu等待磁盘写入完成时间。**该值较高时，说明IO等待比较严重**，这可能磁盘大量作随机访问造成的，也可能是磁盘性能出现了瓶颈。
 
+CPU压测
+
+```sh
+for i in `seq 1 50`; do dd if=/dev/zero of=/dev/null & done
+
+echo "PID of this script: $$"
+```
+
+停止
+
+```sh
+ps -ef | grep if=/dev/zero | grep -v grep |awk '{print $2}' | xargs kill -9
+```
+
+
+
 ## 内存
 
 - VIRT：virtual memory usage，虚拟内存

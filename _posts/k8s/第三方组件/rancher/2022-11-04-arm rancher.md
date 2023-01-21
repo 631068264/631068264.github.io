@@ -280,6 +280,47 @@ rke从https://github.com/rancher/rke/releases/tag/v1.3.11下载
   - https://github.com/coredns/coredns/discussions/4990
   - https://github.com/coredns/coredns/issues/2693
   
+- 创建不了worker节点
+
+  kubelet  看到大量类似报错 `dial tcp 127.0.0.1:6443: connect: connection refused`
+  
+  ```
+  E0106 08:40:08.885824  275376 controller.go:144] failed to ensure lease exists, will retry in 200ms, error: Get "https://127.0.0.1:6443/apis/coordination.k8s.io/v1/namespaces/kube-node-lease/leases/xc-10-81-133-2?timeout=10s": dial tcp 127.0.0.1:6443: connect: connection refused
+  
+  ```
+  
+  nginx-proxy，[某个二进制编译格式不对,](https://github.com/rancher/confd/pull/8)导致nginx-proxy没有正常起来，监听6443。
+  
+  ```
+  /usr/bin/nginx-proxy: line 4: /usr/bin/confd: cannot execute binary file: Exec format error
+  2023/01/09 02:47:22 [notice] 9#9: using the "epoll" event method
+  2023/01/09 02:47:22 [notice] 9#9: nginx/1.21.0
+  2023/01/09 02:47:22 [notice] 9#9: built by gcc 10.2.1 20201203 (Alpine 10.2.1_pre1) 
+  2023/01/09 02:47:22 [notice] 9#9: OS: Linux 4.19.90-24.4.v2101.ky10.aarch64
+  2023/01/09 02:47:22 [notice] 9#9: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+  2023/01/09 02:47:22 [notice] 9#9: start worker processes
+  2023/01/09 02:47:22 [notice] 9#9: start worker process 10
+  ```
+  
+  [根据这个issue](https://github.com/rancher/rancher/issues/37762), 拿到编译好的**confd**，重新commit 出新的镜像
+  
+  ```sh
+  docker pull jerrychina2020/rke-tools:v0.1.78-linux-arm64
+  
+  # 下面步骤在arm64机器上进行
+  docker -it --rm --name xxx jerrychina2020/rke-tools:v0.1.78-linux-arm64
+  # 拿到编译好的confd
+  docker cp xxx:/usr/bin/confd .
+  
+  
+  
+  docker -it --rm --name xxx rancher/rke-tools:v0.1.80
+  
+  docker cp confd xxx:/usr/bin/confd
+  
+  docker commit xxx rancher/rke-tools:v0.1.80
+  ```
+  
   
 
 # nfs
@@ -319,3 +360,26 @@ docker restart registry registryctl nginx
 ```
 
 才能正常跑
+
+**如果要有multi-arch支持，harbor版本必须大于等于2.0.0。同时push时候要用到[docker mainfest](https://docs.docker.com/engine/reference/commandline/manifest/)**
+
+例子
+
+https 自签名的话使用`--insecure`，`-p, --purge-镜像 push 成功后删除本地的多架构镜像mainfest`
+
+```sh
+docker manifest create --insecure myprivateregistry.mycompany.com/repo/image:1.0 \
+    myprivateregistry.mycompany.com/repo/image-linux-ppc64le:1.0 \
+    myprivateregistry.mycompany.com/repo/image-linux-s390x:1.0 \
+    myprivateregistry.mycompany.com/repo/image-linux-arm:1.0 \
+    myprivateregistry.mycompany.com/repo/image-linux-armhf:1.0 \
+    myprivateregistry.mycompany.com/repo/image-windows-amd64:1.0 \
+    myprivateregistry.mycompany.com/repo/image-linux-amd64:1.0
+    
+
+docker manifest push -p --insecure myprivateregistry.mycompany.com/repo/image:tag
+```
+
+- 为不同arch的镜像**本地**创建清单（**指向同一个image:tag**  例如myprivateregistry.mycompany.com/repo/image:1.0），而且其他arch镜像也得预先push，不能只是本地镜像，不然创建失败。
+- push 实际上只是把清单内容push上去
+
