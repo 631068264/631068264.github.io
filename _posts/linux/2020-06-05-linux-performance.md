@@ -285,7 +285,7 @@ TCP三次握手的第一个SYN报文没有收到ACK，系统会自动对SYN报�
 
   - client到nginx的连接是长连接
 
-    ​	**默认情况下，nginx已经自动开启了对client连接的keep alive支持（同时client发送的HTTP请求要求keep alive）**。一般场景可以直接使用，但是对于一些比较特殊的场景，还是有必要调整个别参数（keepalive_timeout和keepalive_requests）。
+    	**默认情况下，nginx已经自动开启了对client连接的keep alive支持（同时client发送的HTTP请求要求keep alive）**。一般场景可以直接使用，但是对于一些比较特殊的场景，还是有必要调整个别参数（keepalive_timeout和keepalive_requests）。
 
     ```
     http {

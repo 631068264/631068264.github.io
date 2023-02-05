@@ -136,6 +136,47 @@ current-context: '${SA_NAME}'-cluster' > ${SA_NAME}_kubeconfig
 
 ![image-20220623223800142](https://cdn.jsdelivr.net/gh/631068264/img/e6c9d24egy1h3ik08i4thj21pe0p8gpa.jpg)
 
+```sh
+# 获取容器里面
+cat /var/run/secrets/kubernetes.io/serviceaccount/token
+```
+
+拿到 token，并在 [jwt.io](https://jwt.io/) 里解析
+
+```json
+{
+  "aud": [
+    "https://kubernetes.default.svc.kubernetes"
+  ],
+  "exp": 1701074189,
+  "iat": 1669538189,
+  "iss": "https://kubernetes.default.svc.kubernetes",
+  "kubernetes.io": {
+    "namespace": "argo-run",
+    "pod": {
+      "name": "...",
+      "uid": "d7f59189-7050-4922-804f-075e5411b950"
+    },
+    "serviceaccount": {
+      "name": "...",
+      "uid": "4e35d20f-58b7-415b-8fa1-5a9929d3f2ea"
+    },
+    "warnafter": 1669541796
+  },
+  "nbf": 1669538189,
+  "sub": "system:serviceaccount:..."
+}
+
+```
+
+注意nbf和exp
+
+
+
+
+
+
+
 Kubernetes 之所以要创建两套独立的账号系统
 
 - User 账号是给人用的， Service Account 是给 Pod 里的 进程用的，面向的对象不同 

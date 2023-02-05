@@ -299,7 +299,7 @@ systemctl disable docker
 
 # 迁移
 cp -r /var/lib/docker /data/docker
-
+nohup cp -rvf docker /mnt/data/ &
 # 加入软连接
 ln -s /data/docker /var/lib/docker
 
