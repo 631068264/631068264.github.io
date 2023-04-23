@@ -15,8 +15,6 @@ categories:
 
 # 术语
 
-在我们深入了解主要架构文档之前，请先了解一些定义。一些定义在行业内略有争议，但它们是 Envoy 在整个文档和代码库中使用它们的方式，所以*c'est la vie*。
-
 **主机**：能够进行网络通信的实体（手机、服务器等应用程序）。在本文档中，主机是一个逻辑网络应用程序。一个物理硬件可能有多个主机在其上运行，只要它们中的每一个都可以独立寻址。
 
 **downstream**：下游主机连接到 Envoy，发送请求并接收响应。
@@ -53,11 +51,11 @@ metadata:
   namespace: istio-system
 spec:
   configPatches:
-    - applyTo: HTTP_FILTER
+    - applyTo: HTTP_FILTER # 将补丁应用于 http 连接管理器中的 HTTP 过滤器链，以修改现有过滤器或添加新过滤器
       listener:
         filterChain:
           filter:
-            name: envoy.http_connection_manager
+            name: envoy.http_connection_manager #具有多个过滤器链的侦听器（例如，具有允许 mTLS 的边车上的入站侦听器，具有多个 SNI 匹配的网关侦听器），过滤器链匹配可用于选择特定的过滤器链进行修补
             subFilter:
               name: ""
       match:
