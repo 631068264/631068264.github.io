@@ -414,7 +414,7 @@ Bookinfo 应用分为四个单独的微服务：
 
 
 
-**流量管理**
+## 流量管理
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -499,7 +499,7 @@ spec:
 
 ![image-20230418152059536](https://cdn.jsdelivr.net/gh/631068264/img/202304201741244.png)
 
-**通讯加密**
+## 通讯加密
 
 默认明文、mTLS加密
 
@@ -526,7 +526,7 @@ curl http://httpbin.istio-example:8000/headers -s | grep X-Forwarded-Client-Cert
 
 ```
 
-**https gateway**
+## https gateway
 
 ```sh
 openssl req -newkey rsa:2048 -nodes -keyout ca.key -x509 -days 36500 -out ca.crt -subj "/C=xx/ST=x/L=x/O=x/OU=x/CN=ca/emailAddress=x/"
@@ -550,7 +550,7 @@ curl -kv -HHost:httpbin.example.com --resolve "httpbin.example.com:31390:10.19.6
 
 
 
-**wasm**
+## wasm
 
 ```sh
 curl -v -H "Authorization: Basic YWRtaW4zOmFkbWluMw==" http://10.19.64.202:31380/productpage
@@ -586,9 +586,9 @@ COPY plugin.wasm ./plugin.wasm
 
 
 
-**dex+ istio**
+## dex+ istio
 
-[Kubeflow: Authentication with Istio + Dex](https://journal.arrikto.com/kubeflow-authentication-with-istio-dex-5eafdfac4782)
+参考[Kubeflow: Authentication with Istio + Dex](https://journal.arrikto.com/kubeflow-authentication-with-istio-dex-5eafdfac4782)
 
 kubeflow使用EnvoyFilter实现传入的 HTTP 请求是否被授权，外部授权服务通过调用外部 gRPC 或者 HTTP 服务来检查传入的 HTTP 请求是否被授权。 如果该请求被视为未授权，则通常会以 403 （禁止）响应拒绝该请求。 注意，从授权服务向上游、下游或者授权服务发送其他自定义元数据也是被允许的。在 [HTTP 过滤器](https://cloudnative.to/envoy/api-v3/extensions/filters/http/ext_authz/v3/ext_authz.proto.html#envoy-v3-api-msg-extensions-filters-http-ext-authz-v3-extauthz) 中有更多详细的解释。
 
