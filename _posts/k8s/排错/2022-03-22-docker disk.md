@@ -301,7 +301,7 @@ systemctl disable docker
 cp -r /var/lib/docker /data/docker
 nohup cp -ravf /var/lib/docker /data/docker &
 # 加入软连接
-ln -s /data/docker /var/lib/docker
+ln -s /var/lib/docker /data/docker 
 
 # 或者修改 /etc/docker/daemon.json
 vim /etc/docker/daemon.json

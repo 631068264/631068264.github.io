@@ -8,6 +8,77 @@ categories:
 
 ---
 
+
+
+# 由来
+
+**[传统微服务](https://www.cnblogs.com/wzh2010/p/14940280.html)**
+
+- 微服务框架出现前：服务需要自己处理网络通信所面临的丢包、错误、乱序、重试等一系列流控问题，因此服务实现中，除了业务逻辑外，还包含对网络传输问题的处理逻辑。
+- 微服务框架出现后：框架实现分布式系统通信需要的各种通用语义功能：如负载均衡和服务发现等，因此一定程度上屏蔽了这些通信细节，使得开发人员使用较少的框架代码就能开发出健壮的分布式系统。
+
+- **缺点**：
+  - **侵入性强。**想要集成SDK的能力，除了需要添加相关依赖，业务层中入侵的代码、注解、配置，与治理层界限不清晰
+  - **升级成本高。**每次升级都需要业务应用修改SDK版本，重新进行功能回归测试，并对每一台服务进行部署上线，与快速迭代开发相悖。
+  - **版本碎片化严重。**由于升级成本高，而中间件版本更新快，导致线上不同服务引用的SDK版本不统一、能力参差不齐，造成很难统一治理。
+  - **治理功能不全。**不同于RPC框架，SpringCloud作为治理全家桶的典型，也不是万能的，诸如协议转换支持、多重授权机制、动态请求路由、故障注入、灰度发布等高级功能并没有覆盖到。
+  - **无法实现真正意义上的语言无关性。**提供的框架一般只支持一种或几种语言，要将框架不支持的语言研发的服务也纳入微服务架构中，是比较有难度的。
+
+**什么是服务网格**
+
+- 应用程序间通讯的中间层
+- 轻量级网络代理
+- 应用程序无感知
+- 解耦应用程序的重试/超时、监控、追踪和服务发现
+
+[istio和其他热门服务网格比较](https://www.helight.cn/blog/2020/comparison-of-service-mesh/)
+
+|                                                    | Istio                                             | Linkerd v2           | Consul                                                       |
+| :------------------------------------------------- | :------------------------------------------------ | :------------------- | ------------------------------------------------------------ |
+| **Supported Workloads**  是否支持 VM 和 Kubernetes | Kubernetes + VMs                                  | Kubernetes only      | Kubernetes + VMs                                             |
+|                                                    |                                                   |                      |                                                              |
+| **Architecture 架构**                              | Istio                                             | Linkerd v2           | Consul                                                       |
+| Single point of failure 单点故障                   | No – 每个 pod 上都有 sidecar                      | No                   | No. 但增加了管理HA的复杂性， 因为必须按指定数量安装Consul服务， 而非用本地K8S master |
+| Sidecar Proxy                                      | Yes (Envoy)                                       | Yes                  | Yes (Envoy)                                                  |
+| Per-node agent                                     | No                                                | No                   | Yes                                                          |
+|                                                    |                                                   |                      |                                                              |
+| **Secure Communication 安全通信**                  | Istio                                             | Linkerd v2           | Consul                                                       |
+| mTLS                                               | Yes                                               | Yes                  | Yes                                                          |
+| Certificate Management                             | Yes                                               | Yes                  | Yes                                                          |
+| Authentication and Authorization                   | Yes                                               | Yes                  | Yes                                                          |
+|                                                    |                                                   |                      |                                                              |
+| **Communication Protocols 通信协议**               | Istio                                             | Linkerd v2           | Consul                                                       |
+| TCP                                                | Yes                                               | Yes                  | Yes                                                          |
+| HTTP/1.x                                           | Yes                                               | Yes                  | Yes                                                          |
+| HTTP/2                                             | Yes                                               | Yes                  | Yes                                                          |
+| gRPC                                               | Yes                                               | Yes                  | Yes                                                          |
+|                                                    |                                                   |                      |                                                              |
+| **Traffic Management 流量管控**                    | Istio                                             | Linkerd v2           | Consul                                                       |
+| Blue/Green Deployments 蓝绿发布                    | Yes                                               | Yes                  | Yes                                                          |
+| Circuit Breaking 熔断                              | Yes                                               | No                   | Yes                                                          |
+| Fault Injection 故障注入                           | Yes                                               | Yes                  | Yes                                                          |
+| Rate Limiting 限频                                 | Yes                                               | No                   | Yes                                                          |
+|                                                    |                                                   |                      |                                                              |
+| **Chaos Monkey-style Testing: 混沌测试**           | Istio                                             | Linkerd v2           | Consul                                                       |
+| Testing                                            | Yes- 可以配置服务延时响应或者按请求百分比返回失败 | Limited              | No                                                           |
+|                                                    |                                                   |                      |                                                              |
+| **Observability 可观测性**                         | Istio                                             | Linkerd v2           | Consul                                                       |
+| Monitoring 监控                                    | Yes, with Prometheus                              | Yes, with Prometheus | Yes, with Prometheus                                         |
+| Distributed Tracing 分布式追踪                     | Yes                                               | Some                 | Yes                                                          |
+|                                                    |                                                   |                      |                                                              |
+| **Multicluster Support 多集群支持**                | Istio                                             | Linkerd v2           | Consul                                                       |
+| Multicluster                                       | Yes                                               | No                   | Yes                                                          |
+|                                                    |                                                   |                      |                                                              |
+| **Installation 安装支持**                          | Istio                                             | Linkerd v2           | Consul                                                       |
+| Deployment                                         | 通过 Helm 和 istioctl 安装                        | Helm                 | Helm                                                         |
+|                                                    |                                                   |                      |                                                              |
+| **Operations Complexity 操作复杂度**               | Istio                                             | Linkerd v2           | Consul                                                       |
+| Complexity                                         | High                                              | Low                  | Medium                                                       |
+
+Istio 是 3 个技术方案中拥有最多的特性和灵活性的一个，但是要记住灵活性就意味着复杂性，所以你的团队要明白这一点，要为此做好准备。如果只是支持 Kubernetes，那么 Linkerd 或许是最好的选择。如果你想支持多种环境（包括了 Kubernetes 和 VM 环境）但是又不需要 Istio 的复杂性，那么 Consul 可能是最好的选择。
+
+
+
 # 功能
 
 - 流量控制功能：通过丰富的 HTTP、gRPC、WebSocket 和 TCP 流量路由规则来执行细粒度的流量控制。
