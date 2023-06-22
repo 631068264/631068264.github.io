@@ -31,7 +31,7 @@ docker container prune
 
 # 查看
 
-## system
+## system 空间占用大小
 
 ```sh
 # 用于查询镜像（Images）、容器（Containers）和本地卷（Local Volumes）等空间使用大户的空间占用情况
@@ -98,7 +98,7 @@ du -sh /var/lib/docker/
 #--max-depth：表示要查看几层目录
 #sort -r：反向显示
 #sort -h：compare human readable numbers (e.g., 2k 1G)
-du -h --max-depth=1 . | sort -hr
+sudo du -h --max-depth=1 . | sort -hr
 
 
 ls    -Slh
@@ -197,6 +197,70 @@ sudo systemctl restart docker
 ```
 
 
+
+# docker overlay2占用大
+
+- [浅析 Docker overlay2 文件结构](http://www.ga1axy.top/index.php/archives/65/#%E5%89%8D%E8%A8%80)
+- [docker的overlay2目录](https://www.jianshu.com/p/8d51311a6bac)
+
+目录下的文件都是docker使用的存储, 存的是我们的**镜像文件**和**容器内的文件**。
+
+**结构**
+
+**容器层**对应两个目录：一个以CacheID命名。一个以CacheID-init 命名。
+
+- 带init的目录 目录是只读的
+
+- 没有init的容器目录  容器的读写目录，容器中写入时候会把文件拷贝进来（读操作直接在每层操作，不需拷贝）
+
+  比如进入容器，在home下写一个hello.txt的文件，于是宿主机该目录下的diff目录中多了一个 home目录，下边多了一个hello.txt文件。
+
+```sh
+# overlay2下有如下目录
+
+fc7a3972226cc84ec052011f547cd594e5298866bd012ae66cbc388d18855b99/
+fc7a3972226cc84ec052011f547cd594e5298866bd012ae66cbc388d18855b99-init/
+
+
+# 查看 overlay 对应的容器名 Name
+docker ps -q | xargs docker inspect --format '{{.State.Pid}}, {{.Id}}, {{.Name}}, {{.GraphDriver.Data.WorkDir}}' | grep "fc7a3972226cc84ec052011f547cd594e5298866bd012ae66cbc388d18855b99"
+
+# 也可以根据容器名 找到 存储位置WorkDir
+docker ps -q | xargs docker inspect --format '{{.State.Pid}}, {{.Id}}, {{.Name}}, {{.GraphDriver.Data.WorkDir}}' | grep  gateway
+```
+
+**没有init的容器目录**
+
+```sh
+-rw------- 1 root root    0 Jan 21 08:49 committed
+drwxr-xr-x 3 root root 4096 Jan 21 08:49 diff  # 文件目录，各层的目录都会放在下边
+-rw-r--r-- 1 root root   26 Jan 21 08:49 link # link 文件 写明该存储对应的镜像层
+-rw-r--r-- 1 root root   86 Jan 21 08:49 lower# 指名该镜像层对应的底层镜像层
+drwx------ 2 root root 4096 Jan 21 08:49 work # 文件系统的工作基础目录，挂载后内容会被清空，且在使用过程中其内容用户不可见
+
+```
+
+
+
+
+
+
+
+**镜像层存储目录**，一个以CacheID命名的目录
+
+
+
+**清理**
+
+- 删除不用的镜像 `docker system prune` (清理磁盘，删除关闭的容器、无用的数据卷和网络，以及dangling镜像(即无tag的镜像)
+
+- 检查各容器的磁盘占用，如果有发现磁盘占用过高的情况则对应处理，**如果容器内服务有写文件行为，则写文件的目录应当挂载到宿主机上，而不是直接往容器的本地写** 
+
+  使用`docker system df [-v]` 参考[容器和volume占用](#system 空间占用大小)
+
+- 检查是否有容器内的服务会往容器内的本地写文件 （容器占用大，volume占用小）
+
+- 需要应急处理的话可以先进入容器内直接删除容器内可以删除的文件
 
 
 
