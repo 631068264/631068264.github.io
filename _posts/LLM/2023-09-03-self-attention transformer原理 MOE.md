@@ -1,7 +1,7 @@
 ---
 layout:     post
 rewards: false
-title:   attention transformer原理 PEFT
+title:   attention transformer原理 MOE
 categories:
     - AI
 tags:
@@ -15,7 +15,7 @@ tags:
 
 # self attention自注意力机制
 
-可以考虑整个向量序列信息来计算，计算量大
+可以考虑整个向量序列信息来计算，计算量大 [Attention Is All You Need 论文](https://arxiv.org/abs/1706.03762)
 
 ## 算法
 
@@ -237,3 +237,25 @@ cross attention 做了什么。用endoder的output和mask的output，计算出�
 
 - Scheduled Sampling 训练测试要加入一些错误的列子，效果会更好
 
+
+
+
+
+
+
+# MOE
+
+[Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer](https://arxiv.org/abs/1701.06538)
+
+稀疏门控专家混合模型 ( Sparsely-Gated MoE):旨在**实现条件计算**，即神经网络的某些部分以每个样本为基础进行激活，作为一种显著增加模型容量和能力而不必成比例增加计算量的方法。
+
+![image-20230911210451264](https://cdn.jsdelivr.net/gh/631068264/img/202309112104424.png)
+
+为了保证稀疏性和均衡性（为了不让某个expert专家权重特别大），对softmax做了如下处理 :
+
+- 引入**KeepTopk**，这是个离散函数，将top-k之外的值强制设为负无穷大，从而softmax后的值为0。（合理听取某些专家建议，其他就不学习）
+- 加noise，这个的目的是为了做均衡，这里引入了一个Wnoise的参数，后面还会在损失函数层面进行改动。
+
+![image-20230911211622412](https://cdn.jsdelivr.net/gh/631068264/img/202309112116468.png)
+
+将大模型拆分成多个小模型（**每个小模型就是一个专家**），对于一个样本来说，无需经过所有的小模型去计算，而**只是激活一部分小模型进行计算这样就节省了计算资源**。稀疏门控 MOE，实现了模型容量超过1000倍的改进，并目在现代 GPU 集群的计算效率损失很小
