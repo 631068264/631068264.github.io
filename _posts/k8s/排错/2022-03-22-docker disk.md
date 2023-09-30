@@ -9,6 +9,28 @@ categories:
 
 
 
+/etc/docker/daemon.json
+
+```json
+{
+    "data-root": "/data/docker",
+    "live-restore": true,
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-file": "10",
+        "max-size": "100m"
+    }
+}
+```
+
+
+
+
+
+
+
+
+
 ```sh
 df -h
 ```

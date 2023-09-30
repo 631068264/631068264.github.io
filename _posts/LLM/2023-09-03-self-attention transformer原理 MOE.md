@@ -259,3 +259,221 @@ cross attention 做了什么。用endoder的output和mask的output，计算出�
 ![image-20230911211622412](https://cdn.jsdelivr.net/gh/631068264/img/202309112116468.png)
 
 将大模型拆分成多个小模型（**每个小模型就是一个专家**），对于一个样本来说，无需经过所有的小模型去计算，而**只是激活一部分小模型进行计算这样就节省了计算资源**。稀疏门控 MOE，实现了模型容量超过1000倍的改进，并目在现代 GPU 集群的计算效率损失很小
+
+
+
+# Flash Attention
+
+[FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness](https://arxiv.org/abs/2205.14135)
+
+![image-20230923114543837](https://cdn.jsdelivr.net/gh/631068264/img/202309231145944.png)
+
+- SRAM的IO速度远大于GPU HBM的IO速度，在SRAM做运算搬运结果更快
+- 将长度为N的句子的Q和{K，V}对分成诸多小块，外循环和内循环在长度轴N上进行，循环计算
+
+
+
+**materialization**
+“材料化”指的是将 N x N 的注意力矩阵存储或表示在内存中，特别是存储在GPU的高带宽内存（HBM）上的过程。通过平铺注意力矩阵并将其加载到片上SRAM（快速的片上内存）中，避免了在相对较慢的GPU HBM上完全材料化整个注意力矩阵。这种方法有助于提高FLASHATTENTION实现中注意力计算的效率和速度。
+
+
+
+# Vision Transformer（VIT）
+
+[An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929)
+
+[ViT论文逐段精读【论文精读】](https://www.youtube.com/watch?v=FRFt3x0bO94&ab_channel=MuLi)
+
+图像任务直接作用Transformer上面
+
+
+
+把图片所有像素拉成一维数组放到Transformer，图片尺寸（224*224=507776），远远超过大模型可接受的序列长度。
+
+
+
+VIT有足够规模的数据预训练效果比现有的残差网络效果接近甚至更好。除了抽取图像块和位置编码用了一些图像特有的这个归纳偏置，然后就可以使用和NLP一样的Transformer。
+
+**和CNN相比，要少很多这种图像特有的归纳偏置。在中小数据集上的表现不如CNN。**
+
+![image-20230927092717661](https://cdn.jsdelivr.net/gh/631068264/img/202309270927822.png)
+
+## patch+位置信息
+
+ViT的首要任务是将图转换成词的结构，将图片分割成小块，每个小块就相当于句子里的一个词。这里把每个小块称作Patch。
+
+>假设：patch 16x16，224/16 = 14  序列长度=14x14=196
+
+而**Patch Embedding**就是把每个Patch再经过一个全连接网络压缩成一定维度的向量。
+
+> 假设：原图224x224x3(RGB channel) 转换成一个patch 的维度(16x16x3=768) 总共196个，通过一个全连接层（768x768），最终向量Patch(196x768) x 全连接层（768x768）= 向量(196x768) + cls_token(1x768) = embedding（197x168）
+
+**加入cls_token**永远放在位置0，由于所有token之间都交换信息，其他的embedding表达的都是不同的patch的特征，而cls_token是要综合所有patch的信息，产生一个新的embedding，**来表达整个图的信息**。
+
+
+
+**位置信息**
+
+和向量维度都是一样的，直接和embedding（197x168）**相加**    = Embedded Patches(197x168)
+
+
+
+图片尺寸改变会影响，patch size 和位置编码，使用更大尺寸图片微调有局限性。位置编码可以学习到2d信息。
+
+![image-20230927092754838](https://cdn.jsdelivr.net/gh/631068264/img/202309270927384.png)
+
+# CLIP
+
+[Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020)
+
+[CLIP 论文逐段精读【论文精读】](https://www.youtube.com/watch?v=OZF1t_Hieq8&ab_channel=MuLi)
+
+**真正把视觉和文字上语义联系到一起，做到zero shot推理，泛化性能远比有监督训练出来的模型厉害**
+
+- 利用文本监督信号，而不是N选一这样的标签，训练集必须够大（WebImageText WIT）
+
+- 给定图片去逐字逐句预测文本，而且对同一张图描述会很多，所以简化成衡量文字信息和图片是否配对，可以提高训练效率
+
+  ![image-20230927153334437](https://cdn.jsdelivr.net/gh/631068264/img/202309271533472.png)
+
+- 传统模型主要研究特征学习的能力，学习泛化性较好的特征，应用到下游任务时还需要微调，所以需要zero shot 迁移
+
+## 预训练
+
+<img src="https://cdn.jsdelivr.net/gh/631068264/img/202309271038087.png" alt="image-20230927103844040" style="zoom:50%;" />
+
+通过各自的Encoder得到N个特征，CLIP通过这些特征进行[对比学习](https://lilianweng.github.io/posts/2021-05-31-contrastive/)（对角线是正样本，白色底是负样本）
+
+
+
+```sh
+# image_encoder - ResNet or Vision Transformer
+# text_encoder - CBOW or Text Transformer
+# I[n, h, w, c] - minibatch of aligned images  N个图像，height x wide x channel
+# T[n, l] - minibatch of aligned texts  N个文本，l序列长度
+# W_i[d_i, d_e] - learned proj of image to embed
+# W_t[d_t, d_e] - learned proj of text to embed
+# t - learned temperature parameter
+# extract feature representations of each modality
+I_f = image_encoder(I) #[n, d_i]
+T_f = text_encoder(T) #[n, d_t]
+# joint multimodal embedding [n, d_e]  单模态到多模态 ，归一化
+I_e = l2_normalize(np.dot(I_f, W_i), axis=1)
+T_e = l2_normalize(np.dot(T_f, W_t), axis=1)
+# scaled pairwise cosine similarities [n, n]
+logits = np.dot(I_e, T_e.T) * np.exp(t)
+# symmetric loss function
+labels = np.arange(n)
+loss_i = cross_entropy_loss(logits, labels, axis=0)
+loss_t = cross_entropy_loss(logits, labels, axis=1)
+loss = (loss_i + loss_t)/2
+```
+
+
+
+学习的目标是学习这样一个嵌入空间，其中相似的样本对彼此靠近，而不相似的样本对相距很远。对比学习可以应用于有监督和无监督的环境。[在处理无监督数据时，对比学习是自监督学习](https://lilianweng.github.io/posts/2019-11-10-self-supervised/)中最强大的方法之一。
+
+
+
+在对比学习的损失函数的早期版本中，仅涉及一个正样本和一个负样本。最近训练目标的趋势是在一批中包含多个正负对。
+
+
+
+
+
+## 推理
+
+![image-20230927105341647](https://cdn.jsdelivr.net/gh/631068264/img/202309271053700.png)
+
+怎样推理分类
+
+- 把所有的分类套入到prompt template，变成一个句子，然后和训练好的编码器进行encoder，得到N个文本特征。
+- 将图片和训练好的编码器进行encoder，得到图片特征。和所有的文本特征，计算相似度
+- 根据相似度可以得到分类
+
+**真正使用的时候，object可以换成其他从来没有训练的单词，图片也可以随便，CLIP可以做到zeor shot，普通的分类模型固定类别N选一**
+
+
+
+## 局限性
+
+- 扩大CLIP规模无法扩大性能
+
+- 不擅长细分类，抽象概念
+
+- 图片和训练图集差得远一样表现差
+
+- 只能从给定的类比判断是否类似，不能好像生成式那样生成新输出
+
+- 数据利用率不高，需要太多数据
+
+- 数据没有太多清洗，有数据偏见
+
+- few shot效果反而不好
+
+  ![image-20230927161037988](https://cdn.jsdelivr.net/gh/631068264/img/202309271610041.png)
+
+# ViLT
+
+[ViLT: Vision-and-Language Transformer Without Convolution or Region Supervision](https://arxiv.org/abs/2102.03334)
+
+
+
+图像相关的模态，以前的模型通过区域特征的抽取，相当于目标检测任务，输出一些离散序列看出单词，输入到transformer和NLP模型做模态融合。
+
+
+
+**但是模型在运行时间方面浪费好多。去掉卷积特征（预训练好的一个分类模型抽出来的特征图）和区域特征（根据特征图做的目标检测的那些框所带来的特征）带来的监督信号，加快运行时间。但是性能没有使用特征的强**  先预训练，再微调。
+
+使用特征带来的坏处
+
+- 运行效率不行。（抽出特征的时间比模态融合的时间长）
+- 模型表达能力受限，因为预训练好的目标检测器，规模不大，用的数据集也小类别数不多，因为文本是没有限制的。
+
+为什么用目标检测
+
+- 需要语义强离散的特征表现形式，每个区域可以看出单词。
+- 和下游任务有关（某个物体是否存在，物体在哪），和物体有强关联性
+
+![image-20230929154514752](https://cdn.jsdelivr.net/gh/631068264/img/202309291545914.png)
+
+## 改进
+
+受到VIT启发。
+
+- 使用patch emedding简化计算复杂度，保持性能
+- 使用数据增强（image-text pair 对应的语义），尽量保证可以对应上
+- NLP整个词mask调，（当时CV的完形填空的方法还没正式有）
+
+衡量模型
+
+- 图像和文本表达能力是否平衡（之前图像训练贵很多），参数量
+- 模态的融合（做得不好，影响下游任务）
+
+![image-20230929164228354](https://cdn.jsdelivr.net/gh/631068264/img/202309291642460.png)
+
+对现有领域的信息，进行分类。加深对领域的理解。
+
+
+
+## 模态融合
+
+效果各有千秋
+
+- single-stream approaches
+
+  只用一个模型处理两个输入（图像和文本），直接向量串联，让transformer自己去学  （**使用了这个**）
+
+- dual-stream approaches
+
+  使用两个模型，对各自的输入，充分去挖掘单独模态里包含的信息，在某个时间点用transformer融合。引入更多参数，成本贵。
+
+![image-20230929172310811](https://cdn.jsdelivr.net/gh/631068264/img/202309291723854.png)
+
+```sh
+I[n, h, w, c] - minibatch of aligned images  N个图像，height x wide x channel
+T[n, l] - minibatch of aligned texts  N个文本，l序列长度
+
+总序列长度= （N+L+2）x N
+```
+
