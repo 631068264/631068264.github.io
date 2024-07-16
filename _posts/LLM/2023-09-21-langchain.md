@@ -11,7 +11,7 @@ tags:
 
 总结几个有用的功能
 
-
+![image-20240523161625199](https://cdn.jsdelivr.net/gh/631068264/img/202405231616241.png)
 
 # 结构化response
 

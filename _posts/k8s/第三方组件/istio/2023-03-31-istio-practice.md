@@ -314,7 +314,7 @@ spec:
 
 定义在 `subsets` 上的默认策略，为 `v1` 和 `v3` 子集设置了一个简单的随机负载均衡器。在 `v2` 策略中，轮询负载均衡器被指定在相应的子集字段上。
 
-### Gateway
+## Gateway
 
 使用[网关](https://istio.io/latest/zh/docs/reference/config/networking/gateway/#Gateway)来管理网格的入站和出站流量，可以让您指定要进入或离开网格的流量。网关配置被用于运行在网格边缘的独立 Envoy 代理，而不是与服务工作负载一起运行的 sidecar Envoy 代理。
 

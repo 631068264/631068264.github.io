@@ -26,19 +26,19 @@ categories:
 
 # 自定义调度器方法
 
-- [调度器扩展程序](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/scheduling/scheduler_extender.md)，这个方案目前是一个可行的方案，可以和上游调度程序兼容，所谓的调度器扩展程序其实就是一个可配置的 Webhook 而已，里面包含 `过滤器` 和 `优先级` 两个端点，分别对应调度周期中的两个主要阶段（过滤和打分）。
-- 通过调度框架（Scheduling Framework），Kubernetes v1.15 版本中引入了可插拔架构的调度框架，使得定制调度器这个任务变得更加的容易。调库框架向现有的调度器中添加了一组插件化的 API，该 API 在保持调度程序“核心”简单且易于维护的同时，使得大部分的调度功能以插件的形式存在，而且在我们现在的 v1.16 版本中上面的 `调度器扩展程序` 也已经被废弃了，所以以后调度框架才是自定义调度器的核心方式。
+- [调度器扩展程序](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/scheduling/scheduler_extender.md)，这个方案目前是一个可行的方案，可以和上游调度程序兼容，所谓的调度器扩展程序其实就是一个可配置的 Webhook 而已，里面包含 `过滤器` 和 `优先级` 两个端点，分别对应调度周期中的两个主要阶段（过滤和打分）。 It is  a configurable webhook that consists of two endpoints, `filter` and `priority`,corresponding to the two main stages of the scheduling cycle (filtering and scoring).
+- 通过调度框架（Scheduling Framework），Kubernetes v1.15 版本中引入了可插拔架构的调度框架，使得定制调度器这个任务变得更加的容易。调库框架向现有的调度器中添加了一组插件化的 API，该 API 在保持调度程序“核心”简单且易于维护的同时，使得大部分的调度功能以插件的形式存在，而且在我们现在的 v1.16 版本中上面的 `调度器扩展程序` 也已经被废弃了，所以以后调度框架才是自定义调度器的核心方式。The Scheduling Framework adds a set of pluggable APIs to the existing scheduler, allowing most scheduling functionalities to exist as plugins.
 
 ## Scheduler Extender
 
 在进入调度器扩展程序之前，我们再来了解下 Kubernetes 调度程序是如何工作的
 
-1. 默认调度器根据指定的参数启动（我们使用 kubeadm 搭建的集群，启动配置文件位于 `/etc/kubernetes/manifests/kube-schdueler.yaml`）
-2. watch apiserver，将 `spec.nodeName` 为空的 Pod 放入调度器内部的调度队列中
-3. 从调度队列中 Pop 出一个 Pod，开始一个标准的调度周期
-4. 从 Pod 属性中检索“硬性要求”（比如 CPU/内存请求值，nodeSelector/nodeAffinity），然后过滤阶段发生，在该阶段计算出满足要求的节点候选列表
-5. 从 Pod 属性中检索“软需求”，并应用一些默认的“软策略”（比如 Pod 倾向于在节点上更加聚拢或分散），最后，它为每个候选节点给出一个分数，并挑选出得分最高的最终获胜者
-6. 和 apiserver 通信（发送绑定调用），然后设置 Pod 的 `spec.nodeName` 属性以表示将该 Pod 调度到的节点。
+1. 默认调度器根据指定的参数启动（我们使用 kubeadm 搭建的集群，启动配置文件位于 `/etc/kubernetes/manifests/kube-schdueler.yaml`）The default scheduler is launched with specified parameters
+2. watch apiserver，将 `spec.nodeName` 为空的 Pod 放入调度器内部的调度队列中The scheduler watches the API server and puts Pods with an empty `spec.nodeName` into an internal scheduling queue.
+3. 从调度队列中 Pop 出一个 Pod，开始一个标准的调度周期A Pod is popped from the scheduling queue, and a standard scheduling cycle begins
+4. 从 Pod 属性中检索“硬性要求”（比如 CPU/内存请求值，nodeSelector/nodeAffinity），然后过滤阶段发生，在该阶段计算出满足要求的节点候选列表"Hard requirements" are retrieved from the Pod attributes (such as CPU/memory requests and nodeSelector/nodeAffinity), and a filtering phase takes place to compute a list of candidate nodes that meet the requirements
+5. 从 Pod 属性中检索“软需求”，并应用一些默认的“软策略”（比如 Pod 倾向于在节点上更加聚拢或分散），最后，它为每个候选节点给出一个分数，并挑选出得分最高的最终获胜者"Soft requirements" are retrieved from the Pod attributes, and default "soft policies" are applied (such as preferring Pods to be spread or packed on nodes). Finally, a score is assigned to each candidate node, and the one with the highest score is selected as the final winner.
+6. 和 apiserver 通信（发送绑定调用），然后设置 Pod 的 `spec.nodeName` 属性以表示将该 Pod 调度到的节点。The scheduler communicates with the API server (by sending a binding call) and sets the `spec.nodeName` attribute of the Pod to indicate the scheduled node.
 
 我们可以通过查看[官方文档](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/)，可以通过 `--config` 参数指定调度器将使用哪些参数，该配置文件应该包含一个 [KubeSchedulerConfiguration](https://godoc.org/k8s.io/kubernetes/pkg/scheduler/apis/config#KubeSchedulerConfiguration) 对象，如下所示格式：（**/etc/kubernetes/scheduler-extender.yaml**)
 
@@ -147,9 +147,9 @@ sheduler参数
 
 用户可以实现扩展点定义的接口来定义自己的调度逻辑（我们称之为**扩展**），并将扩展注册到扩展点上，调度框架在执行调度工作流时，遇到对应的扩展点时，将调用用户注册的扩展。调度框架在预留扩展点时，都是有特定的目的，有些扩展点上的扩展可以改变调度程序的决策方法，有些扩展点上的扩展只是发送一个通知。
 
-我们知道每当调度一个 Pod 时，都会按照两个过程来执行：**调度过程和绑定过程。**
+我们知道每当调度一个 Pod 时，都会按照两个过程来执行：**调度过程和绑定过程。**the scheduling process and the binding process.
 
-调度过程为 Pod 选择一个合适的节点，绑定过程则将调度过程的决策应用到集群中（也就是在被选定的节点上运行 Pod），将调度过程和绑定过程合在一起，称之为**调度上下文（scheduling context）**。**需要注意的是调度过程是`同步`运行的（同一时间点只为一个 Pod 进行调度），绑定过程可异步运行（同一时间点可并发为多个 Pod 执行绑定）。**
+调度过程为 Pod 选择一个合适的节点，绑定过程则将调度过程的决策应用到集群中（也就是在被选定的节点上运行 Pod），将调度过程和绑定过程合在一起，称之为**调度上下文（scheduling context）**。**需要注意的是调度过程是`同步`运行的（同一时间点只为一个 Pod 进行调度），绑定过程可异步运行（同一时间点可并发为多个 Pod 执行绑定）。**The scheduling process selects a suitable node for the Pod, while the binding process applies the scheduling decisions to the cluster (i.e., runs the Pod on the selected node). Combining the scheduling process and the binding process together is referred to as the "scheduling context". It's important to note that the scheduling process runs synchronously (only scheduling one Pod at a time), while the binding process can run asynchronously (multiple Pods can be bound concurrently).
 
 调度过程和绑定过程遇到如下情况时会中途退出：
 
@@ -158,7 +158,7 @@ sheduler参数
 
 这个时候，该 Pod 将被放回到 **待调度队列**，并等待下次重试。
 
-#### 扩展点（Extension Points）
+### 扩展点（Extension Points）
 
 调度框架中的调度上下文及其中的扩展点，一个扩展可以注册多个扩展点，以便可以执行更复杂的有状态的任务。
 

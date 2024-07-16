@@ -121,7 +121,7 @@ du -sh /var/lib/docker/
 #sort -r：反向显示
 #sort -h：compare human readable numbers (e.g., 2k 1G)
 sudo du -h --max-depth=1 . | sort -hr
-
+du -h --max-depth=1 . | sort -h
 
 ls    -Slh
 
@@ -129,10 +129,17 @@ ls    -Slh
 
 
 
-## 查看占用空间的pid，以及对应的容器名称
+## 查看
 
 ```sh
+# 查看占用空间的pid，以及对应的容器名称
+
 docker ps -q | xargs docker inspect --format '{{.State.Pid}}, {{.Name}}, {{.GraphDriver.Data.WorkDir}}' | grep "overlay2 hash"
+
+
+# docker 资源情况
+docker stats
+
 ```
 
 
@@ -307,7 +314,7 @@ lsblk
 
 ```sh 
 # 格式化成ext4
-mkfs.ext4 /dev/vdb1 
+mkfs.ext4 /dev/vdb1
 ```
 
 格式化之后，就可以**挂载分区**了。
@@ -365,6 +372,181 @@ mount -a
 
  
 
+# 多目录挂载
+
+
+
+```sh
+# disk 创建分区
+sudo gdisk /dev/nvme1n1  
+sudo gdisk /dev/nvme0n1
+```
+
+创建1个分区, 
+
+![image-20231109153101587](https://cdn.jsdelivr.net/gh/631068264/img/202311091532680.png)
+
+分区类型选择 **Linux LVM(8e00)**
+
+![image-20231109153318419](https://cdn.jsdelivr.net/gh/631068264/img/202311091533505.png)
+
+p 打印结果，w 保存
+
+![image-20231109153440356](https://cdn.jsdelivr.net/gh/631068264/img/202311091534404.png)
+
+
+
+```sh
+# 查看创建的分区
+sudo fdisk -l
+
+
+Disk /dev/nvme0n1: 1.47 TiB, 1600321314816 bytes, 3125627568 sectors
+Disk model: INTEL SSDPE2KE016T8                     
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: 5FB4B969-4161-44E5-9127-5A842F1FF47F
+
+Device         Start        End    Sectors  Size Type
+/dev/nvme0n1p1  2048 3125627534 3125625487  1.5T Linux LVM  # 1个/dev/nvme0n1p1分区
+
+```
+
+基本概念：
+
+PV（Physical Volume）- 物理卷
+物理卷在逻辑卷管理中处于最底层，它可以是实际物理硬盘上的分区，也可以是整个物理硬盘，也可以是raid设备。
+
+VG（Volumne Group）- 卷组
+卷组建立在物理卷之上，一个卷组中至少要包括一个物理卷，在卷组建立之后可动态添加物理卷到卷组中。一个逻辑卷管理系统工程中可以只有一个卷组，也可以拥有多个卷组。
+
+LV（Logical Volume）- 逻辑卷
+
+逻辑卷建立在卷组之上，卷组中的未分配空间可以用于建立新的逻辑卷，逻辑卷建立后可以动态地扩展和缩小空间。系统中的多个逻辑卷可以属于同一个卷组，也可以属于不同的多个卷组。
+
+```sh
+# 创建PV
+sudo pvcreate /dev/nvme1n1p1 /dev/nvme0n1p1 /dev/nvme3n1p1 /dev/nvme2n1p1
+
+  Physical volume "/dev/nvme1n1p1" successfully created.
+  Physical volume "/dev/nvme0n1p1" successfully created.
+  Physical volume "/dev/nvme3n1p1" successfully created.
+  Physical volume "/dev/nvme2n1p1" successfully created.
+
+# 查看PV
+sudo pvdisplay
+
+  "/dev/nvme1n1p1" is a new physical volume of "<1.46 TiB"
+  --- NEW Physical volume ---
+  PV Name               /dev/nvme1n1p1
+  VG Name               
+  PV Size               <1.46 TiB
+  Allocatable           NO
+  PE Size               0   
+  Total PE              0
+  Free PE               0
+  Allocated PE          0
+  PV UUID               zneQlI-GFKg-OChk-YrlT-Kw56-1fde-vjvUzj
+  
+# 创建VG  lvm_data是vg组的名字，可以自定义
+sudo vgcreate lvm_data /dev/nvme1n1p1 /dev/nvme0n1p1 /dev/nvme3n1p1 /dev/nvme2n1p1
+  Volume group "lvm_data" successfully created
+
+# 查看vg
+sudo vgdisplay 
+  --- Volume group ---
+  VG Name               lvm_data
+  System ID             
+  Format                lvm2
+  Metadata Areas        4
+  Metadata Sequence No  1
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                0
+  Open LV               0
+  Max PV                0
+  Cur PV                4
+  Act PV                4
+  VG Size               5.82 TiB
+  PE Size               4.00 MiB
+  Total PE              1526180
+  Alloc PE / Size       0 / 0   
+  Free  PE / Size       1526180 / 5.82 TiB
+  VG UUID               pszQhl-XUku-6eQF-s5vU-8AdQ-bfMp-hdRpQ7
+
+# 创建LV -L是指定大小、-n是自定义lv的名称
+sudo lvcreate -L 5.82T -n lvmdata_1 lvm_data
+  Rounding up size to full physical extent 5.82 TiB
+  Logical volume "lvmdata_1" created.
+  
+  
+# 查看分区
+sudo fdisk -l
+....
+Disk /dev/mapper/lvm_data-lvmdata_1: 5.84 TiB, 6399161532416 bytes, 12498362368 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+```
+
+
+
+剩下就是和挂载单个磁盘一样
+
+```sh
+# 格式化磁盘
+sudo mkfs.ext4 /dev/mapper/lvm_data-lvmdata_1
+
+# 挂载
+sudo mkdir /data
+sudo mount /dev/mapper/lvm_data-lvmdata_1 /data
+
+# 效果
+df -h
+Filesystem                      Size  Used Avail Use% Mounted on
+....
+/dev/mapper/lvm_data-lvmdata_1  5.8T   89M  5.5T   1% /data
+```
+
+开机挂载
+
+```sh
+# 查看盘的UUID 格式
+lsblk -pf
+
+NAME                               FSTYPE      LABEL    UUID                                   FSAVAIL FSUSE% MOUNTPOINT
+/dev/nvme1n1                                                                                                  
+└─/dev/nvme1n1p1                   LVM2_member          zneQlI-GFKg-OChk-YrlT-Kw56-1fde-vjvUzj                
+  └─/dev/mapper/lvm_data-lvmdata_1 ext4                 cf4d9cc7-d83c-4da6-999f-ebb17d600d33      5.5T     0% /data
+/dev/nvme0n1                                                                                                  
+└─/dev/nvme0n1p1                   LVM2_member          M3xtpb-G7Ib-7YM9-l2Eb-nry6-ync1-6u3JQu                
+  └─/dev/mapper/lvm_data-lvmdata_1 ext4                 cf4d9cc7-d83c-4da6-999f-ebb17d600d33      5.5T     0% /data
+/dev/nvme3n1                                                                                                  
+└─/dev/nvme3n1p1                   LVM2_member          JriJKh-QFrf-erh0-whBK-tu6U-qdoY-EZerLh                
+  └─/dev/mapper/lvm_data-lvmdata_1 ext4                 cf4d9cc7-d83c-4da6-999f-ebb17d600d33      5.5T     0% /data
+/dev/nvme2n1                                                                                                  
+└─/dev/nvme2n1p1                   LVM2_member          Nd5RjT-MJu6-Y4NF-pt40-HWUK-nHfu-14cw6P                
+  └─/dev/mapper/lvm_data-lvmdata_1 ext4                 cf4d9cc7-d83c-4da6-999f-ebb17d600d33      5.5T     0% /data
+  
+
+# 修改配置
+vim /etc/fstab
+
+/dev/mapper/lvm_data-lvmdata_1 /data ext4 defaults 0 0
+
+# 将 /etc/fstab 中定义的所有档案系统挂上。 检验编辑的内容是否有错
+mount -a
+```
+
+
+
+
+
+
+
 # docker数据迁移
 
 默认docker数据目录 `/var/lib/docker `
@@ -384,7 +566,7 @@ systemctl disable docker
 
 
 # 迁移
-cp -r /var/lib/docker /data/docker
+cp -ravf /var/lib/docker /data/docker
 nohup cp -ravf /var/lib/docker /data/docker &
 # 加入软连接
 ln -s /var/lib/docker /data/docker 
@@ -410,4 +592,4 @@ pod起不来，ImageInspectError之类的报错。[参考](https://www.gushiciku
 - 重新pull成功，但是images看不到
 - rmi会报错,`Error response from daemon: unrecognized image ID sha256：xxx`
 
-后面删除`/data/docker/image`目录，重启docker，才重新拉取成功，pod也最好delete一下
+后面删除`/data/docker/image`目录，重启docker，才重新拉取成功，pod也最好delete一
