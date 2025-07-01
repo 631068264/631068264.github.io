@@ -889,43 +889,7 @@ SORA =  [VAE encoder + DiT (DDPM) + VAE decoder +CLIP]
 | 80GB 推理所需卡数      | 347 		需要大规模集群 | 1            |
 | 访存带宽 	**时延**  | 80TB/s                     | 3.35TB/s     |
 
-# VLLM
 
-[vllm blog](https://blog.vllm.ai/2023/06/20/vllm.html)
-
-[PagedAttention  ariv](https://arxiv.org/abs/2309.06180)
-
-支持PagedAttention ，张量并行
-
-## **PagedAttention**
-
-KVCache的弱点
-
-autoregressive decoding 过程中, 使用到所有输入的输入token产生KV cache，保留在GPU显存，生成一个token
-
-- 大：对于LLaMA-13B中的单个序列，需要高达1.7GB的内存。
-
-- 动态性：其大小取决于序列长度，而序列长度具有高度可变和不可预测的特性。因此，有效地管理KV缓存是一个巨大的挑战。我们发现，现有系统由于**碎片化和过度预留而浪费了60%至80%的内存。**
-
-为了解决这个问题，我们引入了PagedAttention，这是一个灵感来自操作系统中**虚拟内存和分页的经典思想的注意力算法。**与传统的注意力算法不同，PagedAttention**允许在非连续的内存空间中存储连续的K和V**。具体而言，PagedAttention将每个序列的KV缓存分成块，每个块包含一定数量的token的K和V。在注意力计算过程中，PagedAttention内核能够高效地识别和提取这些块。
-
-![img](https://cdn.jsdelivr.net/gh/631068264/img/202403102109814.gif)
-
-PagedAttention：KV缓存被分成了块。这些块在内存空间中不需要连续。
-
-由于这些块在内存中不需要连续，我们可以像操作系统的虚拟内存那样更加灵活地管理键和值：可以将这些blocks看作pages，token看作byte，sequences看作processes。序列的连续逻辑块通过块表映射到非连续的物理块。随着生成新的标记，物理块会按需进行分配。
-
-![img](https://cdn.jsdelivr.net/gh/631068264/img/202403102113252.gif)
-
-在 PagedAttention 中，内存浪费仅发生在序列的最后一个块中。内存效率的提高非常有益：它允许系统将更多序列一起批处理，提高 GPU 利用率，从而显着提高吞吐量
-
-PagedAttention 还有另一个关键优势：高效的内存共享。例如，在*并行采样*中，从同一提示生成多个输出序列。
-
-![img](https://cdn.jsdelivr.net/gh/631068264/img/202403102115296.gif)
-
-PagedAttention 自然地通过其块表实现内存共享。与进程共享物理页的方式类似，PagedAttention 中的不同序列可以通过将其逻辑块映射到同一物理块来共享块。为了确保安全共享，PagedAttention 跟踪物理块的引用计数并实现*Copy-on-Write*机制。
-
-![img](https://cdn.jsdelivr.net/gh/631068264/img/202403102115814.gif)
 
 # NLP 单塔 双塔
 
