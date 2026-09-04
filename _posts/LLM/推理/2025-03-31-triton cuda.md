@@ -109,11 +109,16 @@ torhch.compile(model: Optional[Callable] = None, *,
 rm -rf /tmp/torchinductor_xx
 ```
 
+- fullgraph
+
+要求整个函数能捕获为单个 graph；存在 graph break 就抛错。
+
+
 - **mode (str)**：编译模式，可选值：
 
   - "default"（默认）：性能和编译开销之间取得平衡。
   - "reduce-overhead"：减少 Python 运行时开销，适用于小 batch 计算，但可能会增加内存占用（通过 CUDA graphs 预分配计算所需的内存）。
-  - "max-autotune"：启用 Triton 优化的矩阵乘法（matmul）和卷积（convolution），默认启用 CUDA graphs。
+  - "max-autotune"：首次编译慢一点没关系，请尽量为当前硬件和 shape 找运行最快的实现。启用 Triton 优化的矩阵乘法（matmul）和卷积（convolution），默认启用 CUDA graphs。
   - "max-autotune-no-cudagraphs"：类似 "max-autotune"，但不使用 CUDA graphs。
   - 可用 torch._inductor.list_mode_options() 查看各模式的具体配置。
 
